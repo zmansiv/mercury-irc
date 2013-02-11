@@ -1,0 +1,54 @@
+#title-bar {
+	-fx-background-color: linear-gradient(to bottom, rgb(240, 240, 240), rgb(205, 205, 205));
+	-fx-background-radius: 6 6 0 0;
+	-fx-border-color: rgb(175, 175, 175);
+	-fx-border-radius: 5 5 0 0;
+	-fx-border-width: 1px;
+}
+
+#settings-button {
+	-fx-background-image: url("../images/buttons/settings.png");
+	-fx-translate-x: 10;
+	-fx-translate-y: 4;
+}
+
+#settings-button:hover {
+	-fx-background-image: url("../images/buttons/settings_hover.png");
+}
+
+#title {
+	-fx-font: bold 18pt calibri;
+	-fx-text-fill: rgb(100, 100, 100);
+	-fx-translate-x: 35;
+	-fx-translate-y: 5;
+}
+
+#minimize-button {
+	-fx-background-image: url("../images/buttons/minimize.png");
+	-fx-translate-x: -24;
+	-fx-translate-y: 17;
+}
+
+#minimize-button:hover {
+	-fx-background-image: url("../images/buttons/minimize_hover.png");
+}
+
+#maximize-button {
+	-fx-background-image: url("../images/buttons/maximize.png");
+	-fx-translate-x: -14;
+	-fx-translate-y: 5;
+}
+
+#maximize-button:hover {
+	-fx-background-image: url("../images/buttons/maximize_hover.png");
+}
+
+#close-button {
+	-fx-background-image: url("../images/buttons/close.png");
+	-fx-translate-x: -4;
+	-fx-translate-y: 6;
+}
+
+#close-button:hover {
+	-fx-background-image: url("../images/buttons/close_hover.png");
+}
