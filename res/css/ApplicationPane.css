@@ -1,0 +1,31 @@
+.split-pane {
+	-fx-background-color: rgb(175, 175, 175);
+	-fx-background-radius: 0px 0px 6px 6px;
+}
+
+.split-pane .split-pane-divider {
+	-fx-padding: 0px;
+	-fx-border-color: rgb(175, 175, 175);
+}
+
+.split-pane .split-pane-divider .horizontal-grabber {
+	-fx-background-color: transparent;
+}
+
+.content-box {
+	-fx-background-color: linear-gradient(to bottom, rgb(240, 240, 240), rgb(210, 217, 225));
+}
+
+.bottom-bar {
+	-fx-background-color: linear-gradient(to bottom, rgb(240, 240, 240), rgb(205, 205, 205));
+	-fx-border-color: rgb(175, 175, 175);
+	-fx-border-width: 1px 0px 0px 0px;
+}
+
+#left-content-panel .bottom-bar {
+	-fx-background-radius: 0px 0px 0px 5px;
+}
+
+#right-content-panel .bottom-bar {
+	-fx-background-radius: 0px 0px 5px 0px;
+}

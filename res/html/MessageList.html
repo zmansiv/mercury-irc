@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+	<SCRIPT type="text/javascript">
+
+		function addRow(source, message, timestamp, style) {
+			var table = document.getElementById('messageTable');
+			var row = table.insertRow(table.rows.length);
+			row.className = style;
+			var sourceCell = row.insertCell(0);
+			sourceCell.className = "source";
+			sourceCell.innerHTML = source;
+			var messageCell = row.insertCell(1);
+			messageCell.className = style;
+			messageCell.innerHTML = message;
+			var timestampCell = row.insertCell(2);
+			timestampCell.className = "timestamp";
+			timestampCell.innerHTML = timestamp;
+			window.scrollTo(0, window.innerHeight);
+		}
+
+		function onLinkClick(url) {
+			panel.openUrl(url);
+		}
+
+	</SCRIPT>
+	<STYLE type="text/css">
+
+		html, body {
+			margin: 0;
+			padding: 0;
+			background-color: rgb(230, 230, 230);
+		}
+
+		::selection {
+			background: rgb(215, 215, 215);
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			border-spacing: 0px;
+			overflow-y: auto;
+			overflow-x: hidden;
+			text-overflow: ellipsis;
+		}
+
+		tr {
+			border-bottom: 1px solid rgb(175, 175, 175);
+		}
+
+		tr.me {
+			background-image: -webkit-linear-gradient(top, rgb(223, 225, 220), rgb(223, 228, 216));
+		}
+
+		tr.other {
+			background-image: -webkit-linear-gradient(top, rgb(222, 224, 228), rgb(221, 226, 233));
+		}
+
+		tr.highlight {
+			background-image: -webkit-linear-gradient(top, rgb(232, 201, 201), rgb(238, 182, 182));
+		}
+
+		tr.server {
+			background-image: -webkit-linear-gradient(top, rgb(227, 225, 217), rgb(230, 229, 214));
+		}
+
+		td {
+			font-family: Calibri, sans-serif;
+			font-size: 14px;
+			padding: 5px 5px 3px 5px;
+			overflow-x: hidden;
+			text-overflow: ellipsis;
+			color: rgb(100, 100, 100);
+		}
+
+		td.source {
+			width: 1px;
+			text-align: right;
+		}
+
+		td.timestamp {
+			width: 1px;
+			text-align: right;
+		}
+
+		a {
+			color: rgb(150, 150, 150);
+		}
+
+		a:hover {
+			color: rgb(200, 200, 200);
+		}
+
+	</STYLE>
+</HEAD>
+<BODY>
+<TABLE id="messageTable"/>
+</BODY>
+</HTML>

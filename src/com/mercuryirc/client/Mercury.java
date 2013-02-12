@@ -1,6 +1,6 @@
 package com.mercuryirc.client;
 
-import com.mercuryirc.client.ui.ContentPane;
+import com.mercuryirc.client.ui.ApplicationPane;
 import com.mercuryirc.client.ui.TitleBar;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -21,8 +21,8 @@ public class Mercury extends Application {
 		stage.setTitle("Mercury");
 		stage.initStyle(StageStyle.TRANSPARENT);
 		VBox content = new VBox();
-		content.getChildren().add(new TitleBar());
-		content.getChildren().add(new ContentPane());
+		content.getChildren().add(new TitleBar(stage));
+		content.getChildren().add(new ApplicationPane());
 		Scene scene = new Scene(content, 1100, 600);
 		scene.setFill(null);
 		scene.getStylesheets().add(new File("./res/css/Mercury.css").toURI().toURL().toExternalForm());
