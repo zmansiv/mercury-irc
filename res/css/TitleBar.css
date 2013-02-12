@@ -43,6 +43,16 @@
 	-fx-background-image: url("../images/buttons/maximize_hover.png");
 }
 
+#restore-button {
+	-fx-background-image: url("../images/buttons/restore.png");
+	-fx-translate-x: -14px;
+	-fx-translate-y: 5px;
+}
+
+#restore-button:hover {
+	-fx-background-image: url("../images/buttons/restore_hover.png");
+}
+
 #close-button {
 	-fx-background-image: url("../images/buttons/close.png");
 	-fx-translate-x: -4px;
