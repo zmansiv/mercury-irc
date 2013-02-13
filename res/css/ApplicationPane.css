@@ -12,8 +12,12 @@
 	-fx-background-color: transparent;
 }
 
-.content-box {
+.side-panel {
 	-fx-background-color: linear-gradient(to bottom, rgb(240, 240, 240), rgb(210, 217, 225));
+}
+
+.message-panel {
+	-fx-background-color: rgb(230, 230, 230);
 }
 
 .bottom-bar {

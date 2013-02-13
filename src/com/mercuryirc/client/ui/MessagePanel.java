@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.event.EventHandler;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebEvent;
@@ -35,10 +36,12 @@ public class MessagePanel extends VBox {
 	private final WebView webView;
 	private boolean loaded = false;
 
-	public MessagePanel() throws IOException {
-		getStyleClass().add("content-panel");
+	public MessagePanel() {
+		getStyleClass().add("message-panel");
+		setId("right-content-panel");
 		setMinWidth(350);
 		webView = new WebView();
+		VBox.setVgrow(webView, Priority.ALWAYS);
 		final WebEngine webEngine = webView.getEngine();
 		webEngine.setOnAlert(new EventHandler<WebEvent<String>>() {
 			@Override
@@ -46,11 +49,15 @@ public class MessagePanel extends VBox {
 				System.out.println(stringWebEvent.getData());
 			}
 		});
-		webEngine.load(new File("./res/html/MessageList.html").toURI().toURL().toExternalForm());
+		try {
+			webEngine.load(new File("./res/html/MessageList.html").toURI().toURL().toExternalForm());
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 		webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
 			public void changed(ObservableValue observableValue, Worker.State state, Worker.State newState) {
 				if (newState.equals(Worker.State.SUCCEEDED)) {
-					onLoaded();
+					onLoad();
 				}
 			}
 		});
@@ -78,7 +85,7 @@ public class MessagePanel extends VBox {
 		getChildren().addAll(webView, bottomBar);
 	}
 
-	private void onLoaded() {
+	private void onLoad() {
 		loaded = true;
 		synchronized (loadQueue) {
 			for (Message message : loadQueue) {
