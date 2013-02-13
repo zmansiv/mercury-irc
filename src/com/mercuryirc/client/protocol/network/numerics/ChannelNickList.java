@@ -17,7 +17,5 @@ public class ChannelNickList implements Connection.NumericHandler {
 
 		Server srv = conn.getServer();
 		srv.getChannel(chan).addNames(Arrays.asList(names));
-
-		System.out.println("Users on " + chan + ": " + Arrays.asList(names));
 	}
 }

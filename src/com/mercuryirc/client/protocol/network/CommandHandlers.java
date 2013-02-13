@@ -1,6 +1,7 @@
 package com.mercuryirc.client.protocol.network;
 
 import com.mercuryirc.client.protocol.network.commands.ChannelJoin;
+import com.mercuryirc.client.protocol.network.commands.MessageReceived;
 import com.mercuryirc.client.protocol.network.commands.Ping;
 
 import java.util.ArrayList;
@@ -12,5 +13,6 @@ public class CommandHandlers {
 	static {
 		list.add(new Ping());
 		list.add(new ChannelJoin());
+		list.add(new MessageReceived());
 	}
 }

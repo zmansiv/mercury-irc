@@ -6,11 +6,18 @@ import java.util.TreeSet;
 
 public class Channel {
 	private String name;
+
 	private String topic;
+	private long topicTimestamp;
+
 	private Set<String> users = new TreeSet<String>(new RankComparator());
 
 	public Channel(String name) {
 		this.name = name;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public String getTopic() {
@@ -25,7 +32,17 @@ public class Channel {
 		return users;
 	}
 
-	public void addNames(List<String> users) {
-		this.users.addAll(users);
+	public void addNames(List<String> nickList) {
+		this.users.addAll(nickList);
+		System.out.println("Users on " + name + ": " + this.users);
+	}
+
+	public void clear() {
+		topic = null;
+		users.clear();
+	}
+
+	public void setTopicTimestamp(long ts) {
+		topicTimestamp = ts;
 	}
 }

@@ -2,6 +2,7 @@ package com.mercuryirc.client.protocol.network;
 
 import com.mercuryirc.client.protocol.network.numerics.ChannelNickList;
 import com.mercuryirc.client.protocol.network.numerics.ChannelTopic;
+import com.mercuryirc.client.protocol.network.numerics.TopicTimestamp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,5 +13,6 @@ public class NumericHandlers {
 	static {
 		list.add(new ChannelNickList());
 		list.add(new ChannelTopic());
+		list.add(new TopicTimestamp());
 	}
 }

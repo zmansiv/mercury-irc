@@ -1,5 +1,6 @@
 package com.mercuryirc.client.protocol.network;
 
+import com.mercuryirc.client.protocol.IRCCallback;
 import com.mercuryirc.client.protocol.model.*;
 
 import javax.net.ssl.*;
@@ -24,14 +25,22 @@ public class Connection implements Runnable {
 	private BufferedReader in;
 	private BufferedWriter out;
 
+	private User localUser;
+
+	private IRCCallback listener;
 	private ExceptionHandler exceptionHandler;
 
-	public Connection(Server server) {
+	public Connection(Server server, IRCCallback listener) {
 		this.server = server;
+		this.listener = listener;
 	}
 
 	public Server getServer() {
 		return server;
+	}
+
+	public IRCCallback getListener() {
+		return listener;
 	}
 
 	public void connect() {
@@ -93,6 +102,8 @@ public class Connection implements Runnable {
 	}
 
 	public void registerAs(User user) {
+		this.localUser = user;
+
 		writeLine("NICK " + user.getNick());
 		writeLine("USER " + user.getUser() + " * * :" + user.getRealName());
 	}
@@ -127,6 +138,10 @@ public class Connection implements Runnable {
 				exceptionHandler.onException(e);
 			return null;
 		}
+	}
+
+	public User getLocalUser() {
+		return localUser;
 	}
 
 	public void setExceptionHandler(ExceptionHandler exceptionHandler) {
