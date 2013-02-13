@@ -30,8 +30,9 @@ public class Connection implements Runnable {
 	private IRCCallback listener;
 	private ExceptionHandler exceptionHandler;
 
-	public Connection(Server server, IRCCallback listener) {
+	public Connection(Server server, User user, IRCCallback listener) {
 		this.server = server;
+		this.localUser = user;
 		this.listener = listener;
 	}
 
@@ -39,8 +40,16 @@ public class Connection implements Runnable {
 		return server;
 	}
 
+	public User getLocalUser() {
+		return localUser;
+	}
+
 	public IRCCallback getListener() {
 		return listener;
+	}
+
+	public boolean isLocalUser(String nick) {
+		return nick.equalsIgnoreCase(localUser.getNick());
 	}
 
 	public void connect() {
@@ -60,6 +69,9 @@ public class Connection implements Runnable {
 
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+
+			writeLine("NICK " + localUser.getNick());
+			writeLine("USER " + localUser.getUser() + " * * :" + localUser.getRealName());
 
 			new Thread(this).start();
 		} catch(IOException e) {
@@ -101,13 +113,6 @@ public class Connection implements Runnable {
 		writeLine("JOIN " + channel);
 	}
 
-	public void registerAs(User user) {
-		this.localUser = user;
-
-		writeLine("NICK " + user.getNick());
-		writeLine("USER " + user.getUser() + " * * :" + user.getRealName());
-	}
-
 	public void disconnect() {
 		try {
 			socket.close();
@@ -140,14 +145,11 @@ public class Connection implements Runnable {
 		}
 	}
 
-	public User getLocalUser() {
-		return localUser;
-	}
-
 	public void setExceptionHandler(ExceptionHandler exceptionHandler) {
 		this.exceptionHandler = exceptionHandler;
 	}
 
+	/** security risk */
 	public void setAcceptAllSSLCerts(boolean b) {
 		acceptAllCerts = b;
 	}

@@ -8,20 +8,20 @@ import com.mercuryirc.client.protocol.model.*;
 
 public class IRCTest implements Connection.ExceptionHandler, IRCCallback {
 	public static void main(String[] args) throws IOException {
-		IRCTest test = new IRCTest();
+		Server svr = new Server("irc.rizon.net", 6697, true);
 
 		User me = new User("Tekk|Mercury");
 		me.setUser("user");
 		me.setRealName("MercuryIRC");
 
-		Server svr = new Server("irc.rizon.net", 6697, true);
-		Connection conn = new Connection(svr, test);
+		IRCTest test = new IRCTest();
+
+		Connection conn = new Connection(svr, me, test);
 
 		conn.setAcceptAllSSLCerts(true);
 		conn.setExceptionHandler(test);
 
 		conn.connect();
-		conn.registerAs(me);
 		conn.joinChannel("#mercury");
 	}
 
@@ -31,12 +31,12 @@ public class IRCTest implements Connection.ExceptionHandler, IRCCallback {
 	}
 
 	@Override
-	public void onMessage(Connection conn, Message msg) {
-		System.out.println(msg.getFrom() + ": " + msg.getMessage());
+	public void onMessage(Message msg) {
+		System.out.println(msg);
 	}
 
 	@Override
-	public void onChannelJoin(Connection conn, User user, Channel chan) {
+	public void onChannelJoin(User user, Channel chan) {
 		System.out.println(user.getNick() + " has joined " + chan.getName());
 	}
 }

@@ -1,14 +1,22 @@
 package com.mercuryirc.client.protocol.model;
 
+import com.mercuryirc.client.protocol.IRCTools;
+
 public class Message {
 	public static enum Kind { PRIVMSG, NOTICE }
 
 	private Kind kind;
 
+	/**
+	 *'from' could be a User object but I'd prefer that only the Server
+	 * know about the Users
+	 */
 	private String from;
 	private String to;
 
 	private String message;
+
+	/** timestamp in milliseconds */
 	private long timestamp;
 
 	public Message(Kind kind, String from, String to, String message) {
@@ -37,5 +45,9 @@ public class Message {
 
 	public long getTimestamp() {
 		return timestamp;
+	}
+
+	public String toString() {
+		return kind + "(ts: " + timestamp + ", " + "from: " + from + ", to: " + to + ", message: " + message + ")";
 	}
 }

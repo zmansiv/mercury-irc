@@ -1,5 +1,6 @@
 package com.mercuryirc.client.protocol.model;
 
+
 public class User {
 	private String nick;
 

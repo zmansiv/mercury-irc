@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class RankComparator implements Comparator<String> {
 	/** 0 = highest priority (owner), 5 = lowest (normal user) */
-	private static final Map<Character, Integer> priority = new HashMap<Character, Integer>();
+	private static final Map<Character, Integer> priority = new HashMap<>();
 	private static final int NORMAL_USER = 5;
 
 	static {

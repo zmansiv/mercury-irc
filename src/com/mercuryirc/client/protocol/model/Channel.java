@@ -10,7 +10,7 @@ public class Channel {
 	private String topic;
 	private long topicTimestamp;
 
-	private Set<String> users = new TreeSet<String>(new RankComparator());
+	private Set<String> users = new TreeSet<>();
 
 	public Channel(String name) {
 		this.name = name;
