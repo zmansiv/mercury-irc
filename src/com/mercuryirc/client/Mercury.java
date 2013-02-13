@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Mercury extends Application {
 
@@ -17,7 +18,7 @@ public class Mercury extends Application {
 	}
 
 	@Override
-	public void start(Stage stage) throws Exception {
+	public void start(Stage stage) {
 		stage.setTitle("Mercury");
 		stage.initStyle(StageStyle.TRANSPARENT);
 		VBox content = new VBox();
@@ -25,7 +26,11 @@ public class Mercury extends Application {
 		content.getChildren().add(new ApplicationPane());
 		Scene scene = new Scene(content, 1100, 600);
 		scene.setFill(null);
-		scene.getStylesheets().add(new File("./res/css/Mercury.css").toURI().toURL().toExternalForm());
+		try {
+			scene.getStylesheets().add(new File("./res/css/Mercury.css").toURI().toURL().toExternalForm());
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 		stage.setScene(scene);
 		stage.show();
 	}

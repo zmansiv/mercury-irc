@@ -4,16 +4,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-import java.io.File;
-import java.io.IOException;
+public class SidePanel extends VBox {
 
-public class ContentPanel extends VBox {
-
-	public ContentPanel() throws IOException {
-		getStylesheets().add(new File("./res/css/ApplicationPane.css").toURI().toURL().toExternalForm());
+	public SidePanel() {
 		setMinWidth(175);
 		VBox contentBox = new VBox();
-		contentBox.getStyleClass().add("content-box");
+		contentBox.getStyleClass().add("side-panel");
 		VBox.setVgrow(contentBox, Priority.ALWAYS);
 		HBox bottomBar = new HBox();
 		bottomBar.getStyleClass().add("bottom-bar");

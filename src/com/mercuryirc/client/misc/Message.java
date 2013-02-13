@@ -14,7 +14,7 @@ public class Message {
 		source = escape(source);
 		message = escape(findUrls(stripColors(message)));
 		switch (type) {
-			case SERVER:
+			case EVENT:
 				this.source = "";
 				this.message = source + " " + message;
 				break;
@@ -64,7 +64,7 @@ public class Message {
 
 	public enum MessageType {
 
-		ME("me"), OTHER("other"), HIGHLIGHT("highlight"), SERVER("server");
+		ME("me"), OTHER("other"), HIGHLIGHT("highlight"), EVENT("event");
 
 		private final String style;
 

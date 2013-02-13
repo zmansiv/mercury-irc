@@ -16,7 +16,7 @@
 			var timestampCell = row.insertCell(2);
 			timestampCell.className = "timestamp";
 			timestampCell.innerHTML = timestamp;
-			window.scrollTo(0, window.innerHeight);
+			window.scrollTo(0, document.body.scrollHeight);
 		}
 
 		function onLinkClick(url) {
@@ -50,19 +50,19 @@
 		}
 
 		tr.me {
-			background-image: -webkit-linear-gradient(top, rgb(223, 225, 220), rgb(223, 228, 216));
+			background-color: rgb(220, 230, 215);
 		}
 
 		tr.other {
-			background-image: -webkit-linear-gradient(top, rgb(222, 224, 228), rgb(221, 226, 233));
+			background-color: rgb(220, 225, 235);
 		}
 
 		tr.highlight {
-			background-image: -webkit-linear-gradient(top, rgb(232, 201, 201), rgb(238, 182, 182));
+			background-image: -webkit-linear-gradient(top, rgb(230, 200, 200), rgb(240, 180, 180));
 		}
 
-		tr.server {
-			background-image: -webkit-linear-gradient(top, rgb(227, 225, 217), rgb(230, 229, 214));
+		tr.event {
+			background-color: rgb(230, 230, 215);
 		}
 
 		td {
@@ -71,7 +71,7 @@
 			padding: 5px 5px 3px 5px;
 			overflow-x: hidden;
 			text-overflow: ellipsis;
-			color: rgb(100, 100, 100);
+			color: rgb(115, 115, 115);
 		}
 
 		td.source {

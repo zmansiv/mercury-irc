@@ -18,9 +18,13 @@ public class TitleBar extends HBox {
 
 	private final Stage stage;
 
-	public TitleBar(Stage stage) throws IOException {
+	public TitleBar(Stage stage) {
 		this.stage = stage;
-		getStylesheets().add(new File("./res/css/TitleBar.css").toURI().toURL().toExternalForm());
+		try {
+			getStylesheets().add(new File("./res/css/TitleBar.css").toURI().toURL().toExternalForm());
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 		setId("title-bar");
 		setMinHeight(28);
 		setMaxHeight(28);
