@@ -1,19 +1,5 @@
-.split-pane {
-	-fx-background-color: rgb(175, 175, 175);
-	-fx-background-radius: 0px 0px 6px 6px;
-}
-
-.split-pane .split-pane-divider {
-	-fx-padding: 0px;
-	-fx-border-color: rgb(175, 175, 175);
-}
-
-.split-pane .split-pane-divider .horizontal-grabber {
-	-fx-background-color: transparent;
-}
-
 .side-panel {
-	-fx-background-color: linear-gradient(to bottom, rgb(240, 240, 240), rgb(210, 217, 225));
+	-fx-background-color: panel-color;
 }
 
 .message-panel {
@@ -21,15 +7,15 @@
 }
 
 .bottom-bar {
-	-fx-background-color: linear-gradient(to bottom, rgb(240, 240, 240), rgb(205, 205, 205));
-	-fx-border-color: rgb(175, 175, 175);
+	-fx-background-color: bar-color;
+	-fx-border-color: border-color;
 	-fx-border-width: 1px 0px 0px 0px;
 }
 
-#left-content-panel .bottom-bar {
+#left-side-panel .bottom-bar {
 	-fx-background-radius: 0px 0px 0px 5px;
 }
 
-#right-content-panel .bottom-bar {
+#right-side-panel .bottom-bar {
 	-fx-background-radius: 0px 0px 5px 0px;
 }

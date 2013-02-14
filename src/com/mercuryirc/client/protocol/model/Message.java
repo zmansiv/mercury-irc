@@ -1,42 +1,41 @@
 package com.mercuryirc.client.protocol.model;
 
-import com.mercuryirc.client.protocol.IRCTools;
-
 public class Message {
-	public static enum Kind { PRIVMSG, NOTICE }
 
-	private Kind kind;
+	private final Type type;
 
 	/**
-	 *'from' could be a User object but I'd prefer that only the Server
+	 * 'source' could be a User object but I'd prefer that only the Server
 	 * know about the Users
 	 */
-	private String from;
-	private String to;
+	private final String source;
+	private final String target;
 
 	private String message;
 
-	/** timestamp in milliseconds */
-	private long timestamp;
+	/**
+	 * timestamp in milliseconds
+	 */
+	private final long timestamp;
 
-	public Message(Kind kind, String from, String to, String message) {
-		this.kind = kind;
-		this.from = from;
-		this.to = to;
+	public Message(Type type, String source, String target, String message) {
+		this.type = type;
+		this.source = source;
+		this.target = target;
 		this.message = message;
 		this.timestamp = System.currentTimeMillis();
 	}
 
-	public Kind getKind() {
-		return kind;
+	public Type getType() {
+		return type;
 	}
 
-	public String getFrom() {
-		return from;
+	public String getSource() {
+		return source;
 	}
 
-	public String getTo() {
-		return to;
+	public String getTarget() {
+		return target;
 	}
 
 	public String getMessage() {
@@ -48,6 +47,9 @@ public class Message {
 	}
 
 	public String toString() {
-		return kind + "(ts: " + timestamp + ", " + "from: " + from + ", to: " + to + ", message: " + message + ")";
+		return type + "(ts: " + timestamp + ", " + "source: " + source + ", target: " + target + ", message: " + message + ")";
 	}
+
+	public static enum Type {PRIVMSG, NOTICE}
+
 }

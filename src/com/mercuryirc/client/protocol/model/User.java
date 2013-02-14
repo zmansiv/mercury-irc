@@ -1,42 +1,58 @@
 package com.mercuryirc.client.protocol.model;
 
 
-public class User {
-	private String nick;
+public class User implements Target {
 
-	private String user;
-	private String host;
+	private String name;
+	private String userName;
 	private String realName;
+	private String host;
 
-	public User(String nick) {
-		this.nick = nick;
+	public User(String name, String userName, String realName, String host) {
+		this.name = name;
+		this.userName = userName;
+		this.realName = realName;
+		this.host = host;
 	}
 
-	public String getNick() {
-		return nick;
+	public User(String name, String userName, String realName) {
+		this(name, userName, realName, null);
 	}
 
-	public String getUser() {
-		return user;
+	public User(String name) {
+		this(name, null, null, null);
 	}
 
-	public String getHost() {
-		return host;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getRealName() {
 		return realName;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
+	public String getHost() {
+		return host;
 	}
 
 	public void setHost(String host) {
 		this.host = host;
 	}
 
-	public void setRealName(String realName) {
-		this.realName = realName;
-	}
 }

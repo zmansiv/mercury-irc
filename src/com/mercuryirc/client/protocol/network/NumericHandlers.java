@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NumericHandlers {
+
 	public static final List<Connection.NumericHandler> list = new ArrayList<Connection.NumericHandler>();
 
 	static {
@@ -15,4 +16,5 @@ public class NumericHandlers {
 		list.add(new ChannelTopic());
 		list.add(new TopicTimestamp());
 	}
+
 }

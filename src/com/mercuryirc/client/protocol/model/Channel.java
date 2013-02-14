@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class Channel {
-	private String name;
+public class Channel implements Target {
+
+	private final String name;
 
 	private String topic;
 	private long topicTimestamp;
 
-	private Set<String> users = new TreeSet<>();
+	private Set<String> nicks = new TreeSet<>();
 
 	public Channel(String name) {
 		this.name = name;
@@ -28,21 +29,26 @@ public class Channel {
 		this.topic = topic;
 	}
 
-	public Set<String> getNames() {
-		return users;
+	public Set<String> getNicks() {
+		return nicks;
 	}
 
-	public void addNames(List<String> nickList) {
-		this.users.addAll(nickList);
-		System.out.println("Users on " + name + ": " + this.users);
+	public void addNicks(List<String> nickList) {
+		this.nicks.addAll(nickList);
+		System.out.println("Users on " + name + ": " + this.nicks);
 	}
 
-	public void clear() {
-		topic = null;
-		users.clear();
+	public long getTopicTimestamp() {
+		return topicTimestamp;
 	}
 
 	public void setTopicTimestamp(long ts) {
 		topicTimestamp = ts;
 	}
+
+	public void clearData() {
+		topic = null;
+		nicks.clear();
+	}
+
 }

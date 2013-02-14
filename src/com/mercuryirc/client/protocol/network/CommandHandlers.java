@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandHandlers {
-	public static final List<Connection.CommandHandler> list = new ArrayList<Connection.CommandHandler>();
+
+	public static final List<Connection.CommandHandler> list = new ArrayList<Connection.CommandHandler>(3);
 
 	static {
 		list.add(new Ping());
 		list.add(new ChannelJoin());
 		list.add(new MessageReceived());
 	}
+
 }

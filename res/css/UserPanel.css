@@ -1,0 +1,34 @@
+.tree-view {
+	-fx-translate-y: 3px;
+}
+
+.target-cell {
+	-fx-background-repeat: no-repeat;
+	-fx-translate-x: 8px;
+	-fx-translate-y: 3px;
+	-fx-text-fill: control-color;
+	-fx-background-repeat: no-repeat;
+}
+
+.target-cell .label {
+	-fx-padding: 5px 0px 0px 22px;
+	-fx-font: 13px calibri;
+}
+
+#users-cell {
+	-fx-translate-x: 6px;
+	-fx-padding: 0px;
+}
+
+#users-cell .target-cell {
+	-fx-font: bold 15px calibri;
+	-fx-background-image: url("../images/icons/users.png");
+}
+
+#users-cell .label {
+	-fx-padding: 2px 0px 0px 22px;
+}
+
+#user-cell .target-cell {
+	-fx-background-image: url("../images/icons/user.png");
+}

@@ -1,6 +1,6 @@
 package com.mercuryirc.client.ui;
 
-import com.mercuryirc.client.misc.Message;
+import com.mercuryirc.client.ui.model.Message;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -38,7 +38,7 @@ public class MessagePanel extends VBox {
 
 	public MessagePanel() {
 		getStyleClass().add("message-panel");
-		setId("right-content-panel");
+		setId("right-side-panel");
 		setMinWidth(350);
 		webView = new WebView();
 		VBox.setVgrow(webView, Priority.ALWAYS);
@@ -73,7 +73,10 @@ public class MessagePanel extends VBox {
 					if (change.wasAdded()) {
 						for (Message message : change.getAddedSubList()) {
 							if (loaded) {
-								webView.getEngine().executeScript(String.format("addRow('%s', '%s', '%s', '%s')", message.source(), message.message(), "[" + TIME_FORMATTER.format(new Date()) + "]", message.type().style()));
+								try {
+								webView.getEngine().executeScript(String.format("addRow('%s', '%s', '%s', '%s')", message.getSource(), message.getContent(), "[" + TIME_FORMATTER.format(new Date()) + "]", message.getType().style()));
+								} catch (Exception e) {
+								}
 							} else {
 								loadQueue.add(message);
 							}
@@ -89,7 +92,7 @@ public class MessagePanel extends VBox {
 		loaded = true;
 		synchronized (loadQueue) {
 			for (Message message : loadQueue) {
-				webView.getEngine().executeScript(String.format("addRow('%s', '%s', '%s', '%s')", message.source(), message.message(), "[" + TIME_FORMATTER.format(new Date()) + "]", message.type().style()));
+				webView.getEngine().executeScript(String.format("addRow('%s', '%s', '%s', '%s')", message.getSource(), message.getContent(), "[" + TIME_FORMATTER.format(new Date()) + "]", message.getType().style()));
 			}
 		}
 		JSObject window = (JSObject) webView.getEngine().executeScript("window");

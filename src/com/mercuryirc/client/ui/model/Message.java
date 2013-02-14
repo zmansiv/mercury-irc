@@ -1,27 +1,26 @@
-package com.mercuryirc.client.misc;
+package com.mercuryirc.client.ui.model;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Message {
 
+	private final com.mercuryirc.client.protocol.model.Message message;
 	private final String source;
-	private final String message;
-	private final MessageType type;
+	private final String content;
+	private final Type type;
 
-	public Message(String source, String message, MessageType type) {
-		this.type = type;
-		source = escape(source);
-		message = escape(findUrls(stripColors(message)));
-		switch (type) {
-			case EVENT:
-				this.source = "";
-				this.message = source + " " + message;
-				break;
+	public Message(com.mercuryirc.client.protocol.model.Message message) {
+		this.message = message;
+		String source, content;
+		source = message.getSource();
+		content = escape(findUrls(stripColors(message.getMessage())));
+		switch (message.getType()) {
 			default:
 				this.source = source;
-				this.message = message;
+				this.content = content;
 		}
+		type = Type.OTHER;
 	}
 
 	private static String stripColors(String line) {
@@ -50,25 +49,29 @@ public class Message {
 		return line.replace("'", "\\'").replace("\"", "\\\"");
 	}
 
-	public String source() {
-		return source;
-	}
-
-	public String message() {
+	public com.mercuryirc.client.protocol.model.Message getMessage() {
 		return message;
 	}
 
-	public MessageType type() {
+	public String getSource() {
+		return source;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public Type getType() {
 		return type;
 	}
 
-	public enum MessageType {
+	public enum Type {
 
 		ME("me"), OTHER("other"), HIGHLIGHT("highlight"), EVENT("event");
 
 		private final String style;
 
-		private MessageType(final String style) {
+		private Type(final String style) {
 			this.style = style;
 		}
 

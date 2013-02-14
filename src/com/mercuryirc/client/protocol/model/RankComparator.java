@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RankComparator implements Comparator<String> {
-	/** 0 = highest priority (owner), 5 = lowest (normal user) */
+
+	/**
+	 * 0 = highest priority (owner), 5 = lowest (normal user)
+	 */
 	private static final Map<Character, Integer> priority = new HashMap<>();
 	private static final int NORMAL_USER = 5;
 
@@ -18,7 +21,7 @@ public class RankComparator implements Comparator<String> {
 	}
 
 	public int compare(String o1, String o2) {
-		if(!isRank(o1.charAt(0)) && !isRank(o2.charAt(0)))
+		if (!isRank(o1.charAt(0)) && !isRank(o2.charAt(0)))
 			return o1.compareToIgnoreCase(o2);
 
 		else {
@@ -33,9 +36,9 @@ public class RankComparator implements Comparator<String> {
 			int p1 = p1m != null ? p1m : NORMAL_USER;
 			int p2 = p2m != null ? p2m : NORMAL_USER;
 
-			if(p1 < p2)
+			if (p1 < p2)
 				return -1;
-			else if(p1 > p2)
+			else if (p1 > p2)
 				return 1;
 			else {
 				// same rank, do alphabetical
@@ -50,4 +53,5 @@ public class RankComparator implements Comparator<String> {
 	public static boolean isRank(char ch) {
 		return ch == '+' || ch == '%' || ch == '@' || ch == '&' || ch == '~';
 	}
+
 }

@@ -1,64 +1,82 @@
 #title-bar {
-	-fx-background-color: linear-gradient(to bottom, rgb(240, 240, 240), rgb(205, 205, 205));
+	-fx-background-color: bar-color;
 	-fx-background-radius: 6px 6px 0px 0px;
-	-fx-border-color: rgb(175, 175, 175);
+	-fx-border-color: border-color;
 	-fx-border-radius: 5px 5px 0px 0px;
 	-fx-border-width: 1px;
 }
 
 #settings-button {
-	-fx-background-image: url("../images/buttons/settings.png");
 	-fx-translate-x: 10px;
 	-fx-translate-y: 4px;
 }
 
-#settings-button:hover {
+#settings-button .button {
+	-fx-background-image: url("../images/buttons/settings.png");
+}
+
+#settings-button .button:hover {
 	-fx-background-image: url("../images/buttons/settings_hover.png");
 }
 
 #title {
-	-fx-font: bold 18px calibri;
-	-fx-text-fill: rgb(100, 100, 100);
 	-fx-translate-x: 35px;
 	-fx-translate-y: 5px;
+	-fx-text-fill: control-color;
+}
+
+#title .label {
+	-fx-font: bold 18px calibri;
 }
 
 #minimize-button {
-	-fx-background-image: url("../images/buttons/minimize.png");
 	-fx-translate-x: -24px;
 	-fx-translate-y: 17px;
 }
 
-#minimize-button:hover {
+#minimize-button .button {
+	-fx-background-image: url("../images/buttons/minimize.png");
+}
+
+#minimize-button .button:hover {
 	-fx-background-image: url("../images/buttons/minimize_hover.png");
 }
 
 #maximize-button {
-	-fx-background-image: url("../images/buttons/maximize.png");
 	-fx-translate-x: -14px;
 	-fx-translate-y: 5px;
 }
 
-#maximize-button:hover {
+#maximize-button .button {
+	-fx-background-image: url("../images/buttons/maximize.png");
+}
+
+#maximize-button .button:hover {
 	-fx-background-image: url("../images/buttons/maximize_hover.png");
 }
 
 #restore-button {
-	-fx-background-image: url("../images/buttons/restore.png");
 	-fx-translate-x: -14px;
 	-fx-translate-y: 5px;
 }
 
-#restore-button:hover {
+#restore-button .button {
+	-fx-background-image: url("../images/buttons/restore.png");
+}
+
+#restore-button .button:hover {
 	-fx-background-image: url("../images/buttons/restore_hover.png");
 }
 
 #close-button {
-	-fx-background-image: url("../images/buttons/close.png");
 	-fx-translate-x: -4px;
 	-fx-translate-y: 6px;
 }
 
-#close-button:hover {
+#close-button .button {
+	-fx-background-image: url("../images/buttons/close.png");
+}
+
+#close-button .button:hover {
 	-fx-background-image: url("../images/buttons/close_hover.png");
 }

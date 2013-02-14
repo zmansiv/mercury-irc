@@ -4,23 +4,25 @@ import com.mercuryirc.client.protocol.model.Server;
 import com.mercuryirc.client.protocol.network.Connection;
 
 public class ChannelJoin implements Connection.CommandHandler {
-	public boolean appliesTo(String command, String line) {
+
+	public boolean applies(Connection connection, String command, String line) {
 		return command.equals("JOIN");
 	}
 
-	public void process(String line, String[] parts, Connection conn) {
+	public void process(Connection connection, String line, String[] parts) {
 		String chan = line.substring(line.lastIndexOf(':') + 1);
 		String user = parts[0].substring(1, parts[0].indexOf('!'));
 
-		Server srv = conn.getServer();
+		Server srv = connection.getServer();
 
 		// if the person who joined the channel was us...
-		if(user.equalsIgnoreCase(conn.getLocalUser().getNick())) {
+		if (user.equalsIgnoreCase(connection.getLocalUser().getName())) {
 			// clear any saved state about the channel so that
 			// the server can fill us in again
-			srv.getChannel(chan).clear();
+			srv.getChannel(chan).clearData();
 		}
 
-		conn.getListener().onChannelJoin(srv.getUser(user), srv.getChannel(chan));
+		connection.getCallback().onChannelJoin(connection, srv.getChannel(chan), srv.getUser(user));
 	}
+
 }

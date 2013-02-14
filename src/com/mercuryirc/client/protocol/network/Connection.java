@@ -1,6 +1,6 @@
 package com.mercuryirc.client.protocol.network;
 
-import com.mercuryirc.client.protocol.IRCCallback;
+import com.mercuryirc.client.protocol.network.callback.IrcCallback;
 import com.mercuryirc.client.protocol.model.*;
 
 import javax.net.ssl.*;
@@ -17,7 +17,8 @@ import java.security.cert.X509Certificate;
  * the server saying that the channel was successfully joined.
  */
 public class Connection implements Runnable {
-	private Server server;
+
+	private final Server server;
 
 	private boolean acceptAllCerts;
 
@@ -25,15 +26,15 @@ public class Connection implements Runnable {
 	private BufferedReader in;
 	private BufferedWriter out;
 
-	private User localUser;
+	private final User localUser;
 
-	private IRCCallback listener;
+	private final IrcCallback callback;
 	private ExceptionHandler exceptionHandler;
 
-	public Connection(Server server, User user, IRCCallback listener) {
+	public Connection(Server server, User user, IrcCallback callback) {
 		this.server = server;
 		this.localUser = user;
-		this.listener = listener;
+		this.callback = callback;
 	}
 
 	public Server getServer() {
@@ -44,20 +45,20 @@ public class Connection implements Runnable {
 		return localUser;
 	}
 
-	public IRCCallback getListener() {
-		return listener;
+	public IrcCallback getCallback() {
+		return callback;
 	}
 
 	public boolean isLocalUser(String nick) {
-		return nick.equalsIgnoreCase(localUser.getNick());
+		return nick.equalsIgnoreCase(localUser.getName());
 	}
 
 	public void connect() {
 		try {
-			if(server.isSsl()) {
+			if (server.isSsl()) {
 				SSLSocketFactory ssf;
 
-				if(acceptAllCerts)
+				if (acceptAllCerts)
 					ssf = getLenientSocketFactory();
 				else
 					ssf = (SSLSocketFactory) SSLSocketFactory.getDefault();
@@ -70,13 +71,13 @@ public class Connection implements Runnable {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-			writeLine("NICK " + localUser.getNick());
-			writeLine("USER " + localUser.getUser() + " * * :" + localUser.getRealName());
+			writeLine("NICK " + localUser.getName());
+			writeLine("USER " + localUser.getUserName() + " * * :" + localUser.getRealName());
 
 			new Thread(this).start();
-		} catch(IOException e) {
-			if(exceptionHandler != null)
-				exceptionHandler.onException(e);
+		} catch (IOException e) {
+			if (exceptionHandler != null)
+				exceptionHandler.onException(this, e);
 		}
 	}
 
@@ -85,11 +86,11 @@ public class Connection implements Runnable {
 	 * use connect() instead.
 	 */
 	public void run() {
-		for(String line = readLine(); line != null; line = readLine()) {
+		for (String line = readLine(); line != null; line = readLine()) {
 			String[] parts = line.split(" ");
 
 			String command;
-			if(line.startsWith(":"))
+			if (line.startsWith(":"))
 				command = parts[1];
 			else
 				command = parts[0];
@@ -97,14 +98,14 @@ public class Connection implements Runnable {
 			try {
 				int numeric = Integer.parseInt(command);
 
-				for(NumericHandler nh : NumericHandlers.list)
-					if(nh.appliesTo(numeric))
-						nh.process(line, parts, this);
-			} catch(NumberFormatException e) {
+				for (NumericHandler nh : NumericHandlers.list)
+					if (nh.applies(this, numeric))
+						nh.process(this, line, parts);
+			} catch (NumberFormatException e) {
 				// not a numeric
-				for(CommandHandler lh : CommandHandlers.list)
-					if(lh.appliesTo(command, line))
-						lh.process(line, parts, this);
+				for (CommandHandler lh : CommandHandlers.list)
+					if (lh.applies(this, command, line))
+						lh.process(this, line, parts);
 			}
 		}
 	}
@@ -116,9 +117,9 @@ public class Connection implements Runnable {
 	public void disconnect() {
 		try {
 			socket.close();
-		} catch(IOException e) {
-			if(exceptionHandler != null)
-				exceptionHandler.onException(e);
+		} catch (IOException e) {
+			if (exceptionHandler != null)
+				exceptionHandler.onException(this, e);
 		}
 	}
 
@@ -127,9 +128,9 @@ public class Connection implements Runnable {
 			System.out.println("(out) " + rawLine);
 			out.write(rawLine + "\r\n");
 			out.flush();
-		} catch(IOException e) {
-			if(exceptionHandler != null)
-				exceptionHandler.onException(e);
+		} catch (IOException e) {
+			if (exceptionHandler != null)
+				exceptionHandler.onException(this, e);
 		}
 	}
 
@@ -138,9 +139,9 @@ public class Connection implements Runnable {
 			String s = in.readLine();
 			System.out.println(" (in) " + s);
 			return s;
-		} catch(IOException e) {
-			if(exceptionHandler != null)
-				exceptionHandler.onException(e);
+		} catch (IOException e) {
+			if (exceptionHandler != null)
+				exceptionHandler.onException(this, e);
 			return null;
 		}
 	}
@@ -149,16 +150,24 @@ public class Connection implements Runnable {
 		this.exceptionHandler = exceptionHandler;
 	}
 
-	/** security risk */
-	public void setAcceptAllSSLCerts(boolean b) {
-		acceptAllCerts = b;
+	/**
+	 * security risk
+	 */
+	public void setAcceptAllSSLCerts(boolean accept) {
+		acceptAllCerts = accept;
 	}
 
 	private SSLSocketFactory getLenientSocketFactory() {
-		TrustManager[] trustAllCerts = new TrustManager[]{ new X509TrustManager() {
-			public X509Certificate[] getAcceptedIssuers(){ return null; }
-			public void checkClientTrusted(X509Certificate[] certs, String authType){ }
-			public void checkServerTrusted(X509Certificate[] certs, String authType){ }
+		TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+			public X509Certificate[] getAcceptedIssuers() {
+				return null;
+			}
+
+			public void checkClientTrusted(X509Certificate[] certs, String authType) {
+			}
+
+			public void checkServerTrusted(X509Certificate[] certs, String authType) {
+			}
 		}};
 
 		try {
@@ -173,16 +182,25 @@ public class Connection implements Runnable {
 	}
 
 	public static interface ExceptionHandler {
-		public void onException(Exception e);
+
+		public void onException(Connection connection, Exception e);
+
 	}
 
 	public static interface CommandHandler {
-		public boolean appliesTo(String command, String line);
-		public void process(String line, String[] parts, Connection conn);
+
+		public boolean applies(Connection connection, String command, String line);
+
+		public void process(Connection connection, String line, String[] parts);
+
 	}
 
 	public static interface NumericHandler {
-		public boolean appliesTo(int numeric);
-		public void process(String line, String[] parts, Connection conn);
+
+		public boolean applies(Connection connection, int numeric);
+
+		public void process(Connection connection, String line, String[] parts);
+
 	}
+
 }
