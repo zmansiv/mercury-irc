@@ -15,6 +15,7 @@ public class NumericHandlers {
 		list.add(new TopicTimestamp());
 		list.add(new EndOfNamesList());
 		list.add(new Welcome());
+		list.add(new NickInUse());
 	}
 
 }
