@@ -1,5 +1,6 @@
 package com.mercuryirc.client.ui;
 
+import com.mercuryirc.client.protocol.model.RankComparator;
 import com.mercuryirc.client.protocol.model.Target;
 import com.mercuryirc.client.protocol.network.Connection;
 import com.mercuryirc.client.ui.model.TreeLabel;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.TreeSet;
 
 public class UserPanel extends SidePanel {
 
@@ -72,7 +74,9 @@ public class UserPanel extends SidePanel {
 				return cell;
 			}
 		});
-		users = FXCollections.observableSet(new HashSet<String>());
+
+		users = FXCollections.observableSet(new TreeSet<>(new RankComparator()));
+
 		users.addListener(new SetChangeListener<String>() {
 			@Override
 			public void onChanged(Change<? extends String> change) {

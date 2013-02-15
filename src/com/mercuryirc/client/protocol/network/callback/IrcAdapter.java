@@ -14,6 +14,8 @@ import java.util.Set;
  */
 public class IrcAdapter implements IrcCallback {
 
+	public void onConnect(Connection connection) { }
+
 	public void onMessage(Connection connection, Message message) {}
 
 	public void onChannelJoin(Connection connection, Channel channel, User user) {}

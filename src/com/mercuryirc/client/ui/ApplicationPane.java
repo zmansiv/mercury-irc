@@ -37,7 +37,6 @@ public class ApplicationPane extends SplitPane {
 		conn.setAcceptAllSSLCerts(true);
 		conn.setExceptionHandler(callback);
 		conn.connect();
-		conn.joinChannel("#mercury");
 	}
 
 	public TargetPanel getTargetPanel() {
@@ -45,6 +44,11 @@ public class ApplicationPane extends SplitPane {
 	}
 
 	private class IrcHandler implements Connection.ExceptionHandler, IrcCallback {
+
+		@Override
+		public void onConnect(Connection connection) {
+			connection.joinChannel("#mercury");
+		}
 
 		@Override
 		public void onException(Connection connection, Exception e) {

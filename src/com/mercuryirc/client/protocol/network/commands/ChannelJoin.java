@@ -10,7 +10,12 @@ public class ChannelJoin implements Connection.CommandHandler {
 	}
 
 	public void process(Connection connection, String line, String[] parts) {
-		String chan = line.substring(line.lastIndexOf(':') + 1);
+		String chan = parts[2];
+
+		// some irc servers send :#channel, some just send #channel
+		if(chan.startsWith(":"))
+			chan = chan.substring(1);
+
 		String user = parts[0].substring(1, parts[0].indexOf('!'));
 
 		Server srv = connection.getServer();

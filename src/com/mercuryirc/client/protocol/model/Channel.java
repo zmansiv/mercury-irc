@@ -1,5 +1,6 @@
 package com.mercuryirc.client.protocol.model;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
