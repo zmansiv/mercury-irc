@@ -31,6 +31,8 @@ public class Connection implements Runnable {
 	private final IrcCallback callback;
 	private ExceptionHandler exceptionHandler;
 
+	private boolean registered;
+
 	public Connection(Server server, User user, IrcCallback callback) {
 		this.server = server;
 		this.localUser = user;
@@ -148,6 +150,14 @@ public class Connection implements Runnable {
 
 	public void setExceptionHandler(ExceptionHandler exceptionHandler) {
 		this.exceptionHandler = exceptionHandler;
+	}
+
+	public boolean isRegistered() {
+		return registered;
+	}
+
+	public void setRegistered(boolean r) {
+		registered = r;
 	}
 
 	/**

@@ -1,8 +1,6 @@
 package com.mercuryirc.client.protocol.network;
 
-import com.mercuryirc.client.protocol.network.commands.ChannelJoin;
-import com.mercuryirc.client.protocol.network.commands.MessageReceived;
-import com.mercuryirc.client.protocol.network.commands.Ping;
+import com.mercuryirc.client.protocol.network.commands.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +13,11 @@ public class CommandHandlers {
 		list.add(new Ping());
 		list.add(new ChannelJoin());
 		list.add(new MessageReceived());
+		list.add(new ChannelPart());
+		list.add(new Quit());
+		list.add(new TopicChange());
+		list.add(new NickChange());
+		list.add(new Kick());
 	}
 
 }

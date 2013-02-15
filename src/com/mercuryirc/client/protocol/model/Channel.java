@@ -1,6 +1,6 @@
 package com.mercuryirc.client.protocol.model;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -34,9 +34,12 @@ public class Channel implements Target {
 		return nicks;
 	}
 
-	public void addNicks(List<String> nickList) {
-		this.nicks.addAll(nickList);
-		System.out.println("Users on " + name + ": " + this.nicks);
+	public void addNicks(String... nickList) {
+		nicks.addAll(Arrays.asList(nickList));
+	}
+
+	public void removeNicks(String... nickList) {
+		nicks.removeAll(Arrays.asList(nickList));
 	}
 
 	public long getTopicTimestamp() {

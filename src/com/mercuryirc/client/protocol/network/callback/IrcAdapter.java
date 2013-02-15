@@ -20,6 +20,15 @@ public class IrcAdapter implements IrcCallback {
 
 	public void onChannelJoin(Connection connection, Channel channel, User user) {}
 
+	public void onChannelPart(Connection connection, Channel channel, User user, String reason) { }
+
+	public void onUserQuit(Connection connection, User user, String reason) { }
+
 	public void onChannelNickList(Connection connection, Channel channel, Set<String> nicks) {}
 
+	public void onTopicChange(Connection connection, Channel channel, String who) { }
+
+	public void onUserNickChange(Connection connection, User user, String oldNick) { }
+
+	public void onUserKick(Connection connection, Channel channel, User user, String reason) { }
 }

@@ -21,4 +21,11 @@ public class IrcUtils {
 		return System.currentTimeMillis() / 1000;
 	}
 
+	/**
+	 * @return true if the specified character is an IRC rank character
+	 * ('+', '%', '@', '&', or '~')
+	 */
+	public static boolean isRank(char ch) {
+		return ch == '+' || ch == '%' || ch == '@' || ch == '&' || ch == '~';
+	}
 }

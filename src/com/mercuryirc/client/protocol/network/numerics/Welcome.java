@@ -9,6 +9,7 @@ public class Welcome implements Connection.NumericHandler {
 
 	@Override
 	public void process(Connection connection, String line, String[] parts) {
+		connection.setRegistered(true);
 		connection.getCallback().onConnect(connection);
 	}
 }

@@ -6,18 +6,14 @@ import com.mercuryirc.client.protocol.model.Server;
 import com.mercuryirc.client.protocol.model.User;
 import com.mercuryirc.client.protocol.network.Connection;
 
-public class ChannelJoin implements Connection.CommandHandler {
+public class ChannelPart implements Connection.CommandHandler {
 
 	public boolean applies(Connection connection, String command, String line) {
-		return command.equals("JOIN");
+		return command.equals("PART");
 	}
 
 	public void process(Connection connection, String line, String[] parts) {
 		String chName = parts[2];
-
-		// some irc servers send :#channel, some just send #channel
-		if(chName.startsWith(":"))
-			chName = chName.substring(1);
 
 		Server srv = connection.getServer();
 
@@ -25,18 +21,14 @@ public class ChannelJoin implements Connection.CommandHandler {
 		User user = srv.getUser(nick);
 		Channel channel = srv.getChannel(chName);
 
-		// update state
-		user.addChannel(chName);
-		channel.addNicks(nick);
+		user.removeChannel(chName);
+		channel.removeNicks(nick);
 
-		// if the person who joined the channel was us...
-		if (nick.equalsIgnoreCase(connection.getLocalUser().getName())) {
-			// clear any saved state about the channel so that
-			// the server can fill us in again
-			srv.getChannel(chName).clearData();
-		}
+		String reason = null;
+		if(parts.length > 3 && parts[3].length() > 1)
+			reason = line.substring(line.indexOf(':', 1) + 1);
 
-		connection.getCallback().onChannelJoin(connection, channel, user);
+		connection.getCallback().onChannelPart(connection, channel, user, reason);
 	}
 
 }

@@ -14,12 +14,15 @@ public class ChannelNickList implements Connection.NumericHandler {
 
 	@Override
 	public void process(Connection connection, String line, String[] parts) {
-		String chan = parts[4];
 		String[] names = line.substring(line.lastIndexOf(':') + 1).split(" ");
 
 		Server srv = connection.getServer();
-		Channel channel = srv.getChannel(chan);
-		channel.addNicks(Arrays.asList(names));
+
+		// parts[4] = channel name
+		srv.getChannel(parts[4]).addNicks(names);
+
+		// don't notify callback yet, since more 353 numerics may be coming
+		// wait for the EndOfNamesList
 	}
 
 }

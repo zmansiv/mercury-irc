@@ -87,5 +87,29 @@ public class ApplicationPane extends SplitPane {
 				}
 			});
 		}
+
+		public void onChannelPart(Connection connection, Channel channel, User user, String reason) {
+			System.out.println(user.getName() + " has left " + channel.getName() + " (" + reason + ")");
+		}
+
+		@Override
+		public void onUserQuit(Connection connection, User user, String reason) {
+			System.out.println(user.getName() + " has quit (" + reason + ")");
+		}
+
+		@Override
+		public void onTopicChange(Connection connection, Channel channel, String who) {
+			System.out.println(who + " changed the topic of " + channel.getName() + " to " + channel.getTopic());
+		}
+
+		@Override
+		public void onUserNickChange(Connection connection, User user, String oldNick) {
+			System.out.println(oldNick + " is now known as " + user.getName());
+		}
+
+		@Override
+		public void onUserKick(Connection connection, Channel channel, User user, String reason) {
+			System.out.println(user.getName() + " was kicked from " + channel.getName() + " (" + reason + ")");
+		}
 	}
 }

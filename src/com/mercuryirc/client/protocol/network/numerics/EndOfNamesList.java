@@ -19,6 +19,7 @@ public class EndOfNamesList implements Connection.NumericHandler {
 		Server srv = connection.getServer();
 		Channel channel = srv.getChannel(parts[3]);
 
+		System.out.println("Users on channel " + channel.getName() + ": " + channel.getNicks());
 		connection.getCallback().onChannelNickList(connection, channel, channel.getNicks());
 	}
 }

@@ -1,11 +1,12 @@
 package com.mercuryirc.client.protocol.model;
 
+import com.mercuryirc.client.protocol.misc.IrcUtils;
+
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RankComparator implements Comparator<String> {
-
 	/**
 	 * 0 = highest priority (owner), 5 = lowest (normal user)
 	 */
@@ -21,7 +22,7 @@ public class RankComparator implements Comparator<String> {
 	}
 
 	public int compare(String o1, String o2) {
-		if (!isRank(o1.charAt(0)) && !isRank(o2.charAt(0)))
+		if (!IrcUtils.isRank(o1.charAt(0)) && !IrcUtils.isRank(o2.charAt(0)))
 			return o1.compareToIgnoreCase(o2);
 
 		else {
@@ -48,10 +49,6 @@ public class RankComparator implements Comparator<String> {
 				return o1.compareToIgnoreCase(o2);
 			}
 		}
-	}
-
-	public static boolean isRank(char ch) {
-		return ch == '+' || ch == '%' || ch == '@' || ch == '&' || ch == '~';
 	}
 
 }
