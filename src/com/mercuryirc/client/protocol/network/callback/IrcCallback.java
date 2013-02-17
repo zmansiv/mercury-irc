@@ -2,9 +2,11 @@ package com.mercuryirc.client.protocol.network.callback;
 
 import com.mercuryirc.client.protocol.model.Channel;
 import com.mercuryirc.client.protocol.model.Message;
+import com.mercuryirc.client.protocol.model.Mode;
 import com.mercuryirc.client.protocol.model.User;
 import com.mercuryirc.client.protocol.network.Connection;
 
+import java.util.List;
 import java.util.Set;
 
 public interface IrcCallback {
@@ -34,4 +36,6 @@ public interface IrcCallback {
 	public void onUserNickChange(Connection connection, User user, String oldNick);
 
 	public void onUserKick(Connection connection, Channel channel, User user, String reason);
+
+	public void onChannelList(Connection connection, Channel channel, Mode.Type type, List<Mode> list);
 }

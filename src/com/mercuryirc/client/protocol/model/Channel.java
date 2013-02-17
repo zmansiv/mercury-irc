@@ -1,9 +1,6 @@
 package com.mercuryirc.client.protocol.model;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class Channel implements Target {
 
@@ -13,6 +10,11 @@ public class Channel implements Target {
 	private long topicTimestamp;
 
 	private Set<String> nicks = new TreeSet<>();
+
+	private List<Mode> bans = new ArrayList<>();
+	private List<Mode> invites = new ArrayList<>();
+	private List<Mode> excepts = new ArrayList<>();
+
 
 	public Channel(String name) {
 		this.name = name;
@@ -55,4 +57,15 @@ public class Channel implements Target {
 		nicks.clear();
 	}
 
+	public List<Mode> getBans() {
+		return bans;
+	}
+
+	public List<Mode> getInvites() {
+		return invites;
+	}
+
+	public List<Mode> getExcepts() {
+		return excepts;
+	}
 }
