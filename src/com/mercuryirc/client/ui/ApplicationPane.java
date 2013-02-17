@@ -1,6 +1,7 @@
 package com.mercuryirc.client.ui;
 
 import com.mercuryirc.client.protocol.model.Channel;
+import com.mercuryirc.client.protocol.model.Mode;
 import com.mercuryirc.client.protocol.model.Server;
 import com.mercuryirc.client.protocol.model.User;
 import com.mercuryirc.client.protocol.network.Connection;
@@ -13,6 +14,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 public class ApplicationPane extends SplitPane {
@@ -110,6 +112,11 @@ public class ApplicationPane extends SplitPane {
 		@Override
 		public void onUserKick(Connection connection, Channel channel, User user, String reason) {
 			System.out.println(user.getName() + " was kicked from " + channel.getName() + " (" + reason + ")");
+		}
+
+		@Override
+		public void onChannelModeList(Connection connection, Channel channel, Mode.Type type, List<Mode> list) {
+
 		}
 	}
 }

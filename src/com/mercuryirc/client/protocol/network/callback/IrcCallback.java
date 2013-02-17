@@ -37,5 +37,5 @@ public interface IrcCallback {
 
 	public void onUserKick(Connection connection, Channel channel, User user, String reason);
 
-	public void onChannelList(Connection connection, Channel channel, Mode.Type type, List<Mode> list);
+	public void onChannelModeList(Connection connection, Channel channel, Mode.Type type, List<Mode> list);
 }
