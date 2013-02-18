@@ -13,5 +13,8 @@ public class TabPane extends BorderPane {
 
 		buttons = new LeftButtonBox();
 		tabs = new TabBox();
+
+		setTop(buttons);
+		setCenter(tabs);
 	}
 }

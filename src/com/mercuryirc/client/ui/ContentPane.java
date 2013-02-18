@@ -1,8 +1,9 @@
 package com.mercuryirc.client.ui;
 
+import com.mercuryirc.client.Mercury;
 import javafx.scene.layout.BorderPane;
 
-public class MessagePane extends BorderPane {
+public class ContentPane extends BorderPane {
 	private ApplicationPane appPane;
 
 	private TopicPane topicPane;
@@ -10,12 +11,18 @@ public class MessagePane extends BorderPane {
 	private InputPane inputPane;
 	private UserPane userPane;
 
-	public MessagePane(ApplicationPane ap) {
+	public ContentPane(ApplicationPane ap) {
+		getStylesheets().add(Mercury.class.getResource("./res/css/ContentPane.css").toExternalForm());
+
 		appPane = ap;
 
 		topicPane = new TopicPane();
 		messageList = new MessageList();
 		inputPane = new InputPane();
 		userPane = new UserPane();
+
+		setTop(topicPane);
+		setCenter(messageList);
+		setRight(userPane);
 	}
 }

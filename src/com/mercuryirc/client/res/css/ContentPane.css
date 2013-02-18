@@ -1,0 +1,15 @@
+#topic-pane {
+	-fx-background-color: light-background-color;
+}
+
+#input-pane {
+	-fx-background-color: background-color;
+}
+
+#user-list {
+	-fx-background-color: light-background-color;
+}
+
+#right-button-box {
+	-fx-background-color: background-color;
+}

@@ -13,19 +13,17 @@ public class Message {
 	private final Type type;
 
 	public Message(Connection connection, com.mercuryirc.client.protocol.model.Message message) {
-		String source = message.getSource();
-		String content = escape(findUrls(stripColors(message.getMessage())));
-		this.source = source;
-		this.content = content;
-		target = message.getTarget();
+		this.source = message.getSource();
+		this.target = message.getTarget();
+		this.content = escape(findUrls(stripColors(message.getMessage())));
 		String localNick = connection.getLocalUser().getName();
 		type = source.equalsIgnoreCase(localNick) ? Type.ME : content.contains(localNick) ? Type.HIGHLIGHT : Type.OTHER;
 	}
 
 	public Message(String target, String content) {
 		this.source = "";
-		this.content = content;
 		this.target = target;
+		this.content = content;
 		type = Type.OTHER;
 	}
 

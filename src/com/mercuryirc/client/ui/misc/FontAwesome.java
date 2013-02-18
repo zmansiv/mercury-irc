@@ -23,6 +23,7 @@ public class FontAwesome {
 	public static final String INFO = "\uf05a";
 	public static final String ENVELOPE = "\uf0e0";
 	public static final String LEGAL = "\uf0e3";
+	public static final String REPLY = "\uf112";
 
 	public static Button createIconButton(String iconName) {
 		return createIconButton(iconName, "");

@@ -1,7 +1,10 @@
 package com.mercuryirc.client;
 
+import com.mercuryirc.client.protocol.model.Server;
+import com.mercuryirc.client.protocol.network.Connection;
 import com.mercuryirc.client.ui.ApplicationPane;
 import com.mercuryirc.client.ui.TitlePane;
+import com.mercuryirc.client.protocol.model.User;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
@@ -23,13 +26,30 @@ public class Mercury extends Application {
 		stage.setTitle("Mercury");
 		stage.initStyle(StageStyle.TRANSPARENT);
 		VBox content = new VBox();
+		ApplicationPane appPane = new ApplicationPane();
+
 		content.getChildren().add(new TitlePane(stage));
-		content.getChildren().add(new ApplicationPane());
+		content.getChildren().add(appPane);
 		Scene scene = new Scene(content, 1000, 650);
 		scene.setFill(null);
 		scene.getStylesheets().add(Mercury.class.getResource("./res/css/Mercury.css").toExternalForm());
 		stage.setScene(scene);
 		stage.show();
+
+		connectToIRC(appPane);
+	}
+
+	private void connectToIRC(ApplicationPane appPane) {
+		Server server = new Server("Rizon", "irc.rizon.net", 6667, true);
+
+		User user = new User("Test|Mercury");
+		user.setUserName("mercury");
+		user.setRealName("Mercury IRC Client");
+
+		Connection connection = new Connection(server, user, new MercuryCallback(appPane));
+		connection.setAcceptAllSSLCerts(true);
+
+		connection.connect();
 	}
 
 }

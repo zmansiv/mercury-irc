@@ -6,14 +6,20 @@ import com.mercuryirc.client.protocol.model.Mode;
 import com.mercuryirc.client.protocol.model.User;
 import com.mercuryirc.client.protocol.network.Connection;
 import com.mercuryirc.client.protocol.network.callback.IrcCallback;
+import com.mercuryirc.client.ui.ApplicationPane;
 
 import java.util.List;
 import java.util.Set;
 
 public class MercuryCallback implements IrcCallback {
-	@Override
+	private ApplicationPane appPane;
+
+	public MercuryCallback(ApplicationPane ap) {
+		appPane = ap;
+	}
+
 	public void onConnect(Connection connection) {
-		//To change body of implemented methods use File | Settings | File Templates.
+		connection.joinChannel("#mercury");
 	}
 
 	@Override
