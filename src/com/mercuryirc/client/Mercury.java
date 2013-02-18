@@ -1,19 +1,20 @@
 package com.mercuryirc.client;
 
 import com.mercuryirc.client.ui.ApplicationPane;
-import com.mercuryirc.client.ui.TitleBar;
+import com.mercuryirc.client.ui.TitlePane;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import java.io.File;
-import java.io.IOException;
 
 public class Mercury extends Application {
 
 	public static void main(String[] args) {
+		Font.loadFont(Mercury.class.getResource("./res/fonts/font_awesome.ttf").toExternalForm(), 12);
+		Font.loadFont(Mercury.class.getResource("./res/fonts/open_sans.ttf").toExternalForm(), 12);
+		Font.loadFont(Mercury.class.getResource("./res/fonts/ubuntu_mono.ttf").toExternalForm(), 12);
 		Application.launch(args);
 	}
 
@@ -22,15 +23,11 @@ public class Mercury extends Application {
 		stage.setTitle("Mercury");
 		stage.initStyle(StageStyle.TRANSPARENT);
 		VBox content = new VBox();
-		content.getChildren().add(new TitleBar(stage));
+		content.getChildren().add(new TitlePane(stage));
 		content.getChildren().add(new ApplicationPane());
-		Scene scene = new Scene(content, 1100, 600);
+		Scene scene = new Scene(content, 1000, 650);
 		scene.setFill(null);
-		try {
-			scene.getStylesheets().add(new File("./res/css/Mercury.css").toURI().toURL().toExternalForm());
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
+		scene.getStylesheets().add(Mercury.class.getResource("./res/css/Mercury.css").toExternalForm());
 		stage.setScene(scene);
 		stage.show();
 	}

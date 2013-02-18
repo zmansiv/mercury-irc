@@ -1,5 +1,7 @@
 package com.mercuryirc.client.ui;
 
+import com.mercuryirc.client.Mercury;
+import com.mercuryirc.client.ui.misc.FontAwesome;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
@@ -8,59 +10,51 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
-
-public class TitleBar extends HBox {
+public class TitlePane extends StackPane {
 
 	private final Stage stage;
 
-	public TitleBar(Stage stage) {
+	public TitlePane(Stage stage) {
 		this.stage = stage;
-		try {
-			getStylesheets().add(new File("./res/css/TitleBar.css").toURI().toURL().toExternalForm());
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
+		getStylesheets().add(Mercury.class.getResource("./res/css/TitlePane.css").toExternalForm());
 		setId("title-bar");
-		setMinHeight(28);
-		setMaxHeight(28);
-		Button settingsButton = new Button();
-		settingsButton.setId("settings-button");
-		Region spacer1 = new Region();
-		HBox.setHgrow(spacer1, Priority.ALWAYS);
-		Label titleLabel = new Label("Mercury");
+		setMinHeight(50);
+		setMaxHeight(50);
+		Label titleLabel = new Label("mercury");
 		titleLabel.setId("title");
-		Region spacer2 = new Region();
-		HBox.setHgrow(spacer2, Priority.ALWAYS);
-		Button minimizeButton = new Button();
+		HBox buttonBox = new HBox();
+		Region spacer = new Region();
+		HBox.setHgrow(spacer, Priority.ALWAYS);
+		Button minimizeButton = FontAwesome.createIconButton(FontAwesome.MINUS);
 		minimizeButton.setId("minimize-button");
 		minimizeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
-				TitleBar.this.stage.setIconified(true);
+				TitlePane.this.stage.setIconified(true);
 			}
 		});
-		final Button maximizeButton = new Button();
+		final Button maximizeButton = FontAwesome.createIconButton(FontAwesome.RESIZE_FULL);
 		maximizeButton.setId("maximize-button");
 		maximizeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
-				toggleMaximization(TitleBar.this.stage, maximizeButton);
+				toggleMaximization(TitlePane.this.stage, maximizeButton);
 			}
 		});
-		Button closeButton = new Button();
+		Button closeButton = FontAwesome.createIconButton(FontAwesome.REMOVE);
 		closeButton.setId("close-button");
 		closeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
-				TitleBar.this.stage.close();
+				TitlePane.this.stage.close();
 			}
 		});
-		getChildren().addAll(settingsButton, spacer1, titleLabel, spacer2, minimizeButton, maximizeButton, closeButton);
+		buttonBox.getChildren().addAll(spacer, minimizeButton, maximizeButton, closeButton);
+		getChildren().addAll(titleLabel, buttonBox);
 	}
 
 	private void toggleMaximization(Stage stage, Button button) {
@@ -71,13 +65,13 @@ public class TitleBar extends HBox {
 			stage.setY(50);
 			stage.setWidth(1100);
 			stage.setHeight(600);
-			button.setId("maximize-button");
+			button.setGraphic(FontAwesome.createIcon(FontAwesome.RESIZE_FULL));
 		} else {
 			stage.setX(maximized.getMinX());
 			stage.setY(maximized.getMinY());
 			stage.setWidth(maximized.getWidth());
 			stage.setHeight(maximized.getHeight());
-			button.setId("restore-button");
+			button.setGraphic(FontAwesome.createIcon(FontAwesome.RESIZE_SMALL));
 		}
 	}
 

@@ -1,5 +1,6 @@
 package com.mercuryirc.client.ui;
 
+import com.mercuryirc.client.Mercury;
 import com.mercuryirc.client.protocol.model.Channel;
 import com.mercuryirc.client.protocol.model.Mode;
 import com.mercuryirc.client.protocol.model.Server;
@@ -8,41 +9,30 @@ import com.mercuryirc.client.protocol.network.Connection;
 import com.mercuryirc.client.protocol.network.callback.IrcCallback;
 import com.mercuryirc.client.ui.model.Message;
 import javafx.application.Platform;
-import javafx.scene.control.SplitPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-public class ApplicationPane extends SplitPane {
+public class ApplicationPane extends BorderPane {
 
-	private final TargetPanel targetPanel;
+	private final TabPane tabPane;
 
 	public ApplicationPane() {
-		try {
-			getStylesheets().add(new File("./res/css/ApplicationPane.css").toURI().toURL().toExternalForm());
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-		setPrefHeight(692);
+		getStylesheets().add(Mercury.class.getResource("./res/css/ApplicationPane.css").toExternalForm());
 		VBox.setVgrow(this, Priority.ALWAYS);
-		targetPanel = new TargetPanel(this);
-		getItems().addAll(targetPanel, targetPanel.getRootItem().getValue().getUserPanel(), targetPanel.getRootItem().getValue().getMessagePanel());
-		setDividerPositions(0D, 0D);
+		tabPane = new TabPane(this);
+		setLeft(tabPane);
+		setRight(new ChatPane());
 		Server svr = new Server("Rizon", "irc.rizon.net", 6697, true);
 		User me = new User("Test|Mercury", "test_user", "MercuryIRC");
 		IrcHandler callback = new IrcHandler();
 		Connection conn = new Connection(svr, me, callback);
 		conn.setAcceptAllSSLCerts(true);
 		conn.setExceptionHandler(callback);
-		conn.connect();
-	}
-
-	public TargetPanel getTargetPanel() {
-		return targetPanel;
+		//conn.connect();
 	}
 
 	private class IrcHandler implements Connection.ExceptionHandler, IrcCallback {
@@ -60,10 +50,12 @@ public class ApplicationPane extends SplitPane {
 		@Override
 		public void onMessage(final Connection connection, final com.mercuryirc.client.protocol.model.Message message) {
 			Platform.runLater(new Runnable() {
+
 				@Override
 				public void run() {
-					targetPanel.addMessage(connection, new Message(message));
+					tabPane.addMessage(connection, new Message(connection, message));
 				}
+
 			});
 		}
 
@@ -72,10 +64,12 @@ public class ApplicationPane extends SplitPane {
 			System.out.println(user.getName() + " has joined " + channel.getName());
 			if (connection.isLocalUser(user.getName())) {
 				Platform.runLater(new Runnable() {
+
 					@Override
 					public void run() {
-						targetPanel.select(targetPanel.addTarget(connection, channel));
+						tabPane.getSelectionModel().select(tabPane.addTarget(connection, channel));
 					}
+
 				});
 			}
 		}
@@ -83,10 +77,12 @@ public class ApplicationPane extends SplitPane {
 		@Override
 		public void onChannelNickList(final Connection connection, final Channel channel, final Set<String> nicks) {
 			Platform.runLater(new Runnable() {
+
 				@Override
 				public void run() {
-					targetPanel.setNicks(connection, channel, nicks);
+					tabPane.addNicks(connection, channel, nicks);
 				}
+
 			});
 		}
 
@@ -116,7 +112,8 @@ public class ApplicationPane extends SplitPane {
 
 		@Override
 		public void onChannelModeList(Connection connection, Channel channel, Mode.Type type, List<Mode> list) {
-
 		}
+
 	}
+
 }

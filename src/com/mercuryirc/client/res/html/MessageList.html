@@ -16,6 +16,9 @@
 			var timestampCell = row.insertCell(2);
 			timestampCell.className = "timestamp";
 			timestampCell.innerHTML = timestamp;
+			if (window.innerHeight > 10) {
+				window.scrollTo(0, document.body.scrollHeight);
+			}
 		}
 
 		function onLinkClick(url) {
@@ -49,11 +52,11 @@
 		}
 
 		tr.me {
-			background-color: rgb(220, 230, 215);
+			background-color: rgb(220, 225, 235);
 		}
 
 		tr.other {
-			background-color: rgb(220, 225, 235);
+			background-color: rgb(220, 230, 215);
 		}
 
 		tr.highlight {

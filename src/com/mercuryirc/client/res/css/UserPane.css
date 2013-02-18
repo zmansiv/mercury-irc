@@ -1,0 +1,25 @@
+.list-view {
+	-fx-translate-y: 10px;
+}
+
+.list-view .list-cell:selected {
+	-fx-background-color: linear-gradient(to bottom, rgb(215, 225, 245), rgb(190, 215, 245));
+	-fx-border-color: border-color transparent border-color transparent;
+	-fx-border-width: 1px 0px 1px 0px;
+}
+
+#title-label {
+	-fx-text-origin: bottom;
+	-fx-padding: 3px 0px 0px 21px;
+	-fx-translate-x: 10px;
+	-fx-translate-y: 10px;
+	-fx-font: bold 15px calibri;
+	-fx-background-image: url("../images/icons/users.png");
+}
+
+#user-label {
+	-fx-translate-x: 31px;
+	-fx-text-origin: bottom;
+	-fx-padding: 0px 0px 0px 21px;
+	-fx-background-image: url("../images/icons/user.png");
+}

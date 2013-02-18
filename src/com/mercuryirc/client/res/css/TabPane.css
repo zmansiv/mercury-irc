@@ -1,0 +1,36 @@
+.tree-view {
+	-fx-translate-y: 10px;
+}
+
+.tree-cell:selected {
+	-fx-background-color: linear-gradient(to bottom, rgb(215, 225, 245), rgb(190, 215, 245));
+	-fx-border-color: border-color transparent border-color transparent;
+	-fx-border-width: 1px 0px 1px 0px;
+}
+
+.tree-cell .label {
+	-fx-translate-x: 31px;
+	-fx-text-origin: bottom;
+	-fx-padding: 1px 0px 0px 21px;
+}
+
+#title-label {
+	-fx-text-origin: bottom;
+	-fx-padding: 3px 0px 0px 21px;
+	-fx-translate-x: 10px;
+	-fx-translate-y: 10px;
+	-fx-font: bold 15px calibri;
+	-fx-background-image: url("../images/icons/networks.png");
+}
+
+#network-label {
+	-fx-background-image: url("../images/icons/network.png");
+}
+
+#channel-label {
+	-fx-background-image: url("../images/icons/channel.png");
+}
+
+#user-label {
+	-fx-background-image: url("../images/icons/user.png");
+}

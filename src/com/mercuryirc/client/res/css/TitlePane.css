@@ -1,0 +1,35 @@
+#title-bar {
+	-fx-background-color: background-color;
+	-fx-background-radius: 4px 4px 0px 0px;
+	-fx-border-color: border-color, title-stripe-color;
+	-fx-border-width: 1px 0px 0px 0px, 0px 0px 3px 0px;
+	-fx-border-insets: 0px 4px 0px 4px, 0px;
+}
+
+#title {
+	-fx-text-fill: title-color;
+}
+
+#title .label {
+	-fx-font-size: 18px;
+}
+
+.button {
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+}
+
+#minimize-button {
+	-fx-translate-x: -48px;
+	-fx-translate-y: 30px;
+}
+
+#maximize-button {
+	-fx-translate-x: -33px;
+	-fx-translate-y: 18px;
+}
+
+#close-button {
+	-fx-translate-x: -18px;
+	-fx-translate-y: 18px;
+}

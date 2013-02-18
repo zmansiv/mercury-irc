@@ -1,5 +1,6 @@
 package com.mercuryirc.client.ui;
 
+import com.mercuryirc.client.Mercury;
 import com.mercuryirc.client.ui.model.Message;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -17,7 +18,6 @@ import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
 import java.awt.Desktop;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MessagePanel extends VBox {
+public class ChatPane extends VBox {
 
 	private static final DateFormat TIME_FORMATTER = new SimpleDateFormat("hh:mm");
 	private final List<Message> loadQueue = Collections.synchronizedList(new LinkedList<Message>());
@@ -36,11 +36,12 @@ public class MessagePanel extends VBox {
 	private final WebView webView;
 	private boolean loaded = false;
 
-	public MessagePanel() {
+	public ChatPane() {
 		getStyleClass().add("message-panel");
 		setId("right-side-panel");
 		setMinWidth(350);
 		webView = new WebView();
+		webView.setContextMenuEnabled(false);
 		VBox.setVgrow(webView, Priority.ALWAYS);
 		final WebEngine webEngine = webView.getEngine();
 		webEngine.setOnAlert(new EventHandler<WebEvent<String>>() {
@@ -49,11 +50,7 @@ public class MessagePanel extends VBox {
 				System.out.println(stringWebEvent.getData());
 			}
 		});
-		try {
-			webEngine.load(new File("./res/html/MessageList.html").toURI().toURL().toExternalForm());
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
+		webEngine.load(Mercury.class.getResource("./res/html/MessageList.html").toExternalForm());
 		webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
 			public void changed(ObservableValue observableValue, Worker.State state, Worker.State newState) {
 				if (newState.equals(Worker.State.SUCCEEDED)) {
@@ -73,10 +70,7 @@ public class MessagePanel extends VBox {
 					if (change.wasAdded()) {
 						for (Message message : change.getAddedSubList()) {
 							if (loaded) {
-								try {
 								webView.getEngine().executeScript(String.format("addRow('%s', '%s', '%s', '%s')", message.getSource(), message.getContent(), "[" + TIME_FORMATTER.format(new Date()) + "]", message.getType().style()));
-								} catch (Exception e) {
-								}
 							} else {
 								loadQueue.add(message);
 							}

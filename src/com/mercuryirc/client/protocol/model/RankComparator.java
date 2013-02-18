@@ -21,6 +21,11 @@ public class RankComparator implements Comparator<String> {
 		priority.put('+', 4);
 	}
 
+	public static final RankComparator INSTANCE = new RankComparator();
+
+	private RankComparator() {
+	}
+
 	public int compare(String o1, String o2) {
 		if (!IrcUtils.isRank(o1.charAt(0)) && !IrcUtils.isRank(o2.charAt(0)))
 			return o1.compareToIgnoreCase(o2);

@@ -1,25 +1,31 @@
 package com.mercuryirc.client.ui.model;
 
+import com.mercuryirc.client.protocol.network.Connection;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Message {
 
-	private final com.mercuryirc.client.protocol.model.Message message;
 	private final String source;
+	private final String target;
 	private final String content;
 	private final Type type;
 
-	public Message(com.mercuryirc.client.protocol.model.Message message) {
-		this.message = message;
-		String source, content;
-		source = message.getSource();
-		content = escape(findUrls(stripColors(message.getMessage())));
-		switch (message.getType()) {
-			default:
-				this.source = source;
-				this.content = content;
-		}
+	public Message(Connection connection, com.mercuryirc.client.protocol.model.Message message) {
+		String source = message.getSource();
+		String content = escape(findUrls(stripColors(message.getMessage())));
+		this.source = source;
+		this.content = content;
+		target = message.getTarget();
+		String localNick = connection.getLocalUser().getName();
+		type = source.equalsIgnoreCase(localNick) ? Type.ME : content.contains(localNick) ? Type.HIGHLIGHT : Type.OTHER;
+	}
+
+	public Message(String target, String content) {
+		this.source = "";
+		this.content = content;
+		this.target = target;
 		type = Type.OTHER;
 	}
 
@@ -49,12 +55,12 @@ public class Message {
 		return line.replace("'", "\\'").replace("\"", "\\\"");
 	}
 
-	public com.mercuryirc.client.protocol.model.Message getMessage() {
-		return message;
-	}
-
 	public String getSource() {
 		return source;
+	}
+
+	public String getTarget() {
+		return target;
 	}
 
 	public String getContent() {
