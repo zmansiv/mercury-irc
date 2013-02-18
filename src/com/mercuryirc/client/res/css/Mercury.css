@@ -7,7 +7,7 @@
 	control-hover-color: rgb(50, 50, 50);
 	dark-control-color: control-hover-color;
 	dark-control-hover-color: control-color;
-	light-control-color: background-color;
+	light-control-color: rgb(240, 240, 240);
 	light-control-hover-color: light-background-color;
 	button-color: rgb(250, 250, 250);
 	border-color: rgb(200, 200, 200);
@@ -15,8 +15,8 @@
 	green-border-color: rgb(100, 150, 100);
 	red-button-color: rgb(240, 95, 80);
 	red-border-color: rgb(230, 50, 50);
-	blue-button-color: rgb(245, 245, 245);
-	blue-border-color: rgb(245, 245, 245);
+	blue-button-color: rgb(45, 175, 225);
+	blue-border-color: rgb(25, 145, 200);
 	highlight-color: rgb(255, 245, 245);
 	green-message-color: rgb(160, 200, 140);
 	orange-message-color: rgb(255, 200, 135);
@@ -28,10 +28,6 @@
 
 .icon {
 	-fx-text-fill: control-color;
-}
-
-.icon:hover {
-	-fx-text-fill: control-hover-color;
 }
 
 .icon .label {
@@ -47,6 +43,73 @@
 .button {
 	-fx-background-color: button-color;
 	-fx-border-color: border-color;
+	-fx-text-fill: control-color;
+	-fx-font-size: 16px;
+	-fx-border-radius: 3px;
+	-fx-background-radius: 3px;
+	-fx-padding: 0px;
+}
+
+.button:hover {
+	-fx-text-fill: control-hover-color;
+}
+
+.button:hover .icon {
+	-fx-text-fill: control-hover-color;
+}
+
+.green .icon {
+	-fx-text-fill: light-control-color;
+}
+
+.green {
+	-fx-background-color: green-button-color;
+	-fx-border-color: green-border-color;
+	-fx-text-fill: light-control-color;
+}
+
+.green:hover {
+	-fx-text-fill: light-control-hover-color;
+}
+
+.green:hover .icon {
+	-fx-text-fill: light-control-hover-color;
+}
+
+.red .icon {
+	-fx-text-fill: light-control-color;
+}
+
+.red {
+	-fx-background-color: red-button-color;
+	-fx-border-color: red-border-color;
+	-fx-text-fill: light-control-color;
+}
+
+.red:hover {
+	-fx-text-fill: light-control-hover-color;
+}
+
+.red:hover .icon {
+	-fx-text-fill: light-control-hover-color;
+}
+
+.blue .icon {
+	-fx-text-fill: light-control-color;
+}
+
+.blue {
+	-fx-background-color: blue-button-color;
+	-fx-border-color: blue-border-color;
+	-fx-text-fill: light-control-color;
+}
+
+.blue:hover {
+	-fx-text-fill: light-control-hover-color;
+}
+
+.blue:hover .icon {
+	-fx-text-fill: light-control-hover-color;
 }
 
 .split-pane {

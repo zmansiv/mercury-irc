@@ -4,6 +4,8 @@ import com.mercuryirc.client.Mercury;
 import com.mercuryirc.client.ui.misc.FontAwesome;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -33,10 +35,12 @@ public class TitlePane extends StackPane {
 		setMaxHeight(50);
 		Label titleLabel = new Label("mercury");
 		titleLabel.setId("title");
-		HBox buttonBox = new HBox();
+		HBox buttonBox = new HBox(15);
+		buttonBox.setPadding(new Insets(0, 15, 0, 0));
+		buttonBox.setAlignment(Pos.CENTER_RIGHT);
 		Region spacer = new Region();
 		HBox.setHgrow(spacer, Priority.ALWAYS);
-		Button minimizeButton = FontAwesome.createIconButton(FontAwesome.MINUS);
+		Button minimizeButton = FontAwesome.createIconButton(FontAwesome.MINUS, false);
 		minimizeButton.setId("minimize-button");
 		minimizeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -44,16 +48,15 @@ public class TitlePane extends StackPane {
 				stage.setIconified(true);
 			}
 		});
-		resizeButton = FontAwesome.createIconButton(FontAwesome.RESIZE_FULL);
-		resizeButton.setId("maximize-button");
+		resizeButton = FontAwesome.createIconButton(FontAwesome.RESIZE_FULL, false);
+		resizeButton.setId("resize-button");
 		resizeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
 				toggleMaximization(stage);
 			}
 		});
-		Button closeButton = FontAwesome.createIconButton(FontAwesome.REMOVE);
-		closeButton.setId("close-button");
+		Button closeButton = FontAwesome.createIconButton(FontAwesome.REMOVE, false);
 		closeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
@@ -89,6 +92,7 @@ public class TitlePane extends StackPane {
 						stage.setHeight(unmaximizedHeight);
 						dragX = event.getScreenX() - stage.getX();
 						dragY = event.getScreenY() - stage.getY();
+						resizeButton.setGraphic(FontAwesome.createIcon(FontAwesome.RESIZE_FULL));
 					} else {
 						stage.setX(event.getScreenX() - dragX);
 						stage.setY(event.getScreenY() - dragY);
@@ -99,7 +103,17 @@ public class TitlePane extends StackPane {
 	}
 
 	private void toggleMaximization(Stage stage) {
-		Rectangle2D maximized = Screen.getPrimary().getVisualBounds();
+		Screen screen = null;
+		for (Screen _screen : Screen.getScreens()) {
+			if (_screen.getBounds().contains(stage.getX(), stage.getY())) {
+				screen = _screen;
+				break;
+			}
+		}
+		if (screen == null) {
+			screen = Screen.getPrimary();
+		}
+		Rectangle2D maximized = screen.getVisualBounds();
 		if (stage.getWidth() == maximized.getWidth() && stage.getHeight() == maximized.getHeight()) {
 			stage.setX(unmaximizedX);
 			stage.setY(unmaximizedY);

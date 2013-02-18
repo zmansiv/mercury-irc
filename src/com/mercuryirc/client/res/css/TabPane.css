@@ -1,11 +1,20 @@
-#network-label {
-	-fx-background-image: url("../images/icons/network.png");
+.list-cell {
+	-fx-background-color: transparent;
+	-fx-border-color: border-color;
+	-fx-border-width: 0px 1px 0px 0px;
 }
 
-#channel-label {
-	-fx-background-image: url("../images/icons/channel.png");
+.list-cell:empty {
+	-fx-background-color: transparent;
+	-fx-border-width: 0px 1px 0px 0px;
 }
 
-#user-label {
-	-fx-background-image: url("../images/icons/user.png");
+.list-cell:selected {
+	-fx-background-color: light-background-color;
+	-fx-border-color: border-color;
+	-fx-border-width: 1px 0px 1px 0px;
+}
+
+.first .list-cell:selected {
+	-fx-border-width: 0px 0px 1px 0px;
 }
