@@ -3,15 +3,16 @@
 <HEAD>
 	<SCRIPT type="text/javascript">
 
-		function addRow(source, message, timestamp, style) {
+		function addRow(source, message, timestamp, highlight) {
 			var table = document.getElementById('messageTable');
 			var row = table.insertRow(table.rows.length);
-			row.className = style;
+			if (highlight) {
+				row.className = "highlight";
+			}
 			var sourceCell = row.insertCell(0);
 			sourceCell.className = "source";
 			sourceCell.innerHTML = source;
 			var messageCell = row.insertCell(1);
-			messageCell.className = style;
 			messageCell.innerHTML = message;
 			var timestampCell = row.insertCell(2);
 			timestampCell.className = "timestamp";
@@ -31,7 +32,7 @@
 		html, body {
 			margin: 0;
 			padding: 0;
-			background-color: rgb(230, 230, 230);
+			background-color: rgb(255, 255, 255);
 		}
 
 		::selection {
@@ -48,50 +49,38 @@
 		}
 
 		tr {
-			border-bottom: 1px solid rgb(175, 175, 175);
-		}
-
-		tr.me {
-			background-color: rgb(220, 225, 235);
-		}
-
-		tr.other {
-			background-color: rgb(220, 230, 215);
+			border-bottom: 1px solid rgb(230, 230, 230);
 		}
 
 		tr.highlight {
-			background-image: -webkit-linear-gradient(top, rgb(230, 200, 200), rgb(240, 180, 180));
-		}
-
-		tr.event {
-			background-color: rgb(230, 230, 215);
+			background-color: rgb(235, 130, 115);
 		}
 
 		td {
-			font-family: Calibri, sans-serif;
-			font-size: 14px;
-			padding: 5px 5px 3px 5px;
+			font-family: Ubuntu-Mono, monospace;
+			font-size: 15px;
 			overflow-x: hidden;
 			text-overflow: ellipsis;
-			color: rgb(115, 115, 115);
+			color: rgb(130, 130, 130);
 		}
 
 		td.source {
+			color: rgb(50, 50, 50);
 			width: 1px;
-			text-align: right;
 		}
 
 		td.timestamp {
+			color: rgb(200, 200, 200);
 			width: 1px;
 			text-align: right;
 		}
 
 		a {
-			color: rgb(150, 150, 150);
+			color: rgb(115, 200, 235);
 		}
 
 		a:hover {
-			color: rgb(200, 200, 200);
+			color: rgb(30, 150, 200);
 		}
 
 	</STYLE>

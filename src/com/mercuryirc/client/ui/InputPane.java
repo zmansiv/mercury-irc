@@ -1,6 +1,5 @@
 package com.mercuryirc.client.ui;
 
-import com.mercuryirc.client.Mercury;
 import com.mercuryirc.client.ui.misc.FontAwesome;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -11,23 +10,26 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
 public class InputPane extends HBox {
+
 	private Label nickLabel;
-	private TextField inputText;
-	private Button send;
 
-	public InputPane() {
+	public InputPane(ApplicationPane appPane) {
+		getStyleClass().add("dark-pane");
 		setId("input-pane");
-
+		setMinHeight(65);
+		setMaxHeight(65);
 		setSpacing(0);
 		setPadding(new Insets(10, 5, 10, 5));
-
-		Region space = new Region();
-		HBox.setHgrow(space, Priority.ALWAYS);
-
-		nickLabel = new Label("test");
-		inputText = new TextField();
-		send = FontAwesome.createIconButton(FontAwesome.REPLY, "send");
-
-		getChildren().addAll(nickLabel, inputText, space, send);
+		Region spacer = new Region();
+		HBox.setHgrow(spacer, Priority.ALWAYS);
+		nickLabel = new Label("nick");
+		TextField inputField = new TextField();
+		Button sendButton = FontAwesome.createIconButton(FontAwesome.REPLY, "send");
+		getChildren().addAll(nickLabel, inputField, spacer, sendButton);
 	}
+
+	public Label getNickLabel() {
+		return nickLabel;
+	}
+
 }

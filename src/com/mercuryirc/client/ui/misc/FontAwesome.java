@@ -33,7 +33,7 @@ public class FontAwesome {
 		return ButtonBuilder.create()
 				.text(text)
 				.graphic(createIcon(iconName))
-				.contentDisplay(ContentDisplay.LEFT)
+				.contentDisplay(ContentDisplay.RIGHT)
 				.build();
 	}
 
@@ -41,7 +41,7 @@ public class FontAwesome {
 		return LabelBuilder.create()
 				.text(text)
 				.graphic(createIcon(iconName))
-				.contentDisplay(ContentDisplay.RIGHT)
+				.contentDisplay(ContentDisplay.LEFT)
 				.build();
 	}
 

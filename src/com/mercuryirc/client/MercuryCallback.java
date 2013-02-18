@@ -12,10 +12,11 @@ import java.util.List;
 import java.util.Set;
 
 public class MercuryCallback implements IrcCallback {
+
 	private ApplicationPane appPane;
 
-	public MercuryCallback(ApplicationPane ap) {
-		appPane = ap;
+	public MercuryCallback(ApplicationPane appPane) {
+		this.appPane = appPane;
 	}
 
 	public void onConnect(Connection connection) {
@@ -66,4 +67,5 @@ public class MercuryCallback implements IrcCallback {
 	public void onChannelModeList(Connection connection, Channel channel, Mode.Type type, List<Mode> list) {
 		//To change body of implemented methods use File | Settings | File Templates.
 	}
+
 }

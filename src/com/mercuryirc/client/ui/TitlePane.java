@@ -7,6 +7,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -16,10 +18,15 @@ import javafx.stage.Stage;
 
 public class TitlePane extends StackPane {
 
-	private final Stage stage;
+	private final Button resizeButton;
+	private double dragX = 0D;
+	private double dragY = 0D;
+	private double unmaximizedX = 0D;
+	private double unmaximizedY = 0D;
+	private double unmaximizedWidth = 1000D;
+	private double unmaximizedHeight = 650D;
 
-	public TitlePane(Stage stage) {
-		this.stage = stage;
+	public TitlePane(final Stage stage) {
 		getStylesheets().add(Mercury.class.getResource("./res/css/TitlePane.css").toExternalForm());
 		setId("title-bar");
 		setMinHeight(50);
@@ -34,15 +41,15 @@ public class TitlePane extends StackPane {
 		minimizeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
-				TitlePane.this.stage.setIconified(true);
+				stage.setIconified(true);
 			}
 		});
-		final Button maximizeButton = FontAwesome.createIconButton(FontAwesome.RESIZE_FULL);
-		maximizeButton.setId("maximize-button");
-		maximizeButton.setOnAction(new EventHandler<ActionEvent>() {
+		resizeButton = FontAwesome.createIconButton(FontAwesome.RESIZE_FULL);
+		resizeButton.setId("maximize-button");
+		resizeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
-				toggleMaximization(TitlePane.this.stage, maximizeButton);
+				toggleMaximization(stage);
 			}
 		});
 		Button closeButton = FontAwesome.createIconButton(FontAwesome.REMOVE);
@@ -50,28 +57,65 @@ public class TitlePane extends StackPane {
 		closeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
-				TitlePane.this.stage.close();
+				stage.close();
 			}
 		});
-		buttonBox.getChildren().addAll(spacer, minimizeButton, maximizeButton, closeButton);
+		buttonBox.getChildren().addAll(spacer, minimizeButton, resizeButton, closeButton);
 		getChildren().addAll(titleLabel, buttonBox);
+		setOnMouseClicked(new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent mouseEvent) {
+				if (mouseEvent.getButton().ordinal() == MouseButton.PRIMARY.ordinal() && mouseEvent.getClickCount() == 2) { //Double click
+					toggleMaximization(stage);
+				}
+			}
+		});
+		setOnMousePressed(new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent event) {
+				if (event.isPrimaryButtonDown()) {
+					dragX = event.getSceneX();
+					dragY = event.getSceneY();
+				}
+			}
+		});
+		setOnMouseDragged(new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent event) {
+				if (event.isPrimaryButtonDown()) {
+					Rectangle2D maximized = Screen.getPrimary().getVisualBounds();
+					if (stage.getWidth() == maximized.getWidth() && stage.getHeight() == maximized.getHeight()) {
+						int sceneClickX = (int) (event.getSceneX() / getWidth() * unmaximizedWidth);
+						stage.setX(event.getScreenX() - sceneClickX);
+						stage.setY(event.getScreenY() - event.getSceneY());
+						stage.setWidth(unmaximizedWidth);
+						stage.setHeight(unmaximizedHeight);
+						dragX = event.getScreenX() - stage.getX();
+						dragY = event.getScreenY() - stage.getY();
+					} else {
+						stage.setX(event.getScreenX() - dragX);
+						stage.setY(event.getScreenY() - dragY);
+					}
+				}
+			}
+		});
 	}
 
-	private void toggleMaximization(Stage stage, Button button) {
-		Screen screen = Screen.getPrimary();
-		Rectangle2D maximized = screen.getVisualBounds();
+	private void toggleMaximization(Stage stage) {
+		Rectangle2D maximized = Screen.getPrimary().getVisualBounds();
 		if (stage.getWidth() == maximized.getWidth() && stage.getHeight() == maximized.getHeight()) {
-			stage.setX(50);
-			stage.setY(50);
-			stage.setWidth(1100);
-			stage.setHeight(600);
-			button.setGraphic(FontAwesome.createIcon(FontAwesome.RESIZE_FULL));
+			stage.setX(unmaximizedX);
+			stage.setY(unmaximizedY);
+			stage.setWidth(unmaximizedWidth);
+			stage.setHeight(unmaximizedHeight);
+			resizeButton.setGraphic(FontAwesome.createIcon(FontAwesome.RESIZE_FULL));
 		} else {
+			unmaximizedX = stage.getX();
+			unmaximizedY = stage.getY();
+			unmaximizedWidth = stage.getWidth();
+			unmaximizedHeight = stage.getHeight();
 			stage.setX(maximized.getMinX());
 			stage.setY(maximized.getMinY());
 			stage.setWidth(maximized.getWidth());
 			stage.setHeight(maximized.getHeight());
-			button.setGraphic(FontAwesome.createIcon(FontAwesome.RESIZE_SMALL));
+			resizeButton.setGraphic(FontAwesome.createIcon(FontAwesome.RESIZE_SMALL));
 		}
 	}
 
