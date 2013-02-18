@@ -17,6 +17,7 @@ public class NumericHandlers {
 		list.add(new Welcome());
 		list.add(new NickInUse());
 		list.add(new BanList());
+		list.add(new Who());
 	}
 
 }

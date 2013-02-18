@@ -39,6 +39,8 @@ public class Connection implements Runnable {
 		this.callback = callback;
 	}
 
+	/* accessors */
+
 	public Server getServer() {
 		return server;
 	}
@@ -54,6 +56,27 @@ public class Connection implements Runnable {
 	public boolean isLocalUser(String nick) {
 		return nick.equalsIgnoreCase(localUser.getName());
 	}
+
+	public void setExceptionHandler(ExceptionHandler exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+	}
+
+	public boolean isRegistered() {
+		return registered;
+	}
+
+	public void setRegistered(boolean r) {
+		registered = r;
+	}
+
+	/**
+	 * security risk
+	 */
+	public void setAcceptAllSSLCerts(boolean accept) {
+		acceptAllCerts = accept;
+	}
+
+	/* raw network methods */
 
 	public void connect() {
 		try {
@@ -112,10 +135,6 @@ public class Connection implements Runnable {
 		}
 	}
 
-	public void joinChannel(String channel) {
-		writeLine("JOIN " + channel);
-	}
-
 	public void disconnect() {
 		try {
 			socket.close();
@@ -148,24 +167,60 @@ public class Connection implements Runnable {
 		}
 	}
 
-	public void setExceptionHandler(ExceptionHandler exceptionHandler) {
-		this.exceptionHandler = exceptionHandler;
+	/* IRC commands */
+
+	public void joinChannel(String channel) {
+		writeLine("JOIN " + channel);
 	}
 
-	public boolean isRegistered() {
-		return registered;
+	public void partChannel(String channel) {
+		writeLine("PART " + channel);
 	}
 
-	public void setRegistered(boolean r) {
-		registered = r;
+	public void setChannelModes(String channel, String modes, String... args) {
+		String send = "MODE " + channel + " " + modes + " ";
+		for(String a : args)
+			send += a + " ";
+		send = send.substring(0, send.lastIndexOf(' '));
+		writeLine(send);
 	}
 
-	/**
-	 * security risk
-	 */
-	public void setAcceptAllSSLCerts(boolean accept) {
-		acceptAllCerts = accept;
+	public void ban(String channel, String user) { setHostMode(channel, user, "+b"); }
+	public void unban(String channel, String user) { setHostMode(channel, user, "-b"); }
+	public void invite(String channel, String user) { setHostMode(channel, user, "+I"); }
+	public void uninvite(String channel, String user) { setHostMode(channel, user, "-I"); }
+	public void except(String channel, String user) { setHostMode(channel, user, "+e"); }
+	public void unexcept(String channel, String user) { setHostMode(channel, user, "-e"); }
+
+	private void setHostMode(String channel, String mask, String mode) {
+		if(mask.contains("!") && mask.contains("@")) {
+			writeLine("MODE " + channel + " " + mode + " " + mask);
+		} else {
+			// attempt to find the user's host
+			User u = server.getUser(mask, false);
+			if(u.getHost() == null)
+				return;
+
+			writeLine("MODE " + channel + " " + mode + " *!*@" + u.getHost());
+		}
 	}
+
+	public void sendMessage(Message msg) {
+		switch(msg.getType()) {
+			case NOTICE:  writeLine("NOTICE " + msg.getTarget() + " :" + msg.getMessage());  break;
+			case PRIVMSG: writeLine("PRIVMSG " + msg.getTarget() + " :" + msg.getMessage()); break;
+		}
+	}
+
+	public void whois(String nick) {
+		writeLine("WHOIS " + nick);
+	}
+
+	public void quit(String reason) {
+		writeLine("QUIT :" + reason);
+	}
+
+	/* internal utility method used to accept all SSL certificates */
 
 	private SSLSocketFactory getLenientSocketFactory() {
 		TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
@@ -190,6 +245,8 @@ public class Connection implements Runnable {
 
 		return null;
 	}
+
+	/* external interfaces */
 
 	public static interface ExceptionHandler {
 

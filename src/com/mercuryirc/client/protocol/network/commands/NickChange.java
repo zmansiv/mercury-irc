@@ -14,9 +14,14 @@ public class NickChange implements Connection.CommandHandler {
 	@Override
 	public void process(Connection connection, String line, String[] parts) {
 		String oldNick = IrcUtils.parseTarget(parts[0]);
-		User user = connection.getServer().getUser(oldNick);
+		connection.getServer().removeUser(oldNick);
 
-		user.setName(parts[2].substring(1));
+		String newNick = parts[2];
+		if(newNick.startsWith(":"))
+			newNick = newNick.substring(1);
+
+		User user = connection.getServer().getUser(newNick);
+
 		user.setHost(parts[0].substring(parts[0].indexOf('@') + 1));
 		user.setUserName(line.substring(line.indexOf('!') + 1, line.indexOf('@')));
 

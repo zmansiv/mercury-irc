@@ -26,6 +26,13 @@ public class Message {
 		this.timestamp = System.currentTimeMillis();
 	}
 
+	/**
+	 * for outgoing messages, we don't care about the source
+	 */
+	public Message(Type type, String target, String message) {
+		this(type, null, target, message);
+	}
+
 	public Type getType() {
 		return type;
 	}

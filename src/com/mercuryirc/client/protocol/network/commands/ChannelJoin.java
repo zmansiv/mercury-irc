@@ -36,6 +36,9 @@ public class ChannelJoin implements Connection.CommandHandler {
 			srv.getChannel(chName).clearData();
 		}
 
+		// get info on the hostmasks
+		connection.writeLine("WHO " + chName);
+
 		connection.getCallback().onChannelJoin(connection, channel, user);
 	}
 

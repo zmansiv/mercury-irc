@@ -45,16 +45,23 @@ public class Server implements Target {
 	}
 
 	/**
-	 * @return the User object associated with the given nickname. If the client
-	 * does not know about a User with this nick, a new User object is created
-	 * and returned.
+	 * @see Server#getUser(String, boolean)
 	 */
 	public User getUser(String nick) {
+		return getUser(nick, true);
+	}
+
+	/**
+	 * @return the User object associated with the given nickname. If the client
+	 * does not know about a User with this nick and 'create' is true, a new
+	 * User object is created and returned, otherwise, null is returned.
+	 */
+	public User getUser(String nick, boolean create) {
 		if(IrcUtils.isRank(nick.charAt(0)))
 			nick = nick.substring(1);
 
 		User u = users.get(nick);
-		if (u == null) {
+		if (u == null && create) {
 			u = new User(nick);
 			users.put(nick, u);
 		}
@@ -69,8 +76,12 @@ public class Server implements Target {
 	}
 
 	public Channel getChannel(String name) {
+		return getChannel(name, true);
+	}
+
+	public Channel getChannel(String name, boolean create) {
 		Channel c = channels.get(name);
-		if (c == null) {
+		if (c == null && create) {
 			c = new Channel(name);
 			channels.put(name, c);
 		}
