@@ -23,7 +23,7 @@ public class ApplicationPane extends HBox {
 	}
 
 	private Connection connectToIRC() {
-		Server server = new Server("Rizon", "irc.rizon.net", 6667, true);
+		Server server = new Server("Rizon", "irc.rizon.net", 6697, true);
 		User user = new User("Test|Mercury");
 		user.setUserName("mercury");
 		user.setRealName("Mercury IRC Client");

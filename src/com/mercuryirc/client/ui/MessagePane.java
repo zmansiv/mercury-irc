@@ -1,7 +1,7 @@
 package com.mercuryirc.client.ui;
 
 import com.mercuryirc.client.Mercury;
-import com.mercuryirc.client.ui.model.Message;
+import com.mercuryirc.client.ui.model.MessageRow;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
@@ -30,12 +30,12 @@ public class MessagePane extends VBox {
 	private InputPane inputPane;
 	private boolean pageLoaded;
 
-	private final List<Message> loadQueue;
+	private final List<MessageRow> loadQueue;
 
 	public MessagePane(ApplicationPane appPane) {
 		webView = new WebView();
 		inputPane = new InputPane(appPane);
-		loadQueue = Collections.synchronizedList(new ArrayList<Message>());
+		loadQueue = Collections.synchronizedList(new ArrayList<MessageRow>());
 
 		webView.setContextMenuEnabled(false);
 		VBox.setVgrow(webView, Priority.ALWAYS);
@@ -55,7 +55,7 @@ public class MessagePane extends VBox {
 		}
 	}
 
-	public void addRow(Message message) {
+	public void addRow(MessageRow message) {
 		if (pageLoaded) {
 			webView.getEngine().executeScript(String.format("addRow('%s', '%s', '%s', '%s')", message.getSource(), message.getContent(), TIME_FORMATTER.format(new Date()), message.getType().style()));
 		} else {
@@ -66,7 +66,7 @@ public class MessagePane extends VBox {
 	private void onLoad() {
 		pageLoaded = true;
 		synchronized (loadQueue) {
-			for (Message message : loadQueue) {
+			for (MessageRow message : loadQueue) {
 				addRow(message);
 			}
 		}

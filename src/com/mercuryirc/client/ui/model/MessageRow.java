@@ -1,18 +1,19 @@
 package com.mercuryirc.client.ui.model;
 
+import com.mercuryirc.client.protocol.model.Message;
 import com.mercuryirc.client.protocol.network.Connection;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Message {
+public class MessageRow {
 
 	private final String source;
 	private final String target;
 	private final String content;
 	private final Type type;
 
-	public Message(Connection connection, com.mercuryirc.client.protocol.model.Message message) {
+	public MessageRow(Connection connection, Message message) {
 		this.source = message.getSource();
 		this.target = message.getTarget();
 		this.content = escape(findUrls(stripColors(message.getMessage())));
@@ -20,7 +21,7 @@ public class Message {
 		type = source.equalsIgnoreCase(localNick) ? Type.ME : content.contains(localNick) ? Type.HIGHLIGHT : Type.OTHER;
 	}
 
-	public Message(String target, String content) {
+	public MessageRow(String target, String content) {
 		this.source = "";
 		this.target = target;
 		this.content = content;

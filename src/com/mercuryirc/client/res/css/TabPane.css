@@ -1,11 +1,8 @@
-#network-label {
-	-fx-background-image: url("../images/icons/network.png");
+#tab-list {
+	-fx-font-size: 18px;
+	-fx-padding: 10px;
 }
 
-#channel-label {
-	-fx-background-image: url("../images/icons/channel.png");
-}
-
-#user-label {
-	-fx-background-image: url("../images/icons/user.png");
+#tab-list .network {
+	-fx-font-size: 12px;
 }

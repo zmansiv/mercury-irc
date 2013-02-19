@@ -1,12 +1,12 @@
 package com.mercuryirc.client;
 
-import com.mercuryirc.client.protocol.model.Channel;
-import com.mercuryirc.client.protocol.model.Message;
-import com.mercuryirc.client.protocol.model.Mode;
-import com.mercuryirc.client.protocol.model.User;
+import com.mercuryirc.client.protocol.model.*;
 import com.mercuryirc.client.protocol.network.Connection;
 import com.mercuryirc.client.protocol.network.callback.IrcCallback;
 import com.mercuryirc.client.ui.ApplicationPane;
+import com.mercuryirc.client.ui.Tab;
+import com.mercuryirc.client.ui.model.MessageRow;
+import javafx.application.Platform;
 
 import java.util.List;
 import java.util.Set;
@@ -24,8 +24,15 @@ public class MercuryCallback implements IrcCallback {
 	}
 
 	@Override
-	public void onMessage(Connection connection, Message message) {
-		//To change body of implemented methods use File | Settings | File Templates.
+	public void onMessage(final Connection connection, final Message message) {
+		Platform.runLater(new Runnable() {
+			public void run() {
+				Target target = connection.resolveTarget(message.getTarget());
+				MessageRow row = new MessageRow(connection, message);
+				Tab tab = appPane.getTabPane().getTab(target);
+				tab.getMessagePane().addRow(row);
+			}
+		});
 	}
 
 	@Override

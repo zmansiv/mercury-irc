@@ -69,6 +69,18 @@ public class Connection implements Runnable {
 		registered = r;
 	}
 
+	public Target resolveTarget(String name) {
+		Channel ch = server.getChannel(name, false);
+		if(ch != null)
+			return ch;
+
+		User u = server.getUser(name, false);
+		if(u != null)
+			return u;
+
+		return server;
+	}
+
 	/**
 	 * security risk
 	 */
