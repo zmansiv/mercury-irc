@@ -17,6 +17,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class TitlePane extends StackPane {
 
@@ -98,6 +99,12 @@ public class TitlePane extends StackPane {
 						stage.setY(event.getScreenY() - dragY);
 					}
 				}
+			}
+		});
+		stage.addEventHandler(WindowEvent.WINDOW_HIDDEN, new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent windowEvent) {
+				System.exit(0);
 			}
 		});
 	}

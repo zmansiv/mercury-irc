@@ -18,14 +18,7 @@ public class MessageRow {
 		this.target = message.getTarget();
 		this.content = escape(findUrls(stripColors(message.getMessage())));
 		String localNick = connection.getLocalUser().getName();
-		type = source.equalsIgnoreCase(localNick) ? Type.ME : content.contains(localNick) ? Type.HIGHLIGHT : Type.OTHER;
-	}
-
-	public MessageRow(String target, String content) {
-		this.source = "";
-		this.target = target;
-		this.content = content;
-		type = Type.OTHER;
+		type = content.toLowerCase().contains(localNick.toLowerCase()) ? Type.HIGHLIGHT : source == null || source.equals("") ? Type.EVENT : Type.NORMAL;
 	}
 
 	private static String stripColors(String line) {
@@ -72,7 +65,7 @@ public class MessageRow {
 
 	public enum Type {
 
-		ME("me"), OTHER("other"), HIGHLIGHT("highlight"), EVENT("event");
+		NORMAL("normal"), HIGHLIGHT("highlight"), EVENT("event");
 
 		private final String style;
 

@@ -18,3 +18,11 @@
 .first .list-cell:selected {
 	-fx-border-width: 0px 0px 1px 0px;
 }
+
+#tab-list {
+	-fx-font-size: 18px;
+}
+
+#tab-list .network {
+	-fx-font-size: 12px;
+}

@@ -3,16 +3,15 @@
 <HEAD>
 	<SCRIPT type="text/javascript">
 
-		function addRow(source, message, timestamp, highlight) {
+		function addRow(source, message, timestamp, style) {
 			var table = document.getElementById('messageTable');
 			var row = table.insertRow(table.rows.length);
-			if (highlight) {
-				row.className = "highlight";
-			}
+			row.className = style;
 			var sourceCell = row.insertCell(0);
 			sourceCell.className = "source";
 			sourceCell.innerHTML = source;
 			var messageCell = row.insertCell(1);
+			messageCell.className = "message";
 			messageCell.innerHTML = message;
 			var timestampCell = row.insertCell(2);
 			timestampCell.className = "timestamp";
@@ -31,12 +30,12 @@
 
 		html, body {
 			margin: 0;
-			padding: 0;
+			padding: 0px 5px 0px 5px;
 			background-color: rgb(255, 255, 255);
 		}
 
 		::selection {
-			background: rgb(215, 215, 215);
+			background: rgb(245, 245, 245);
 		}
 
 		table {
@@ -50,26 +49,49 @@
 
 		tr {
 			border-bottom: 1px solid rgb(230, 230, 230);
+			padding: 0px 5px 0px 5px;
+			line-height: 25x;
 		}
 
 		tr.highlight {
-			background-color: rgb(235, 130, 115);
+			background-color: rgb(255, 245, 245);
+			border-left: 3px solid rgb(240, 95, 80);
+		}
+
+		tr.highlight td.source {
+			padding-left: 3px;
+			color: rgb(50, 50, 50);
+			width: 1px;
+		}
+
+		tr.event {
+			color: rgb(255, 200, 135);
+		}
+
+		tr.normal {
+			color: rgb(130, 130, 130);
 		}
 
 		td {
 			font-family: Ubuntu-Mono, monospace;
-			font-size: 15px;
+			font-size: 14px;
 			overflow-x: hidden;
 			text-overflow: ellipsis;
-			color: rgb(130, 130, 130);
+		}
+
+		td.message {
+			padding-left: 7px;
+			padding-right: 7px;
 		}
 
 		td.source {
+			padding-left: 5px;
 			color: rgb(50, 50, 50);
 			width: 1px;
 		}
 
 		td.timestamp {
+			font-size: 13px;
 			color: rgb(200, 200, 200);
 			width: 1px;
 			text-align: right;

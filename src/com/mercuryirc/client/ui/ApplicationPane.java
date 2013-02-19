@@ -19,7 +19,7 @@ public class ApplicationPane extends HBox {
 		getStylesheets().add(Mercury.class.getResource("./res/css/ApplicationPane.css").toExternalForm());
 		VBox.setVgrow(this, Priority.ALWAYS);
 		getChildren().addAll(tabPane = new TabPane(this), contentPane = new ContentPane(this));
-		connection = null;//connectToIRC();
+		connection = connectToIRC();
 	}
 
 	private Connection connectToIRC() {
