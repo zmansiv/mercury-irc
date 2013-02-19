@@ -1,6 +1,7 @@
 package com.mercuryirc.client.ui;
 
-import javafx.scene.control.Label;
+import com.mercuryirc.client.ui.misc.FontAwesome;
+import javafx.geometry.Pos;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -23,11 +24,13 @@ public class UserPane extends VBox {
 	private class UserButtonPane extends HBox {
 
 		public UserButtonPane() {
+			super(10);
 			getStyleClass().add("dark-pane");
 			setId("user-button-pane");
+			setAlignment(Pos.CENTER);
 			setMinHeight(65);
 			setMaxHeight(65);
-			getChildren().add(new Label("UserButtonPane"));
+			getChildren().addAll(FontAwesome.createIconButton(FontAwesome.INFO), FontAwesome.createIconButton(FontAwesome.ENVELOPE), FontAwesome.createIconButton(FontAwesome.LEGAL));
 		}
 
 	}

@@ -38,19 +38,35 @@ public class Mercury extends Application {
 		stage.setScene(scene);
 		String bounds = Settings.get("bounds");
 		if (bounds == null) {
-			Rectangle2D maximized = Screen.getPrimary().getVisualBounds();
-			stage.setX(maximized.getMinX());
-			stage.setY(maximized.getMinY());
-			stage.setWidth(maximized.getWidth());
-			stage.setHeight(maximized.getHeight());
+			setDefaultBounds();
 		} else {
 			String[] bounds_ = bounds.split(" ");
 			stage.setX(Double.parseDouble(bounds_[0]));
 			stage.setY(Double.parseDouble(bounds_[1]));
 			stage.setWidth(Double.parseDouble(bounds_[2]));
 			stage.setHeight(Double.parseDouble(bounds_[3]));
+			//check if window was initialized offscreen
+			//e.g. if someone used mercury with a secondary monitor that is now disconnected
+			Screen screen = null;
+			for (Screen _screen : Screen.getScreens()) {
+				if (_screen.getBounds().contains(stage.getX(), stage.getY())) {
+					screen = _screen;
+					break;
+				}
+			}
+			if (screen == null) {
+				setDefaultBounds();
+			}
 		}
 		stage.show();
+	}
+
+	private void setDefaultBounds() {
+		Rectangle2D maximized = Screen.getPrimary().getVisualBounds();
+		stage.setX(maximized.getMinX());
+		stage.setY(maximized.getMinY());
+		stage.setWidth(maximized.getWidth());
+		stage.setHeight(maximized.getHeight());
 	}
 
 	public static Stage getStage() {
