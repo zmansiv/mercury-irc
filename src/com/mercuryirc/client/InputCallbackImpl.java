@@ -1,6 +1,10 @@
 package com.mercuryirc.client;
 
-import com.mercuryirc.client.protocol.model.*;
+import com.mercuryirc.client.protocol.model.Channel;
+import com.mercuryirc.client.protocol.model.Message;
+import com.mercuryirc.client.protocol.model.Mode;
+import com.mercuryirc.client.protocol.model.Target;
+import com.mercuryirc.client.protocol.model.User;
 import com.mercuryirc.client.protocol.network.Connection;
 import com.mercuryirc.client.protocol.network.callback.InputCallback;
 import com.mercuryirc.client.ui.ApplicationPane;
@@ -112,8 +116,11 @@ public class InputCallbackImpl implements InputCallback {
 			@Override
 			public void run() {
 				for (Tab tab : appPane.getTabPane().getItems()) {
-					if (tab.getContentPane().getUserPane().getUsers().contains(user)) {
-						tab.getContentPane().getMessagePane().addRow(new MessageRow(tab.getTarget().getName(), oldNick + " has changed their name to " + user.getName(), MessageRow.Type.EVENT));
+					for (User _user : tab.getContentPane().getUserPane().getUsers()) {
+						if (_user.getName().equals(oldNick) && _user.getServer().equals(user.getServer())) {
+							tab.getContentPane().getMessagePane().addRow(new MessageRow(tab.getTarget().getName(), oldNick + " has changed their name to " + user.getName(), MessageRow.Type.EVENT));
+							break;
+						}
 					}
 				}
 			}

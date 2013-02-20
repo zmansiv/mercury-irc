@@ -88,7 +88,7 @@ public class Connection implements Runnable {
 		if(ch != null)
 			return ch;
 
-		User u = server.getUser(name, false);
+		User u = server.getUser(name, true);
 		if(u != null)
 			return u;
 

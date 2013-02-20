@@ -3,12 +3,14 @@
 <HEAD>
 	<SCRIPT type="text/javascript">
 
-		function addRow(source, message, timestamp, style) {
+		function addRow(source, message, timestamp, style, color) {
 			var table = document.getElementById('messageTable');
 			var row = table.insertRow(table.rows.length);
 			row.className = style;
 			var sourceCell = row.insertCell(0);
 			sourceCell.className = "source";
+			sourceCell.style.color = color;
+			alert(sourceCell.style.borderRight);
 			sourceCell.innerHTML = source;
 			var messageCell = row.insertCell(1);
 			messageCell.className = "message";
@@ -54,7 +56,7 @@
 		}
 
 		tr.highlight {
-			background-color: rgb(255, 245, 245);
+			background-color: rgb(255, 225, 225);
 			border-left: 3px solid rgb(240, 95, 80);
 		}
 

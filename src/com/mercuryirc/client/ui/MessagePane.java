@@ -59,7 +59,12 @@ public class MessagePane extends VBox {
 
 	public void addRow(MessageRow message) {
 		if (pageLoaded) {
-			webView.getEngine().executeScript(String.format("addRow('%s', '%s', '%s', '%s')", message.getSource(), message.getContent(), TIME_FORMATTER.format(new Date()), message.getType().style()));
+			int hash = message.getSource().hashCode();
+			int r = (hash & 0xFF0000) >> 16;
+			int g = (hash & 0x00FF00) >> 8;
+			int b = hash & 0x0000FF;
+			String rgb = String.format("rgba(%d, %d, %d, %s)", r, g, b, "0.7");
+			webView.getEngine().executeScript(String.format("addRow('%s', '%s', '%s', '%s', '%s')", message.getSource(), message.getContent(), TIME_FORMATTER.format(new Date()), message.getType().style(), rgb));
 		} else {
 			loadQueue.add(message);
 		}

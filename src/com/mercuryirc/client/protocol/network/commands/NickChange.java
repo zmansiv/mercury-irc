@@ -17,14 +17,16 @@ public class NickChange implements Connection.CommandHandler {
 		connection.getServer().removeUser(oldNick);
 
 		String newNick = parts[2];
-		if(newNick.startsWith(":"))
+		if (newNick.startsWith(":"))
 			newNick = newNick.substring(1);
 
-		User user = connection.getServer().getUser(newNick);
-
-		user.setHost(parts[0].substring(parts[0].indexOf('@') + 1));
-		user.setUserName(line.substring(line.indexOf('!') + 1, line.indexOf('@')));
-
+		User user;
+		if (connection.getLocalUser().getName().equals(oldNick)) {
+			user = connection.getLocalUser();
+		} else {
+			user = connection.getServer().getUser(oldNick);
+		}
+		user.setName(newNick);
 		connection.getInputCallback().onUserNickChange(connection, user, oldNick);
 	}
 
