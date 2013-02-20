@@ -1,10 +1,22 @@
 package com.mercuryirc.client.protocol.network;
 
-import com.mercuryirc.client.protocol.network.callback.IrcCallback;
-import com.mercuryirc.client.protocol.model.*;
+import com.mercuryirc.client.protocol.model.Channel;
+import com.mercuryirc.client.protocol.model.Message;
+import com.mercuryirc.client.protocol.model.Server;
+import com.mercuryirc.client.protocol.model.Target;
+import com.mercuryirc.client.protocol.model.User;
+import com.mercuryirc.client.protocol.network.callback.InputCallback;
+import com.mercuryirc.client.protocol.network.callback.OutputCallback;
 
-import javax.net.ssl.*;
-import java.io.*;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -28,15 +40,17 @@ public class Connection implements Runnable {
 
 	private final User localUser;
 
-	private final IrcCallback callback;
+	private final InputCallback inputCallback;
+	private final OutputCallback outputCallback;
 	private ExceptionHandler exceptionHandler;
 
 	private boolean registered;
 
-	public Connection(Server server, User user, IrcCallback callback) {
+	public Connection(Server server, User localUser, InputCallback inputCallback, OutputCallback outputCallback) {
 		this.server = server;
-		this.localUser = user;
-		this.callback = callback;
+		this.localUser = localUser;
+		this.inputCallback = inputCallback;
+		this.outputCallback = outputCallback;
 	}
 
 	/* accessors */
@@ -49,12 +63,12 @@ public class Connection implements Runnable {
 		return localUser;
 	}
 
-	public IrcCallback getCallback() {
-		return callback;
+	public InputCallback getInputCallback() {
+		return inputCallback;
 	}
 
-	public boolean isLocalUser(String nick) {
-		return nick.equalsIgnoreCase(localUser.getName());
+	public OutputCallback getOutputCallback() {
+		return outputCallback;
 	}
 
 	public void setExceptionHandler(ExceptionHandler exceptionHandler) {
@@ -156,7 +170,7 @@ public class Connection implements Runnable {
 		}
 	}
 
-	public void writeLine(String rawLine) {
+	private void writeLine(String rawLine) {
 		try {
 			System.out.println("(out) " + rawLine);
 			out.write(rawLine + "\r\n");
@@ -217,15 +231,44 @@ public class Connection implements Runnable {
 		}
 	}
 
-	public void sendMessage(Message msg) {
-		switch(msg.getType()) {
-			case NOTICE:  writeLine("NOTICE " + msg.getTarget() + " :" + msg.getMessage());  break;
-			case PRIVMSG: writeLine("PRIVMSG " + msg.getTarget() + " :" + msg.getMessage()); break;
+	public void process(Target target, String input) {
+		if (input.startsWith("/")) {
+			input = input.substring(1);
+			final String[] tokens = input.split(" ");
+			if (input.toLowerCase().startsWith("msg")) {
+				if (tokens.length > 2 && !tokens[1].startsWith("#")) {
+					Message message = new Message(Message.Type.PRIVMSG, localUser.getName(), tokens[1], input.substring(input.indexOf(tokens[2])));
+					writeLine("PRIVMSG " + message.getTarget() + " :" + message.getMessage());
+					outputCallback.onMessage(this, message);
+				}
+			} else if (input.trim().equalsIgnoreCase("part") && target instanceof Channel) {
+				partChannel(target.getName());
+			} else if (tokens[0].equalsIgnoreCase("topic") && !tokens[1].startsWith("#") && target instanceof Channel) {
+				writeLine("TOPIC " + target.getName() + " :" + input.substring(input.indexOf(tokens[1])));
+			} else {
+				writeLine(input);
+			}
+		} else {
+			Message message = new Message(Message.Type.PRIVMSG, localUser.getName(), target.getName(), input);
+			writeLine("PRIVMSG " + message.getTarget() + " :" + message.getMessage());
+			outputCallback.onMessage(this, message);
 		}
 	}
 
 	public void whois(String nick) {
 		writeLine("WHOIS " + nick);
+	}
+
+	public void who(String channel) {
+		writeLine("WHO " + channel);
+	}
+
+	public void nick(String nick) {
+		writeLine("NICK " + nick);
+	}
+
+	public void pong(String pong) {
+		writeLine("PONG :" + pong);
 	}
 
 	public void quit(String reason) {

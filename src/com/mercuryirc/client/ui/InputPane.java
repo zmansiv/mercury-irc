@@ -1,11 +1,7 @@
 package com.mercuryirc.client.ui;
 
-import com.mercuryirc.client.protocol.model.Channel;
-import com.mercuryirc.client.protocol.model.Message;
-import com.mercuryirc.client.protocol.model.Target;
+import com.mercuryirc.client.protocol.model.User;
 import com.mercuryirc.client.ui.misc.FontAwesome;
-import com.mercuryirc.client.ui.model.MessageRow;
-import com.mercuryirc.client.ui.model.UserRow;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -56,7 +52,7 @@ public class InputPane extends HBox {
 
 		@Override
 		public void handle(ActionEvent actionEvent) {
-			String input = inputField.getText();
+			final String input = inputField.getText();
 			if (input == null || input.isEmpty()) {
 				return;
 			}
@@ -66,34 +62,15 @@ public class InputPane extends HBox {
 				messageHistoryIndex++;
 			}
 			messageHistory.add(input);
-			Target target = appPane.getTabPane().getSelected().getTarget();
-			if (input.startsWith("/")) {
-				input = input.substring(1);
-				final String[] tokens = input.split(" ");
-				if (input.toLowerCase().startsWith("query") && tokens.length > 1) {
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							appPane.getTabPane().select(appPane.getTabPane().get(appPane.getConnection().resolveTarget(tokens[1])));
-						}
-					});
-				} else if (input.toLowerCase().startsWith("msg")) {
-					if (tokens.length > 2 && !tokens[1].startsWith("#")) {
-						Message message = new Message(Message.Type.PRIVMSG, appPane.getConnection().getLocalUser().getName(), tokens[1], input.substring(input.indexOf(tokens[2])));
-						appPane.getConnection().sendMessage(message);
-						appPane.getTabPane().get(appPane.getConnection().resolveTarget(tokens[1])).getContentPane().getMessagePane().addRow(new MessageRow(appPane.getConnection(), message));
+			if (input.toLowerCase().startsWith("/query ")) {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						appPane.getTabPane().select(appPane.getTabPane().get(appPane.getConnection().resolveTarget(input.substring(7))));
 					}
-				} else if (input.trim().equalsIgnoreCase("part") && target instanceof Channel) {
-					appPane.getConnection().partChannel(target.getName());
-				} else if (tokens[0].equalsIgnoreCase("topic") && !tokens[1].startsWith("#") && target instanceof Channel) {
-					appPane.getConnection().writeLine("TOPIC " + target.getName() + " :" + input.substring(input.indexOf(tokens[1])));
-				} else {
-					appPane.getConnection().writeLine(input);
-				}
+				});
 			} else {
-				Message message = new Message(Message.Type.PRIVMSG, appPane.getConnection().getLocalUser().getName(), target.getName(), input);
-				appPane.getConnection().sendMessage(message);
-				appPane.getTabPane().get(appPane.getConnection().resolveTarget(target.getName())).getContentPane().getMessagePane().addRow(new MessageRow(appPane.getConnection(), message));
+				appPane.getConnection().process(appPane.getTabPane().getSelected().getTarget(), input);
 			}
 			inputField.setText("");
 		}
@@ -131,7 +108,7 @@ public class InputPane extends HBox {
 					}
 					if (start != -1) {
 						String beginning = text.substring(start, inputField.getCaretPosition()).toLowerCase();
-						for (UserRow user : appPane.getContentPane().getUserPane().getUsers()) {
+						for (User user : appPane.getContentPane().getUserPane().getUsers()) {
 							final String nick = user.getName();
 							if (nick.toLowerCase().startsWith(beginning)) {
 								inputField.deleteText(start, inputField.getCaretPosition());

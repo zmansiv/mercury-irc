@@ -1,8 +1,9 @@
 package com.mercuryirc.client.ui;
 
 import com.mercuryirc.client.protocol.misc.IrcUtils;
+import com.mercuryirc.client.protocol.model.Target;
+import com.mercuryirc.client.protocol.model.User;
 import com.mercuryirc.client.ui.misc.FontAwesome;
-import com.mercuryirc.client.ui.model.UserRow;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -14,12 +15,18 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class UserPane extends VBox {
 
 	private static final char KEY_NORMAL_USER = 0;
 	private static final Map<Character, String> rankNames = new HashMap<>();
+
 	static {
 		rankNames.put('~', "owners");
 		rankNames.put('&', "admins");
@@ -30,7 +37,7 @@ public class UserPane extends VBox {
 
 	private final ApplicationPane appPane;
 
-	private ListView<UserRow> userList = new ListView<>();
+	private ListView<User> userList = new ListView<>();
 	private UserButtonPane buttons = new UserButtonPane();
 
 	private List<Character> ranksDisplayed = new ArrayList<>();
@@ -40,29 +47,32 @@ public class UserPane extends VBox {
 		setMinWidth(175);
 		VBox.setVgrow(userList, Priority.ALWAYS);
 		userList.setId("user-list");
-		userList.setCellFactory(new Callback<ListView<UserRow>, ListCell<UserRow>>() {
+		userList.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
 			@Override
-			public ListCell<UserRow> call(ListView<UserRow> userListView) {
+			public ListCell<User> call(ListView<User> userListView) {
 				return new UserListCell();
 			}
 		});
 		getChildren().addAll(userList, buttons);
 	}
 
-	public List<UserRow> getUsers() {
+	public List<User> getUsers() {
 		return userList.getItems();
 	}
 
 	public void setUsers(Collection<String> users) {
-		List<UserRow> rows = new ArrayList<>();
-		for(String u : users)
-			rows.add(new UserRow(u));
+		List<User> rows = new LinkedList<>();
+		for (String u : users) {
+			Target target = appPane.getConnection().resolveTarget(IrcUtils.isRank(u.charAt(0)) ? u.substring(1) : u);
+			if (target instanceof User) {
+				rows.add((User) target);
+			}
+		}
 
-		ObservableList<UserRow> items = userList.getItems();
+		ObservableList<User> items = userList.getItems();
 
 		ranksDisplayed.clear();
-		items.clear();
-		items.addAll(rows);
+		items.setAll(rows);
 
 		FXCollections.sort(items);
 	}
@@ -81,26 +91,29 @@ public class UserPane extends VBox {
 
 	}
 
-	/** does not work yet */
-	private class UserListCell extends ListCell<UserRow> {
+	/**
+	 * does not work yet
+	 */
+	private class UserListCell extends ListCell<User> {
+
 		@Override
-		protected void updateItem(UserRow user, boolean b) {
+		protected void updateItem(User user, boolean b) {
 			super.updateItem(user, b);
 
-			if(user == null)
+			if (user == null)
 				return;
 
 			char ch = user.getName().charAt(0);
 
-			if(IrcUtils.isRank(ch)) {
+			if (IrcUtils.isRank(ch)) {
 				// only do first time
-				if(!ranksDisplayed.contains(ch)) {
+				if (!ranksDisplayed.contains(ch)) {
 					setGraphic(new Label(rankNames.get(ch)));
 					ranksDisplayed.add(ch);
 				}
 				setText(user.getName().substring(1));
 			} else {
-				if(!ranksDisplayed.contains(KEY_NORMAL_USER)) {
+				if (!ranksDisplayed.contains(KEY_NORMAL_USER)) {
 					setGraphic(new Label("users"));
 					ranksDisplayed.add(KEY_NORMAL_USER);
 				}

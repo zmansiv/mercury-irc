@@ -18,6 +18,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
+import java.util.Collection;
+
 public class TabPane extends VBox {
 
 	private final ApplicationPane appPane;
@@ -58,6 +60,10 @@ public class TabPane extends VBox {
 		getChildren().addAll(buttonPane, tabListBox);
 	}
 
+	public Collection<Tab> getItems() {
+		return tabList.getItems();
+	}
+
 	public Tab add(Target target) {
 		Tab t = new Tab(appPane, target);
 		tabList.getItems().add(t);
@@ -94,6 +100,13 @@ public class TabPane extends VBox {
 		} else {
 			selectionModel.selectPrevious();
 		}
+	}
+
+	public void close(Tab tab) {
+		if (getSelected().equals(tab)) {
+			selectPrevious();
+		}
+		tabList.getItems().remove(tab);
 	}
 
 	private class TabClickedListener implements ChangeListener<Tab> {

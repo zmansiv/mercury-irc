@@ -9,7 +9,7 @@ public class Ping implements Connection.CommandHandler {
 	}
 
 	public void process(Connection connection, String line, String[] parts) {
-		connection.writeLine("PONG :" + line.substring(6));
+		connection.pong(line.substring(6));
 	}
 
 }

@@ -25,7 +25,7 @@ public class NickChange implements Connection.CommandHandler {
 		user.setHost(parts[0].substring(parts[0].indexOf('@') + 1));
 		user.setUserName(line.substring(line.indexOf('!') + 1, line.indexOf('@')));
 
-		connection.getCallback().onUserNickChange(connection, user, oldNick);
+		connection.getInputCallback().onUserNickChange(connection, user, oldNick);
 	}
 
 }

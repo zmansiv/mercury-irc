@@ -28,7 +28,7 @@ public class ChannelPart implements Connection.CommandHandler {
 		if(parts.length > 3 && parts[3].length() > 1)
 			reason = line.substring(line.indexOf(':', 1) + 1);
 
-		connection.getCallback().onChannelPart(connection, channel, user, reason);
+		connection.getInputCallback().onChannelPart(connection, channel, user, reason);
 	}
 
 }

@@ -19,7 +19,7 @@ public class MessageReceived implements Connection.CommandHandler {
 		String text = line.substring(line.indexOf(to) + to.length() + 2);
 		Message message = new Message(Message.Type.valueOf(cmd.toUpperCase()), from, to, text);
 
-		connection.getCallback().onMessage(connection, message);
+		connection.getInputCallback().onMessage(connection, message);
 	}
 
 }

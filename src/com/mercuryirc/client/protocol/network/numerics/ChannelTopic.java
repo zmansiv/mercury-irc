@@ -11,15 +11,11 @@ public class ChannelTopic implements Connection.NumericHandler {
 
 	public void process(Connection connection, String line, String[] parts) {
 		String chan = parts[3];
-
 		String look = chan + " :";
 		int idx = line.indexOf(look) + look.length();
 		String topic = line.substring(idx);
-
 		Server srv = connection.getServer();
 		srv.getChannel(chan).setTopic(topic);
-
-		System.out.println("Topic for " + chan + " is " + topic);
 	}
 
 }

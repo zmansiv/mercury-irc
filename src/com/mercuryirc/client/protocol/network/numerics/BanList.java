@@ -3,7 +3,7 @@ package com.mercuryirc.client.protocol.network.numerics;
 import com.mercuryirc.client.protocol.model.Channel;
 import com.mercuryirc.client.protocol.model.Mode;
 import com.mercuryirc.client.protocol.network.Connection;
-import com.mercuryirc.client.protocol.network.callback.IrcCallback;
+import com.mercuryirc.client.protocol.network.callback.InputCallback;
 
 public class BanList implements Connection.NumericHandler {
 	private static final int[] numerics = { 367, 368, 346, 347, 348, 349 };
@@ -17,7 +17,7 @@ public class BanList implements Connection.NumericHandler {
 
 	public void process(Connection connection, String line, String[] parts) {
 		Channel ch = connection.getServer().getChannel(parts[3]);
-		IrcCallback cb = connection.getCallback();
+		InputCallback cb = connection.getInputCallback();
 
 		int num = Integer.parseInt(parts[1]);
 

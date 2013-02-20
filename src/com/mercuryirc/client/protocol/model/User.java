@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class User implements Target {
+public class User implements Target, Comparable<User> {
 
 	private Server server;
 	private String name;
@@ -97,4 +97,8 @@ public class User implements Target {
 		return user.getServer().equals(server) && user.getName().equals(name);
 	}
 
+	@Override
+	public int compareTo(User o) {
+		return RankComparator.INSTANCE.compare(name, o.getName());
+	}
 }

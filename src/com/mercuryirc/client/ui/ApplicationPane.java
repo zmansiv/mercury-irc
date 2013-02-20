@@ -1,7 +1,8 @@
 package com.mercuryirc.client.ui;
 
+import com.mercuryirc.client.InputCallbackImpl;
 import com.mercuryirc.client.Mercury;
-import com.mercuryirc.client.MercuryCallback;
+import com.mercuryirc.client.OutputCallbackImpl;
 import com.mercuryirc.client.protocol.model.Server;
 import com.mercuryirc.client.protocol.model.User;
 import com.mercuryirc.client.protocol.network.Connection;
@@ -48,7 +49,7 @@ public class ApplicationPane extends HBox {
 		User user = new User(server, "Test|Mercury");
 		user.setUserName("mercury");
 		user.setRealName("Mercury IRC Client");
-		Connection connection = new Connection(server, user, new MercuryCallback(this));
+		Connection connection = new Connection(server, user, new InputCallbackImpl(this), new OutputCallbackImpl(this));
 		connection.setAcceptAllSSLCerts(true);
 		connection.connect();
 		getTabPane().select(getTabPane().get(server));

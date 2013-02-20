@@ -9,7 +9,7 @@ import com.mercuryirc.client.protocol.network.Connection;
 import java.util.List;
 import java.util.Set;
 
-public interface IrcCallback {
+public interface InputCallback {
 
 	/** Called upon successful connection to the IRC network. */
 	public void onConnect(Connection connection);
@@ -30,7 +30,7 @@ public interface IrcCallback {
 	public void onChannelNickList(Connection connection, Channel channel, Set<String> nicks);
 
 	/** Called whenever the topic changes in a channel you are in. */
-	public void onTopicChange(Connection connection, Channel channel, String who);
+	public void onTopicChange(Connection connection, Channel channel, String who, String topic);
 
 	/** Called whenever any user (who shares a common channel with you) changes nicks. */
 	public void onUserNickChange(Connection connection, User user, String oldNick);
@@ -38,4 +38,5 @@ public interface IrcCallback {
 	public void onUserKick(Connection connection, Channel channel, User user, String reason);
 
 	public void onChannelModeList(Connection connection, Channel channel, Mode.Type type, List<Mode> list);
+
 }

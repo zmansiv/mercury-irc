@@ -20,6 +20,6 @@ public class Kick implements Connection.CommandHandler {
 			reason = line.substring(line.indexOf(':', 1) + 1);
 
 		User user = connection.getServer().getUser(parts[3]);
-		connection.getCallback().onUserKick(connection, channel, user, reason);
+		connection.getInputCallback().onUserKick(connection, channel, user, reason);
 	}
 }

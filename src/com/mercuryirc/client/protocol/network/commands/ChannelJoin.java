@@ -37,9 +37,9 @@ public class ChannelJoin implements Connection.CommandHandler {
 		}
 
 		// get info on the hostmasks
-		connection.writeLine("WHO " + chName);
+		connection.who(chName);
 
-		connection.getCallback().onChannelJoin(connection, channel, user);
+		connection.getInputCallback().onChannelJoin(connection, channel, user);
 	}
 
 }

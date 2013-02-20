@@ -1,7 +1,6 @@
 package com.mercuryirc.client.protocol.network.commands;
 
 import com.mercuryirc.client.protocol.misc.IrcUtils;
-import com.mercuryirc.client.protocol.model.Channel;
 import com.mercuryirc.client.protocol.model.Server;
 import com.mercuryirc.client.protocol.model.User;
 import com.mercuryirc.client.protocol.network.Connection;
@@ -30,7 +29,7 @@ public class Quit implements Connection.CommandHandler {
 			reason = line.substring(line.indexOf(':', 1) + 1);
 		}
 
-		connection.getCallback().onUserQuit(connection, user, reason);
+		connection.getInputCallback().onUserQuit(connection, user, reason);
 		svr.removeUser(name);
 	}
 

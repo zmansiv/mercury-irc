@@ -18,6 +18,6 @@ public class TopicChange implements Connection.CommandHandler {
 		channel.setTopic(topic);
 		channel.setTopicTimestamp(IrcUtils.getTimestamp());
 
-		connection.getCallback().onTopicChange(connection, channel, who);
+		connection.getInputCallback().onTopicChange(connection, channel, who, topic);
 	}
 }

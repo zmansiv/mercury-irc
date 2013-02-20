@@ -14,6 +14,6 @@ public class NickInUse implements Connection.NumericHandler {
 		String nick = connection.getLocalUser().getName() + "_";
 		connection.getLocalUser().setName(nick);
 
-		connection.writeLine("NICK " + nick);
+		connection.nick(nick);
 	}
 }
