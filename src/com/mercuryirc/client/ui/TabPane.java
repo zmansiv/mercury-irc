@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -21,6 +22,7 @@ public class TabPane extends VBox {
 
 	private final ApplicationPane appPane;
 	private final ListView<Tab> tabList;
+	private final MultipleSelectionModel<Tab> selectionModel;
 
 	public TabPane(ApplicationPane appPane) {
 		this.appPane = appPane;
@@ -33,7 +35,8 @@ public class TabPane extends VBox {
 		setVgrow(tabListBox, Priority.ALWAYS);
 		tabList = new ListView<>();
 		setVgrow(tabList, Priority.ALWAYS);
-		tabList.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+		selectionModel = tabList.getSelectionModel();
+		selectionModel.selectedIndexProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
 				if (number2 == 0) {
@@ -45,7 +48,7 @@ public class TabPane extends VBox {
 				}
 			}
 		});
-		tabList.getSelectionModel().selectedItemProperty().addListener(new TabClickedListener());
+		selectionModel.selectedItemProperty().addListener(new TabClickedListener());
 		tabList.setCellFactory(new Callback<ListView<Tab>, ListCell<Tab>>() {
 			public ListCell<Tab> call(ListView<Tab> tabListView) {
 				return new TabCell();
@@ -69,6 +72,10 @@ public class TabPane extends VBox {
 		return addTab(target);
 	}
 
+	public void selectTab(Tab tab) {
+		selectionModel.select(tab);
+	}
+
 	private class TabClickedListener implements ChangeListener<Tab> {
 
 		public void changed(ObservableValue<? extends Tab> ov, Tab oldTab, Tab newTab) {
@@ -84,7 +91,11 @@ public class TabPane extends VBox {
 			super.updateItem(tab, empty);
 			if (tab != null) {
 				Target target = tab.getTarget();
+				setMinHeight(50);
+				setMaxHeight(50);
 				if (target instanceof Server) {
+					setMinHeight(60);
+					setMaxHeight(60);
 					Label net = new Label("network");
 					net.getStyleClass().add("network");
 
@@ -100,6 +111,8 @@ public class TabPane extends VBox {
 					setGraphic(FontAwesome.createIcon(FontAwesome.USER));
 					setText(target.getName());
 				}
+				setMinHeight(50);
+				setMaxHeight(50);
 			}
 		}
 

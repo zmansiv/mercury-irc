@@ -1,8 +1,6 @@
 package com.mercuryirc.client.protocol.model;
 
 
-import com.sun.xml.internal.ws.config.management.policy.ManagementPolicyValidator;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -10,6 +8,7 @@ import java.util.TreeSet;
 
 public class User implements Target {
 
+	private Server server;
 	private String name;
 	private String userName;
 	private String realName;
@@ -19,7 +18,8 @@ public class User implements Target {
 
 	private Map<String, String> properties;
 
-	public User(String name, String userName, String realName, String host) {
+	public User(Server server, String name, String userName, String realName, String host) {
+		this.server = server;
 		this.name = name;
 		this.userName = userName;
 		this.realName = realName;
@@ -28,12 +28,16 @@ public class User implements Target {
 		this.properties = new HashMap<>();
 	}
 
-	public User(String name, String userName, String realName) {
-		this(name, userName, realName, null);
+	public User(Server server, String name, String userName, String realName) {
+		this(server, name, userName, realName, null);
 	}
 
-	public User(String name) {
-		this(name, null, null, null);
+	public User(Server server, String name) {
+		this(server, name, null, null, null);
+	}
+
+	public Server getServer() {
+		return server;
 	}
 
 	public String getName() {
@@ -83,4 +87,14 @@ public class User implements Target {
 	public void removeChannel(String ch) {
 		channels.remove(ch);
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof User)) {
+			return false;
+		}
+		User user = (User) o;
+		return user.getServer().equals(server) && user.getName().equals(name);
+	}
+
 }

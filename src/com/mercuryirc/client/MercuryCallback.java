@@ -19,7 +19,7 @@ public class MercuryCallback implements IrcCallback {
 		this.appPane = appPane;
 	}
 
-	public void onConnect(Connection connection) {
+	public void onConnect(final Connection connection) {
 		connection.joinChannel("#mercury");
 	}
 
@@ -36,8 +36,17 @@ public class MercuryCallback implements IrcCallback {
 	}
 
 	@Override
-	public void onChannelJoin(Connection connection, Channel channel, User user) {
-		//To change body of implemented methods use File | Settings | File Templates.
+	public void onChannelJoin(final Connection connection, final Channel channel, final User user) {
+		Platform.runLater(new Runnable() {
+			public void run() {
+				MessageRow row = new MessageRow(channel.getName(), user.getName() + " has joined the channel", MessageRow.Type.EVENT);
+				Tab tab = appPane.getTabPane().getTab(channel);
+				tab.getMessagePane().addRow(row);
+				if (user.equals(connection.getLocalUser())) {
+					appPane.getTabPane().selectTab(tab);
+				}
+			}
+		});
 	}
 
 	@Override

@@ -62,7 +62,7 @@ public class Server implements Target {
 
 		User u = users.get(nick);
 		if (u == null && create) {
-			u = new User(nick);
+			u = new User(this, nick);
 			users.put(nick, u);
 		}
 		return u;

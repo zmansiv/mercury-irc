@@ -21,6 +21,13 @@ public class MessageRow {
 		type = content.toLowerCase().contains(localNick.toLowerCase()) ? Type.HIGHLIGHT : source == null || source.equals("") ? Type.EVENT : Type.NORMAL;
 	}
 
+	public MessageRow(String target, String content, Type type) {
+		this.source = "";
+		this.target = target;
+		this.content = content;
+		this.type = type;
+	}
+
 	private static String stripColors(String line) {
 		return line.replaceAll("[\u0003]+[\\d](\\d)?(,[\\d](\\d)?)?", "");
 	}

@@ -32,7 +32,7 @@
 
 .icon .label {
 	-fx-font-family: FontAwesome;
-	-fx-font-size: 20px;
+	-fx-font-size: 16pt;
 }
 
 .label {
@@ -44,7 +44,7 @@
 	-fx-background-color: button-color;
 	-fx-border-color: border-color;
 	-fx-text-fill: control-color;
-	-fx-font-size: 16px;
+	-fx-font-size: 16pt;
 	-fx-border-radius: 3px;
 	-fx-background-radius: 3px;
 	-fx-padding: 0px;
