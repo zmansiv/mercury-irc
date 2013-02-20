@@ -7,13 +7,20 @@ public class TopicPane extends HBox {
 
 	private final ApplicationPane appPane;
 
+	private Label topicLabel;
+
 	public TopicPane(ApplicationPane appPane) {
 		this.appPane = appPane;
 		getStyleClass().add("light-pane");
 		setId("topic-pane");
 		setMinHeight(85);
 		setMaxHeight(85);
-		getChildren().add(new Label("TopicPane"));
+
+		topicLabel = new Label("TopicPane");
+		getChildren().add(topicLabel);
 	}
 
+	public void setTopic(String topic) {
+		topicLabel.setText(topic);
+	}
 }

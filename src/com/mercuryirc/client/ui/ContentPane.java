@@ -4,38 +4,51 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class ContentPane extends GridPane {
 
 	private ApplicationPane appPane;
-	private TopicPane topicPane;
-	private UserPane userPane;
 
 	public ContentPane(ApplicationPane appPane) {
 		this.appPane = appPane;
 
-		add(topicPane = new TopicPane(appPane), 0, 0, 2, 1);
+		add(new TopicPane(appPane), 0, 0, 2, 1);
 		add(new MessagePane(appPane), 0, 1);
-		add(userPane = new UserPane(appPane), 1, 1);
+		add(new UserPane(appPane), 1, 1);
 	}
 
-	public TopicPane getTopicPane() {
-		return topicPane;
+	private static class GridLoc {
+		public int col, row, colSpan, rowSpan;
+
+		public GridLoc(int c, int r, int cs, int rs) {
+			col = c;
+			row = r;
+			colSpan = cs;
+			rowSpan = rs;
+		}
 	}
 
-	public void setMessagePane(MessagePane mp) {
+	private static final Map<Class<? extends Node>, GridLoc> locations = new HashMap<>();
+
+	static {
+		locations.put(TopicPane.class, new GridLoc(0, 0, 2, 1));
+		locations.put(MessagePane.class, new GridLoc(0, 1, 1, 1));
+		locations.put(UserPane.class, new GridLoc(1, 1, 1, 1));
+	}
+
+	public <T extends Node> void setSubPane(Class<T> cl, T pane) {
 		ObservableList<Node> nodes = getChildren();
 		for(int k = nodes.size() - 1; k >= 0; k--) {
 			Node n = nodes.get(k);
-			if(n instanceof MessagePane)
+			if(n.getClass().equals(cl))
 				nodes.remove(k);
 		}
 
-		add(mp, 0, 1);
-	}
-
-	public UserPane getUserPane() {
-		return userPane;
+		GridLoc loc = locations.get(cl);
+		add(pane, loc.col, loc.row, loc.colSpan, loc.rowSpan);
 	}
 
 }

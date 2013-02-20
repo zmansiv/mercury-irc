@@ -79,7 +79,9 @@ public class TabPane extends VBox {
 	private class TabClickedListener implements ChangeListener<Tab> {
 
 		public void changed(ObservableValue<? extends Tab> ov, Tab oldTab, Tab newTab) {
-			appPane.getContentPane().setMessagePane(newTab.getMessagePane());
+			appPane.getContentPane().setSubPane(TopicPane.class, newTab.getTopicPane());
+			appPane.getContentPane().setSubPane(MessagePane.class, newTab.getMessagePane());
+			appPane.getContentPane().setSubPane(UserPane.class, newTab.getUserPane());
 		}
 
 	}

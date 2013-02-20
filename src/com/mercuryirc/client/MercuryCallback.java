@@ -42,6 +42,7 @@ public class MercuryCallback implements IrcCallback {
 				MessageRow row = new MessageRow(channel.getName(), user.getName() + " has joined the channel", MessageRow.Type.EVENT);
 				Tab tab = appPane.getTabPane().getTab(channel);
 				tab.getMessagePane().addRow(row);
+				tab.getTopicPane().setTopic(channel.getTopic());
 				if (user.equals(connection.getLocalUser())) {
 					appPane.getTabPane().selectTab(tab);
 				}
@@ -60,8 +61,13 @@ public class MercuryCallback implements IrcCallback {
 	}
 
 	@Override
-	public void onChannelNickList(Connection connection, Channel channel, Set<String> nicks) {
-		//To change body of implemented methods use File | Settings | File Templates.
+	public void onChannelNickList(Connection connection, final Channel channel, final Set<String> nicks) {
+		Platform.runLater(new Runnable() {
+			public void run() {
+				Tab tab = appPane.getTabPane().getTab(channel);
+				tab.getUserPane().setUserList(nicks);
+			}
+		});
 	}
 
 	@Override
