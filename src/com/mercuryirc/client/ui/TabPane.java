@@ -58,30 +58,48 @@ public class TabPane extends VBox {
 		getChildren().addAll(buttonPane, tabListBox);
 	}
 
-	public Tab addTab(Target target) {
+	public Tab add(Target target) {
 		Tab t = new Tab(appPane, target);
 		tabList.getItems().add(t);
 		return t;
 	}
 
-	public Tab getTab(Target target) {
+	public Tab get(Target target) {
 		for (Tab t : tabList.getItems()) {
 			if (t.getTarget().equals(target))
 				return t;
 		}
-		return addTab(target);
+		return add(target);
 	}
 
-	public void selectTab(Tab tab) {
+	public Tab getSelected() {
+		return selectionModel.getSelectedItem();
+	}
+
+	public void select(Tab tab) {
 		selectionModel.select(tab);
+	}
+
+	public void selectNext() {
+		if (selectionModel.getSelectedIndex() == tabList.getItems().size() - 1) {
+			selectionModel.selectFirst();
+		} else {
+			selectionModel.selectNext();
+		}
+	}
+
+	public void selectPrevious() {
+		if (selectionModel.getSelectedIndex() == 0) {
+			selectionModel.selectLast();
+		} else {
+			selectionModel.selectPrevious();
+		}
 	}
 
 	private class TabClickedListener implements ChangeListener<Tab> {
 
 		public void changed(ObservableValue<? extends Tab> ov, Tab oldTab, Tab newTab) {
-			appPane.getContentPane().setSubPane(TopicPane.class, newTab.getTopicPane());
-			appPane.getContentPane().setSubPane(MessagePane.class, newTab.getMessagePane());
-			appPane.getContentPane().setSubPane(UserPane.class, newTab.getUserPane());
+			appPane.setContentPane(newTab.getContentPane());
 		}
 
 	}

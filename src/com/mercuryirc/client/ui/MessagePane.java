@@ -5,6 +5,7 @@ import com.mercuryirc.client.ui.model.MessageRow;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
@@ -27,24 +28,25 @@ public class MessagePane extends VBox {
 	private static final DateFormat TIME_FORMATTER = new SimpleDateFormat("hh:mmaa");
 
 	private final WebView webView;
-	private InputPane inputPane;
 	private boolean pageLoaded;
 
 	private final List<MessageRow> loadQueue;
 
 	public MessagePane(ApplicationPane appPane) {
+		VBox.setVgrow(this, Priority.ALWAYS);
+		HBox.setHgrow(this, Priority.ALWAYS);
 		webView = new WebView();
-		inputPane = new InputPane(appPane);
 		loadQueue = Collections.synchronizedList(new ArrayList<MessageRow>());
 
 		webView.setContextMenuEnabled(false);
 		VBox.setVgrow(webView, Priority.ALWAYS);
+		HBox.setHgrow(webView, Priority.ALWAYS);
 
 		WebEngine engine = webView.getEngine();
 		engine.getLoadWorker().stateProperty().addListener(new LoadListener());
 		engine.load(Mercury.class.getResource("./res/html/MessageList.html").toExternalForm());
 
-		getChildren().addAll(webView, inputPane);
+		getChildren().addAll(webView, new InputPane(appPane));
 	}
 
 	public void openUrl(String url) {

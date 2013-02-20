@@ -29,8 +29,8 @@ public class MercuryCallback implements IrcCallback {
 			public void run() {
 				Target target = connection.resolveTarget(message.getTarget());
 				MessageRow row = new MessageRow(connection, message);
-				Tab tab = appPane.getTabPane().getTab(target);
-				tab.getMessagePane().addRow(row);
+				Tab tab = appPane.getTabPane().get(target);
+				tab.getContentPane().getMessagePane().addRow(row);
 			}
 		});
 	}
@@ -40,11 +40,11 @@ public class MercuryCallback implements IrcCallback {
 		Platform.runLater(new Runnable() {
 			public void run() {
 				MessageRow row = new MessageRow(channel.getName(), user.getName() + " has joined the channel", MessageRow.Type.EVENT);
-				Tab tab = appPane.getTabPane().getTab(channel);
-				tab.getMessagePane().addRow(row);
-				tab.getTopicPane().setTopic(channel.getTopic());
+				Tab tab = appPane.getTabPane().get(channel);
+				tab.getContentPane().getMessagePane().addRow(row);
+				tab.getContentPane().getTopicPane().setTopic(channel.getTopic());
 				if (user.equals(connection.getLocalUser())) {
-					appPane.getTabPane().selectTab(tab);
+					appPane.getTabPane().select(tab);
 				}
 			}
 		});
@@ -64,8 +64,8 @@ public class MercuryCallback implements IrcCallback {
 	public void onChannelNickList(Connection connection, final Channel channel, final Set<String> nicks) {
 		Platform.runLater(new Runnable() {
 			public void run() {
-				Tab tab = appPane.getTabPane().getTab(channel);
-				tab.getUserPane().setUserList(nicks);
+				Tab tab = appPane.getTabPane().get(channel);
+				tab.getContentPane().getUserPane().setUsers(nicks);
 			}
 		});
 	}

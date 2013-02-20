@@ -2,6 +2,7 @@ package com.mercuryirc.client.ui;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 public class TopicPane extends HBox {
 
@@ -15,7 +16,7 @@ public class TopicPane extends HBox {
 		setId("topic-pane");
 		setMinHeight(85);
 		setMaxHeight(85);
-
+		setHgrow(this, Priority.ALWAYS);
 		topicLabel = new Label("TopicPane");
 		getChildren().add(topicLabel);
 	}

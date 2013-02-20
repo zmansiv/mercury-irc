@@ -1,54 +1,36 @@
 package com.mercuryirc.client.ui;
 
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.layout.GridPane;
-
-import java.util.HashMap;
-import java.util.Map;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 
-public class ContentPane extends GridPane {
+public class ContentPane extends VBox {
 
-	private ApplicationPane appPane;
+	private final TopicPane topicPane;
+	private final MessagePane messagePane;
+	private final UserPane userPane;
 
 	public ContentPane(ApplicationPane appPane) {
-		this.appPane = appPane;
-
-		add(new TopicPane(appPane), 0, 0, 2, 1);
-		add(new MessagePane(appPane), 0, 1);
-		add(new UserPane(appPane), 1, 1);
+		VBox.setVgrow(this, Priority.ALWAYS);
+		HBox.setHgrow(this, Priority.ALWAYS);
+		HBox box = new HBox();
+		VBox.setVgrow(box, Priority.ALWAYS);
+		HBox.setHgrow(box, Priority.ALWAYS);
+		box.getChildren().addAll(messagePane = new MessagePane(appPane), userPane = new UserPane(appPane));
+		getChildren().addAll(topicPane = new TopicPane(appPane), box);
 	}
 
-	private static class GridLoc {
-		public int col, row, colSpan, rowSpan;
-
-		public GridLoc(int c, int r, int cs, int rs) {
-			col = c;
-			row = r;
-			colSpan = cs;
-			rowSpan = rs;
-		}
+	public TopicPane getTopicPane() {
+		return topicPane;
 	}
 
-	private static final Map<Class<? extends Node>, GridLoc> locations = new HashMap<>();
-
-	static {
-		locations.put(TopicPane.class, new GridLoc(0, 0, 2, 1));
-		locations.put(MessagePane.class, new GridLoc(0, 1, 1, 1));
-		locations.put(UserPane.class, new GridLoc(1, 1, 1, 1));
+	public MessagePane getMessagePane() {
+		return messagePane;
 	}
 
-	public <T extends Node> void setSubPane(Class<T> cl, T pane) {
-		ObservableList<Node> nodes = getChildren();
-		for(int k = nodes.size() - 1; k >= 0; k--) {
-			Node n = nodes.get(k);
-			if(n.getClass().equals(cl))
-				nodes.remove(k);
-		}
-
-		GridLoc loc = locations.get(cl);
-		add(pane, loc.col, loc.row, loc.colSpan, loc.rowSpan);
+	public UserPane getUserPane() {
+		return userPane;
 	}
 
 }

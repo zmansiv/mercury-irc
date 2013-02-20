@@ -49,7 +49,11 @@ public class UserPane extends VBox {
 		getChildren().addAll(userList, buttons);
 	}
 
-	public void setUserList(Collection<String> users) {
+	public List<UserRow> getUsers() {
+		return userList.getItems();
+	}
+
+	public void setUsers(Collection<String> users) {
 		List<UserRow> rows = new ArrayList<>();
 		for(String u : users)
 			rows.add(new UserRow(u));
