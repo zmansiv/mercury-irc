@@ -1,0 +1,27 @@
+#nick-label {
+	-fx-translate-y: 1px;
+	-fx-font-family: Ubuntu-Mono;
+	-fx-font-size: 14pt;
+	-fx-text-fill: dark-control-color;
+	-fx-background-color: background-color;
+	-fx-background-radius: 4px 0px 0px 4px;
+	-fx-border-color: border-color;
+	-fx-border-radius: 4px 0px 0px 4px;
+	-fx-border-width: 1px 0px 1px 1px;
+}
+
+#nick-label .label {
+	-fx-padding: 5px;
+}
+
+.text-field {
+	-fx-translate-y: 1px;
+	-fx-font-family: Open-Sans;
+	-fx-font-size: 14pt;
+	-fx-text-fill: control-color;
+	-fx-prompt-text-fill: border-color;
+	-fx-background-color: light-background-color;
+	-fx-background-radius: 0px 4px 4px 0px;
+	-fx-border-color: border-color;
+	-fx-border-radius: 0px 4px 4px 0px;
+}

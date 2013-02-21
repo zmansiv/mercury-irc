@@ -21,6 +21,7 @@ public class ApplicationPane extends HBox {
 	private final Connection connection;
 
 	public ApplicationPane() {
+		connection = connectToIRC();
 		getStylesheets().add(Mercury.class.getResource("./res/css/ApplicationPane.css").toExternalForm());
 		VBox.setVgrow(this, Priority.ALWAYS);
 		HBox.setHgrow(this, Priority.ALWAYS);
@@ -29,7 +30,6 @@ public class ApplicationPane extends HBox {
 		HBox.setHgrow(contentPaneContainer, Priority.ALWAYS);
 		contentPaneContainer.getChildren().setAll(contentPane = new ContentPane(this));
 		getChildren().addAll(tabPane = new TabPane(this), contentPaneContainer);
-		connection = connectToIRC();
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent keyEvent) {
@@ -42,6 +42,7 @@ public class ApplicationPane extends HBox {
 				}
 			}
 		});
+		getTabPane().select(getTabPane().get(connection.getServer()));
 	}
 
 	private Connection connectToIRC() {
@@ -52,7 +53,6 @@ public class ApplicationPane extends HBox {
 		Connection connection = new Connection(server, user, new InputCallbackImpl(this), new OutputCallbackImpl(this));
 		connection.setAcceptAllSSLCerts(true);
 		connection.connect();
-		getTabPane().select(getTabPane().get(server));
 		return connection;
 	}
 

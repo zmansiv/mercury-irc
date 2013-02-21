@@ -1,31 +1,29 @@
 package com.mercuryirc.client.protocol.model;
 
 
-import java.util.HashMap;
-import java.util.Map;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.util.Set;
 import java.util.TreeSet;
 
 public class User implements Target, Comparable<User> {
 
 	private Server server;
-	private String name;
+	private StringProperty name = new SimpleStringProperty("");
 	private String userName;
 	private String realName;
 	private String host;
 
 	private Set<String> channels;
 
-	private Map<String, String> properties;
-
 	public User(Server server, String name, String userName, String realName, String host) {
 		this.server = server;
-		this.name = name;
+		this.name.set(name);
 		this.userName = userName;
 		this.realName = realName;
 		this.host = host;
 		this.channels = new TreeSet<>();
-		this.properties = new HashMap<>();
 	}
 
 	public User(Server server, String name, String userName, String realName) {
@@ -40,12 +38,16 @@ public class User implements Target, Comparable<User> {
 		return server;
 	}
 
-	public String getName() {
+	public StringProperty getNameProperty() {
 		return name;
 	}
 
+	public String getName() {
+		return name.get();
+	}
+
 	public void setName(String name) {
-		this.name = name;
+		this.name.set(name);
 	}
 
 	public String getUserName() {
@@ -99,6 +101,6 @@ public class User implements Target, Comparable<User> {
 
 	@Override
 	public int compareTo(User o) {
-		return RankComparator.INSTANCE.compare(name, o.getName());
+		return RankComparator.INSTANCE.compare(name.get(), o.getName());
 	}
 }

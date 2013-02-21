@@ -29,6 +29,7 @@ public class MessagePane extends VBox {
 
 	private final WebView webView;
 	private boolean pageLoaded;
+	private final InputPane inputPane;
 
 	private final List<MessageRow> loadQueue;
 
@@ -46,7 +47,11 @@ public class MessagePane extends VBox {
 		engine.getLoadWorker().stateProperty().addListener(new LoadListener());
 		engine.load(Mercury.class.getResource("./res/html/MessageList.html").toExternalForm());
 
-		getChildren().addAll(webView, new InputPane(appPane));
+		getChildren().addAll(webView, inputPane = new InputPane(appPane));
+	}
+
+	public InputPane getInputPane() {
+		return inputPane;
 	}
 
 	public void openUrl(String url) {

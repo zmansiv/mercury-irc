@@ -1,5 +1,6 @@
 package com.mercuryirc.client.ui;
 
+import com.mercuryirc.client.Mercury;
 import com.mercuryirc.client.protocol.model.User;
 import com.mercuryirc.client.ui.misc.FontAwesome;
 import javafx.application.Platform;
@@ -26,20 +27,30 @@ public class InputPane extends HBox {
 	private int messageHistoryIndex = -1;
 
 	public InputPane(final ApplicationPane appPane) {
+		super(0);
 		this.appPane = appPane;
+		getStylesheets().add(Mercury.class.getResource("./res/css/InputPane.css").toExternalForm());
 		getStyleClass().add("dark-pane");
 		setId("input-pane");
 		setAlignment(Pos.CENTER);
 		setMinHeight(65);
 		setMaxHeight(65);
-		setSpacing(0);
-		setPadding(new Insets(10, 5, 10, 5));
-		Region spacer = new Region();
-		HBox.setHgrow(spacer, Priority.ALWAYS);
-		nickLabel = new Label("nick");
+		setPadding(new Insets(10, 10, 10, 10));
+		nickLabel = new Label();
+		nickLabel.setId("nick-label");
+		nickLabel.setMinHeight(33);
+		nickLabel.setMaxHeight(33);
 		inputField = new TextField();
+		inputField.setPromptText("Write a message...");
+		inputField.setMinHeight(33);
+		inputField.setMaxHeight(33);
+		HBox.setHgrow(inputField, Priority.ALWAYS);
+		nickLabel.textProperty().bind(appPane.getConnection().getLocalUser().getNameProperty());
 		inputField.setOnAction(new InputHandler());
 		inputField.setOnKeyPressed(new KeyHandler());
+		Region spacer = new Region();
+		spacer.setMinWidth(10);
+		spacer.setMaxWidth(10);
 		Button sendButton = FontAwesome.createIconButton(FontAwesome.REPLY, "send", "blue");
 		getChildren().addAll(nickLabel, inputField, spacer, sendButton);
 	}
