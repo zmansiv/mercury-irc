@@ -128,8 +128,9 @@ public class InputCallbackImpl implements InputCallback {
 			@Override
 			public void run() {
 				for (Tab tab : appPane.getTabPane().getItems()) {
-					for (User _user : tab.getContentPane().getUserPane().getUsers()) {
-						if (_user.getName().equals(oldNick) && _user.getServer().equals(user.getServer())) {
+					for (String _nick : tab.getContentPane().getUserPane().getUsers()) {
+						User _user = (User) connection.resolveTarget(_nick);
+						if (_nick.equals(oldNick) && _user.getServer().equals(user.getServer())) {
 							tab.getContentPane().getMessagePane().addRow(new MessageRow(tab.getTarget().getName(), oldNick + " has changed their name to " + user.getName(), MessageRow.Type.EVENT));
 							break;
 						}

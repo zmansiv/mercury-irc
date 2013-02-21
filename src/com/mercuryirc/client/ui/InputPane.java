@@ -119,8 +119,7 @@ public class InputPane extends HBox {
 					}
 					if (start != -1) {
 						String beginning = text.substring(start, inputField.getCaretPosition()).toLowerCase();
-						for (User user : appPane.getContentPane().getUserPane().getUsers()) {
-							final String nick = user.getName();
+						for (String nick : appPane.getContentPane().getUserPane().getUsers()) {
 							if (nick.toLowerCase().startsWith(beginning)) {
 								inputField.deleteText(start, inputField.getCaretPosition());
 								inputField.insertText(start, nick + " ");

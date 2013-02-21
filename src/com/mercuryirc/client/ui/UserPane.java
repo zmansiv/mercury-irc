@@ -1,6 +1,7 @@
 package com.mercuryirc.client.ui;
 
 import com.mercuryirc.client.protocol.misc.IrcUtils;
+import com.mercuryirc.client.protocol.model.RankComparator;
 import com.mercuryirc.client.protocol.model.Target;
 import com.mercuryirc.client.protocol.model.User;
 import com.mercuryirc.client.ui.misc.FontAwesome;
@@ -37,7 +38,7 @@ public class UserPane extends VBox {
 
 	private final ApplicationPane appPane;
 
-	private ListView<User> userList = new ListView<>();
+	private ListView<String> userList = new ListView<>();
 	private UserButtonPane buttons = new UserButtonPane();
 
 	private List<Character> ranksDisplayed = new ArrayList<>();
@@ -47,34 +48,26 @@ public class UserPane extends VBox {
 		setMinWidth(175);
 		VBox.setVgrow(userList, Priority.ALWAYS);
 		userList.setId("user-list");
-		userList.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
+		userList.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 			@Override
-			public ListCell<User> call(ListView<User> userListView) {
+			public ListCell<String> call(ListView<String> userListView) {
 				return new UserListCell();
 			}
 		});
 		getChildren().addAll(userList, buttons);
 	}
 
-	public List<User> getUsers() {
+	public List<String> getUsers() {
 		return userList.getItems();
 	}
 
 	public void setUsers(Collection<String> users) {
-		List<User> rows = new LinkedList<>();
-		for (String u : users) {
-			Target target = appPane.getConnection().resolveTarget(IrcUtils.isRank(u.charAt(0)) ? u.substring(1) : u);
-			if (target instanceof User) {
-				rows.add((User) target);
-			}
-		}
-
-		ObservableList<User> items = userList.getItems();
+		ObservableList<String> items = userList.getItems();
 
 		ranksDisplayed.clear();
-		items.setAll(rows);
+		items.setAll(users);
 
-		FXCollections.sort(items);
+		FXCollections.sort(items, RankComparator.INSTANCE);
 	}
 
 	private class UserButtonPane extends HBox {
@@ -94,16 +87,16 @@ public class UserPane extends VBox {
 	/**
 	 * does not work yet
 	 */
-	private class UserListCell extends ListCell<User> {
+	private class UserListCell extends ListCell<String> {
 
 		@Override
-		protected void updateItem(User user, boolean b) {
+		protected void updateItem(String user, boolean b) {
 			super.updateItem(user, b);
 
 			if (user == null)
 				return;
 
-			char ch = user.getName().charAt(0);
+			char ch = user.charAt(0);
 
 			if (IrcUtils.isRank(ch)) {
 				// only do first time
@@ -111,13 +104,13 @@ public class UserPane extends VBox {
 					setGraphic(new Label(rankNames.get(ch)));
 					ranksDisplayed.add(ch);
 				}
-				setText(user.getName().substring(1));
+				setText(user.substring(1));
 			} else {
 				if (!ranksDisplayed.contains(KEY_NORMAL_USER)) {
 					setGraphic(new Label("users"));
 					ranksDisplayed.add(KEY_NORMAL_USER);
 				}
-				setText(user.getName());
+				setText(user);
 			}
 		}
 	}
