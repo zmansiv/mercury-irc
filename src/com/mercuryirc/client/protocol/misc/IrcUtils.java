@@ -4,9 +4,9 @@ public class IrcUtils {
 
 	/**
 	 * @param in a string like ":irc.whatever.com" or ":Nick!User@Host"
-	 * @return the properly parsed target, e.g. "irc.whatever.com" or "Nick"
+	 * @return the properly parsed source, e.g. "irc.whatever.com" or "Nick"
 	 */
-	public static String parseTarget(String in) {
+	public static String parseSource(String in) {
 		if (in.contains("!"))
 			return in.substring(1, in.indexOf('!'));
 		else

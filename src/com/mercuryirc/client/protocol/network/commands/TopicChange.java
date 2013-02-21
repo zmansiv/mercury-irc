@@ -11,7 +11,7 @@ public class TopicChange implements Connection.CommandHandler {
 	}
 
 	public void process(Connection connection, String line, String[] parts) {
-		String who = IrcUtils.parseTarget(parts[0]);
+		String who = IrcUtils.parseSource(parts[0]);
 		Channel channel = connection.getServer().getChannel(parts[2]);
 
 		String topic = line.substring(line.indexOf(':', 2) + 1);

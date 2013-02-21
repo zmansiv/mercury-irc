@@ -11,15 +11,19 @@ public class MessageReceived implements Connection.CommandHandler {
 	}
 
 	public void process(Connection connection, String line, String[] parts) {
-		String from = IrcUtils.parseTarget(parts[0]);
+		String from = IrcUtils.parseSource(parts[0]);
 		String cmd = parts[1];
 		String to = parts[2];
 
-		// add 2 for the " :"
-		String text = line.substring(line.indexOf(to) + to.length() + 2);
-		Message message = new Message(Message.Type.valueOf(cmd.toUpperCase()), from, to, text);
+		String text = line.substring(line.indexOf(':', 1) + 1);
 
-		connection.getInputCallback().onMessage(connection, message);
+		if(text.length() > 0 && text.charAt(0) == '\u0001') {
+			String ctcp = text.substring(1, text.indexOf('\u0001', 1));
+			connection.getInputCallback().onCTCP(connection, from, ctcp);
+		} else {
+			Message message = new Message(Message.Type.valueOf(cmd.toUpperCase()), from, to, text);
+			connection.getInputCallback().onMessage(connection, message);
+		}
 	}
 
 }

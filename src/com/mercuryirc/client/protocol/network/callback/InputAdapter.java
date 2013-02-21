@@ -18,9 +18,11 @@ public class InputAdapter implements InputCallback {
 
 	public void onConnect(Connection connection) { }
 
-	public void onMessage(Connection connection, Message message) {}
+	public void onMessage(Connection connection, Message message) { }
 
-	public void onChannelJoin(Connection connection, Channel channel, User user) {}
+	public void onCTCP(Connection connection, String from, String ctcp) { }
+
+	public void onChannelJoin(Connection connection, Channel channel, User user) { }
 
 	public void onChannelPart(Connection connection, Channel channel, User user, String reason) { }
 

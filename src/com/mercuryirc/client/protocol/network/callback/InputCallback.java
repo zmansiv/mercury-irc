@@ -17,6 +17,8 @@ public interface InputCallback {
 	/** Called whenever someone sends a message to you or a channel you are in. */
 	public void onMessage(Connection connection, Message message);
 
+	public void onCTCP(Connection connection, String from, String ctcp);
+
 	/** Called whenever any user joins a channel you are in. */
 	public void onChannelJoin(Connection connection, Channel channel, User user);
 

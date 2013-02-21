@@ -16,7 +16,7 @@ public class Quit implements Connection.CommandHandler {
 		//		>> :mlaux_!user@99-37-202-122.lightspeed.dllstx.sbcglobal.net JOIN :#oculr
 		//		>> :mlaux_!user@99-37-202-122.lightspeed.dllstx.sbcglobal.net QUIT :Quit:
 
-		String name = IrcUtils.parseTarget(parts[0]);
+		String name = IrcUtils.parseSource(parts[0]);
 
 		Server svr = connection.getServer();
 		User user = svr.getUser(name);

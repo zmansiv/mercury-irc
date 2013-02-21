@@ -13,7 +13,7 @@ public class NickChange implements Connection.CommandHandler {
 
 	@Override
 	public void process(Connection connection, String line, String[] parts) {
-		String oldNick = IrcUtils.parseTarget(parts[0]);
+		String oldNick = IrcUtils.parseSource(parts[0]);
 		connection.getServer().removeUser(oldNick);
 
 		String newNick = parts[2];

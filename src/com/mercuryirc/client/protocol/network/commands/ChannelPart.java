@@ -17,7 +17,7 @@ public class ChannelPart implements Connection.CommandHandler {
 
 		Server srv = connection.getServer();
 
-		String nick = IrcUtils.parseTarget(parts[0]);
+		String nick = IrcUtils.parseSource(parts[0]);
 		User user = srv.getUser(nick);
 		Channel channel = srv.getChannel(chName);
 

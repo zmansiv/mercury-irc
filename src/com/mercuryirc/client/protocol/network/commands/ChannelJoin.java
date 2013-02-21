@@ -21,12 +21,18 @@ public class ChannelJoin implements Connection.CommandHandler {
 
 		Server srv = connection.getServer();
 
-		String nick = IrcUtils.parseTarget(parts[0]);
+		String nick = IrcUtils.parseSource(parts[0]);
+		String username = parts[0].substring(parts[0].indexOf('!') + 1, parts[0].indexOf('@'));
+		String host = parts[0].substring(parts[0].indexOf('@') + 1);
+
 		User user = srv.getUser(nick);
 		Channel channel = srv.getChannel(chName);
 
 		// update state
 		user.addChannel(chName);
+		user.setUserName(username);
+		user.setHost(host);
+
 		channel.addNicks(nick);
 
 		// if the person who joined the channel was us...
@@ -34,10 +40,10 @@ public class ChannelJoin implements Connection.CommandHandler {
 			// clear any saved state about the channel so that
 			// the server can fill us in again
 			srv.getChannel(chName).clearData();
-		}
 
-		// get info on the hostmasks
-		connection.who(chName);
+			// get info on the hostmasks
+			connection.who(chName);
+		}
 
 		connection.getInputCallback().onChannelJoin(connection, channel, user);
 	}

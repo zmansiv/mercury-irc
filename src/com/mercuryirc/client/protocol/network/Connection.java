@@ -275,6 +275,10 @@ public class Connection implements Runnable {
 		writeLine("QUIT :" + reason);
 	}
 
+	public void ctcp(String to, String message) {
+		writeLine("NOTICE " + to + " :\u0001" + message + "\u0001");
+	}
+
 	/* internal utility method used to accept all SSL certificates */
 
 	private SSLSocketFactory getLenientSocketFactory() {

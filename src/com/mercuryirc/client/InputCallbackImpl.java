@@ -49,6 +49,18 @@ public class InputCallbackImpl implements InputCallback {
 	}
 
 	@Override
+	public void onCTCP(Connection connection, String from, String ctcp) {
+		String arch = System.getProperty("os.arch");
+		if(arch.equals("amd64"))
+			arch = "x64";
+
+		String sysInfo = System.getProperty("os.name") + " (" + arch + ", "
+				+ Runtime.getRuntime().availableProcessors() + " cores)";
+
+		connection.ctcp(from, "VERSION MercuryIRC // " + sysInfo);
+	}
+
+	@Override
 	public void onChannelJoin(final Connection connection, final Channel channel, final User user) {
 		Platform.runLater(new Runnable() {
 			public void run() {
