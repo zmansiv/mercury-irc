@@ -11,14 +11,14 @@ public class ContentPane extends VBox {
 	private final MessagePane messagePane;
 	private final UserPane userPane;
 
-	public ContentPane(ApplicationPane appPane) {
+	public ContentPane(ApplicationPane appPane, Tab tab) {
 		VBox.setVgrow(this, Priority.ALWAYS);
 		HBox.setHgrow(this, Priority.ALWAYS);
 		HBox box = new HBox();
 		VBox.setVgrow(box, Priority.ALWAYS);
 		HBox.setHgrow(box, Priority.ALWAYS);
 		box.getChildren().addAll(messagePane = new MessagePane(appPane), userPane = new UserPane(appPane));
-		getChildren().addAll(topicPane = new TopicPane(appPane), box);
+		getChildren().addAll(topicPane = new TopicPane(appPane, tab), box);
 	}
 
 	public TopicPane getTopicPane() {

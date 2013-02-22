@@ -28,7 +28,7 @@ public class ApplicationPane extends HBox {
 		contentPaneContainer = new VBox();
 		VBox.setVgrow(contentPaneContainer, Priority.ALWAYS);
 		HBox.setHgrow(contentPaneContainer, Priority.ALWAYS);
-		contentPaneContainer.getChildren().setAll(contentPane = new ContentPane(this));
+		contentPaneContainer.getChildren().setAll(new VBox());
 		getChildren().addAll(tabPane = new TabPane(this), contentPaneContainer);
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override

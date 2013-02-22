@@ -1,5 +1,6 @@
 package com.mercuryirc.client.protocol.network;
 
+import com.mercuryirc.client.protocol.misc.IrcUtils;
 import com.mercuryirc.client.protocol.model.Channel;
 import com.mercuryirc.client.protocol.model.Message;
 import com.mercuryirc.client.protocol.model.Server;
@@ -87,6 +88,9 @@ public class Connection implements Runnable {
 		Channel ch = server.getChannel(name, false);
 		if(ch != null)
 			return ch;
+
+		if(IrcUtils.isRank(name.charAt(0)))
+			name = name.substring(1);
 
 		User u = server.getUser(name, false);
 		if(u != null)

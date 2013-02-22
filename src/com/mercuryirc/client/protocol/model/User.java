@@ -96,7 +96,7 @@ public class User implements Target, Comparable<User> {
 			return false;
 		}
 		User user = (User) o;
-		return user.getServer().equals(server) && user.getNameProperty().equals(name);
+		return user.getServer().equals(server) && user.getName().equals(name.get());
 	}
 
 	@Override

@@ -11,7 +11,7 @@ public class Tab {
 	public Tab(ApplicationPane appPane, Target target) {
 		this.target = target;
 
-		this.contentPane = new ContentPane(appPane);
+		this.contentPane = new ContentPane(appPane, this);
 	}
 
 	public Target getTarget() {

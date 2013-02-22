@@ -21,6 +21,7 @@ import java.util.LinkedList;
 public class InputPane extends HBox {
 
 	private final ApplicationPane appPane;
+
 	private final Label nickLabel;
 	private final TextField inputField;
 	private LinkedList<String> messageHistory = new LinkedList<>();
@@ -29,6 +30,7 @@ public class InputPane extends HBox {
 	public InputPane(final ApplicationPane appPane) {
 		super(0);
 		this.appPane = appPane;
+
 		getStylesheets().add(Mercury.class.getResource("./res/css/InputPane.css").toExternalForm());
 		getStyleClass().add("dark-pane");
 		setId("input-pane");
@@ -45,7 +47,7 @@ public class InputPane extends HBox {
 		inputField.setMinHeight(33);
 		inputField.setMaxHeight(33);
 		HBox.setHgrow(inputField, Priority.ALWAYS);
-		nickLabel.textProperty().bind(appPane.getConnection().getLocalUser().getNameProperty());
+		nickLabel.setText(appPane.getConnection().getLocalUser().getName());
 		inputField.setOnAction(new InputHandler());
 		inputField.setOnKeyPressed(new KeyHandler());
 		Region spacer = new Region();
@@ -55,8 +57,8 @@ public class InputPane extends HBox {
 		getChildren().addAll(nickLabel, inputField, spacer, sendButton);
 	}
 
-	public Label getNickLabel() {
-		return nickLabel;
+	public void setNick(String nick) {
+		nickLabel.setText(nick);
 	}
 
 	private class InputHandler implements EventHandler<ActionEvent> {

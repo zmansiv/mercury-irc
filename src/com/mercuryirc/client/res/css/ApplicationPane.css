@@ -27,6 +27,20 @@
 
 #topic-pane {
 	-fx-border-width: 0px 1px 1px 0px;
+	-fx-padding: 15;
+}
+
+#topic-pane .type {
+	-fx-text-fill: control-color;
+}
+
+#topic-pane .name {
+	-fx-text-fill: dark-control-color;
+	-fx-text-size: 24pt;
+}
+
+#topic-pane .topic {
+	-fx-text-fill: control-color;
 }
 
 #user-list {

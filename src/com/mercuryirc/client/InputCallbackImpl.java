@@ -135,7 +135,16 @@ public class InputCallbackImpl implements InputCallback {
 							break;
 						}
 					}
+
+					/*
+					topicpane now has more info. can't get CSS right. changed the way InputPane nick is set, since it didn't like the Property being set from the network thread. now works, but nick changing is still messed up because it doesn't update the list of channel users w/the new nick.
+					 */
+
+					if(user.equals(connection.getLocalUser())) {
+						tab.getContentPane().getMessagePane().getInputPane().setNick(user.getName());
+					}
 				}
+
 			}
 		});
 	}
