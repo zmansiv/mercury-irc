@@ -19,7 +19,8 @@ public class Mercury extends Application {
 	public static void main(String[] args) {
 		Font.loadFont(Mercury.class.getResource("./res/fonts/font_awesome.ttf").toExternalForm(), 12);
 		Font.loadFont(Mercury.class.getResource("./res/fonts/open_sans.ttf").toExternalForm(), 12);
-		Font.loadFont(Mercury.class.getResource("./res/fonts/ubuntu_mono.ttf").toExternalForm(), 12);
+		Font.loadFont(Mercury.class.getResource("./res/fonts/inconsolata.ttf").toExternalForm(), 12);
+		Font.loadFont(Mercury.class.getResource("./res/fonts/inconsolata_bold.ttf").toExternalForm(), 12);
 		Settings.init();
 		Application.launch(args);
 	}

@@ -1,15 +1,14 @@
 package com.mercuryirc.client;
 
-import com.mercuryirc.client.protocol.model.Channel;
-import com.mercuryirc.client.protocol.model.Message;
-import com.mercuryirc.client.protocol.model.Mode;
-import com.mercuryirc.client.protocol.model.Target;
-import com.mercuryirc.client.protocol.model.User;
-import com.mercuryirc.client.protocol.network.Connection;
-import com.mercuryirc.client.protocol.network.callback.InputCallback;
 import com.mercuryirc.client.ui.ApplicationPane;
-import com.mercuryirc.client.ui.Tab;
 import com.mercuryirc.client.ui.model.MessageRow;
+import com.mercuryirc.model.Channel;
+import com.mercuryirc.model.Entity;
+import com.mercuryirc.model.Message;
+import com.mercuryirc.model.Mode;
+import com.mercuryirc.model.User;
+import com.mercuryirc.network.Connection;
+import com.mercuryirc.network.callback.InputCallback;
 import javafx.application.Platform;
 
 import java.util.List;
@@ -24,53 +23,63 @@ public class InputCallbackImpl implements InputCallback {
 	}
 
 	public void onConnect(final Connection connection) {
-		connection.joinChannel("#mercury");
+		connection.join("#mercury");
 	}
 
 	@Override
-	public void onMessage(final Connection connection, final Message message) {
+	public void onPrivMsg(final Connection connection, final Message message) {
 		Platform.runLater(new Runnable() {
+			@Override
 			public void run() {
-				Target target = connection.resolveTarget(message.getTarget());
-				MessageRow row = new MessageRow(connection, message);
-				Tab tab;
-				if (message.getType() == Message.Type.NOTICE) {
-					tab = appPane.getTabPane().getSelected();
-				} else {
-					if (message.getTarget().startsWith("#")) {
-						tab = appPane.getTabPane().get(target);
-					} else {
-						tab = appPane.getTabPane().get(connection.resolveTarget(message.getSource()));
-					}
-				}
-				tab.getContentPane().getMessagePane().addRow(row);
+				boolean highlight = message.getMessage().toLowerCase().contains(connection.getLocalUser().getName().toLowerCase());
+				appPane.getTabPane().addTargetedMessage(connection, message, highlight ? MessageRow.Type.HIGHLIGHT : MessageRow.Type.PRIVMSG);
 			}
 		});
 	}
 
 	@Override
-	public void onCTCP(Connection connection, String from, String ctcp) {
-		String arch = System.getProperty("os.arch");
-		if(arch.equals("amd64"))
-			arch = "x64";
+	public void onNotice(final Connection connection, final Message message) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				appPane.getTabPane().addUntargetedMessage(connection, message, MessageRow.Type.NOTICE);
+			}
+		});
+	}
 
-		String sysInfo = System.getProperty("os.name") + " (" + arch + ", "
-				+ Runtime.getRuntime().availableProcessors() + " cores)";
-
-		connection.ctcp(from, "VERSION MercuryIRC // " + sysInfo);
+	@Override
+	public void onCtcp(final Connection connection, final Message message) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				String ctcp = message.getMessage();
+				if (ctcp.startsWith("ACTION")) {
+					Message _message = new Message(message.getSource(), message.getTarget(), ctcp.substring(7));
+					appPane.getTabPane().addTargetedMessage(connection, _message, MessageRow.Type.EVENT);
+				} else {
+					Message _message = new Message(message.getSource(), message.getTarget(), ctcp);
+					appPane.getTabPane().addUntargetedMessage(connection, _message, MessageRow.Type.CTCP);
+					if (ctcp.equals("VERSION")) {
+						String arch = System.getProperty("os.arch");
+						if (arch.equals("amd64")) {
+							arch = "x64";
+						}
+						String sysInfo = System.getProperty("os.name") + " (" + arch + " "
+								+ Runtime.getRuntime().availableProcessors() + "-core)";
+						connection.ctcp(message.getSource(), "VERSION MercuryIRC // " + sysInfo);
+					}
+				}
+			}
+		});
 	}
 
 	@Override
 	public void onChannelJoin(final Connection connection, final Channel channel, final User user) {
 		Platform.runLater(new Runnable() {
+			@Override
 			public void run() {
-				MessageRow row = new MessageRow(channel.getName(), user.getName() + " has joined the channel", MessageRow.Type.EVENT);
-				Tab tab = appPane.getTabPane().get(channel);
-				tab.getContentPane().getMessagePane().addRow(row);
-				tab.getContentPane().getTopicPane().setTopic(channel.getTopic());
-				if (user.equals(connection.getLocalUser())) {
-					appPane.getTabPane().select(tab);
-				}
+				Message message = new Message(user, channel, "has joined the channel");
+				appPane.getTabPane().addTargetedMessage(connection, message, MessageRow.Type.JOIN);
 			}
 		});
 	}
@@ -80,9 +89,10 @@ public class InputCallbackImpl implements InputCallback {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				appPane.getTabPane().get(channel).getContentPane().getMessagePane().addRow(new MessageRow(channel.getName(), user.getName() + " has left the channel" + (reason == null ? "" : " (" + reason + ")"), MessageRow.Type.EVENT));
+				Message message = new Message(user, channel, "has left the channel");
+				appPane.getTabPane().addTargetedMessage(connection, message, MessageRow.Type.PART);
 				if (user.equals(connection.getLocalUser())) {
-					appPane.getTabPane().close(appPane.getTabPane().get(channel));
+					appPane.getTabPane().close(appPane.getTabPane().get(connection, channel));
 				}
 			}
 		});
@@ -93,31 +103,29 @@ public class InputCallbackImpl implements InputCallback {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				for (Tab tab : appPane.getTabPane().getItems()) {
-					if (tab.getContentPane().getUserPane().getUsers().contains(user)) {
-						tab.getContentPane().getMessagePane().addRow(new MessageRow(tab.getTarget().getName(), user.getName() + " has quit" + (reason == null ? "" : " (" + reason + ")"), MessageRow.Type.EVENT));
-					}
-				}
+				Message message = new Message(user, null, "has quit (" + reason + ")");
+				appPane.getTabPane().addUserStatusMessage(user, message, MessageRow.Type.PART);
 			}
 		});
 	}
 
 	@Override
-	public void onChannelNickList(Connection connection, final Channel channel, final Set<String> nicks) {
+	public void onChannelNickList(final Connection connection, final Channel channel, final Set<User> users) {
 		Platform.runLater(new Runnable() {
 			public void run() {
-				appPane.getTabPane().get(channel).getContentPane().getUserPane().setUsers(nicks);
+				appPane.getTabPane().get(connection, channel).getContentPane().getUserPane().setUsers(users);
 			}
 		});
 	}
 
 	@Override
-	public void onTopicChange(Connection connection, final Channel channel, final String who, final String topic) {
+	public void onTopicChange(final Connection connection, final Channel channel, final User source, final String topic) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				appPane.getTabPane().get(channel).getContentPane().getMessagePane().addRow(new MessageRow(channel.getName(), who + " has set the topic to: " + topic, MessageRow.Type.EVENT));
-				appPane.getTabPane().get(channel).getContentPane().getTopicPane().setTopic(topic);
+				Message message = new Message(source, channel, "has set the topic: " + topic);
+				appPane.getTabPane().addTargetedMessage(connection, message, MessageRow.Type.EVENT);
+				appPane.getTabPane().get(connection, channel).getContentPane().getTopicPane().setTopic(topic);
 			}
 		});
 	}
@@ -127,24 +135,11 @@ public class InputCallbackImpl implements InputCallback {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				for (Tab tab : appPane.getTabPane().getItems()) {
-					for (String _nick : tab.getContentPane().getUserPane().getUsers()) {
-						User _user = (User) connection.resolveTarget(_nick);
-						if (_nick.equals(oldNick) && _user.getServer().equals(user.getServer())) {
-							tab.getContentPane().getMessagePane().addRow(new MessageRow(tab.getTarget().getName(), oldNick + " has changed their name to " + user.getName(), MessageRow.Type.EVENT));
-							break;
-						}
-					}
-
-					/*
-					topicpane now has more info. can't get CSS right. changed the way InputPane nick is set, since it didn't like the Property being set from the network thread. now works, but nick changing is still messed up because it doesn't update the list of channel users w/the new nick.
-					 */
-
-					if(user.equals(connection.getLocalUser())) {
-						tab.getContentPane().getMessagePane().getInputPane().setNick(user.getName());
-					}
+				Message message = new Message(null, null, oldNick + " is now known as " + user.getName());
+				appPane.getTabPane().addUserStatusMessage(user, message, MessageRow.Type.EVENT);
+				if (user.equals(connection.getLocalUser())) {
+					appPane.getContentPane().getMessagePane().getInputPane().setNick(user.getName());
 				}
-
 			}
 		});
 	}
@@ -154,17 +149,59 @@ public class InputCallbackImpl implements InputCallback {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				appPane.getTabPane().get(channel).getContentPane().getMessagePane().addRow(new MessageRow(channel.getName(), user.getName() + " has been kicked out of the channel" + (reason == null ? "" : " (" + reason + ")"), MessageRow.Type.EVENT));
-				if (user.equals(connection.getLocalUser())) {
-					appPane.getTabPane().close(appPane.getTabPane().get(channel));
-				}
+				Message message = new Message(user, channel, "has been kicked from the channel");
+				appPane.getTabPane().addTargetedMessage(connection, message, MessageRow.Type.PART);
 			}
 		});
 	}
 
 	@Override
 	public void onChannelModeList(Connection connection, Channel channel, Mode.Type type, List<Mode> list) {
-		//To change body of implemented methods use File | Settings | File Templates.
+		Message message = new Message(null, null, "Channel " + type.toString() + " list:");
+		appPane.getTabPane().addTargetedMessage(connection, message, MessageRow.Type.EVENT);
+		for (Mode mode : list) {
+			Message message2 = new Message(null, null, ((User) mode.getTarget()).getHost() + " by " + mode.getSource().getHost());
+			appPane.getTabPane().addTargetedMessage(connection, message2, MessageRow.Type.EVENT);
+		}
+	}
+
+	@Override
+	public void onError(final Connection connection, final String error) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				Message message = new Message(null, null, error);
+				appPane.getTabPane().addUntargetedMessage(connection, message, MessageRow.Type.ERROR);
+			}
+		});
+	}
+
+	@Override
+	public void onUnknownCommand(final Connection connection, final String command) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				Message message = new Message(null, null, "Unknown command: " + command);
+				appPane.getTabPane().addUntargetedMessage(connection, message, MessageRow.Type.ERROR);
+			}
+		});
+	}
+
+	@Override
+	public void onModeChange(final Connection connection, final Entity target, final Set<Mode> modes, final boolean add) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				for (Mode mode : modes) {
+					Message message = new Message(mode.getSource(), target, (add ? "" : "un") + "sets " + mode.getType().toString() + " on " + mode.getTarget().getName() + (mode.getTarget().equals(target) ? "" : " in " + target.getName()));
+					if (target instanceof Channel) {
+						appPane.getTabPane().addTargetedMessage(connection, message, MessageRow.Type.EVENT);
+					} else {
+						appPane.getTabPane().addUntargetedMessage(connection, message, MessageRow.Type.EVENT);
+					}
+				}
+			}
+		});
 	}
 
 }

@@ -11,19 +11,30 @@
 	light-control-hover-color: light-background-color;
 	button-color: rgb(250, 250, 250);
 	border-color: rgb(200, 200, 200);
-	green-button-color: rgb(115, 175, 90);
-	green-border-color: rgb(100, 150, 100);
+	green-button-color: rgb(130, 205, 115);
+	green-border-color: rgb(120, 160, 85);
 	red-button-color: rgb(240, 95, 80);
 	red-border-color: rgb(230, 50, 50);
-	blue-button-color: rgb(45, 175, 225);
-	blue-border-color: rgb(25, 145, 200);
-	highlight-color: rgb(255, 225, 225);
-	green-message-color: rgb(160, 200, 140);
-	orange-message-color: rgb(255, 200, 135);
-	red-message-color: rgb(255, 245, 245);
-	blue-message-color: rgb(115, 200, 235);
-	blue-message-hover-color: rgb(30, 150, 200);
+	blue-button-color: rgb(100, 175, 230);
+	blue-border-color: rgb(90, 130, 200);
 	light-line-color: rgb(230, 230, 230);
+	message-source-color: rgb(50, 50, 50);
+	message-color: control-color;
+	message-time-color: border-color;
+	self-message-source-color: rgb(90, 130, 200);
+	self-message-color: rgb(120, 170, 240);
+	highlight-color: rgb(0, 0, 0);
+	highlight-background-color: rgb(255, 235, 235);
+	highlight-stripe-color: rgb(235, 130, 115);
+	notice-color: highlight-color;
+	notice-background-color: rgb(255, 245, 200);
+	notice-stripe-color: rgb(255, 200, 135);
+	join-message-color: rgb(160, 200, 140);
+	event-message-color: notice-stripe-color;
+	part-message-color: rgb(255, 245, 245);
+	link-message-color: rgb(115, 200, 235);
+	link-message-hover-color: rgb(30, 150, 200);
+	text-selection-color: background-color;
 }
 
 .icon {

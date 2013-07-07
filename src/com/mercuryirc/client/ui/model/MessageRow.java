@@ -1,7 +1,6 @@
 package com.mercuryirc.client.ui.model;
 
-import com.mercuryirc.client.protocol.model.Message;
-import com.mercuryirc.client.protocol.network.Connection;
+import com.mercuryirc.model.Message;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,27 +8,33 @@ import java.util.regex.Pattern;
 public class MessageRow {
 
 	private final String source;
-	private final String target;
-	private final String content;
+	private final String message;
+	private final long time;
 	private final Type type;
 
-	public MessageRow(Connection connection, Message message) {
-		String source = message.getSource();
-		if (message.getType() == Message.Type.NOTICE) {
-			source = "-" + source + "-";
-		}
-		this.source = source;
-		target = message.getTarget();
-		content = escapeLine(stripColors(message.getMessage()));
-		String localNick = connection.getLocalUser().getName();
-		type = message.getType() == Message.Type.NOTICE || content.toLowerCase().contains(localNick.toLowerCase()) ? Type.HIGHLIGHT : source == null || source.equals("") ? Type.EVENT : Type.NORMAL;
-	}
-
-	public MessageRow(String target, String content, Type type) {
-		this.source = "";
-		this.target = target;
-		this.content = content;
+	public MessageRow(Message message, Type type) {
 		this.type = type;
+		this.time = message.getTimestamp();
+		String _message = escapeLine(stripColors(message.getMessage()));
+		switch (type) {
+			case PRIVMSG:
+			case HIGHLIGHT:
+			case SELF:
+				this.source = message.getSource().getName();
+				this.message = _message;
+				break;
+			case NOTICE:
+				this.source = message.getSource().getName();
+				this.message = "[NOTICE" + (message.getTarget() == null ? "" : " to " + message.getTarget().getName()) + "] " + _message;
+				break;
+			case CTCP:
+				this.source = message.getSource().getName();
+				this.message = "[CTCP" + (message.getTarget() == null ? "" : " to " + message.getTarget().getName()) + "] " + _message;
+				break;
+			default:
+				this.source = "";
+				this.message = (message.getSource() == null ? "" : (message.getSource().getName() + " ")) + _message;
+		}
 	}
 
 	private static String stripColors(String line) {
@@ -63,12 +68,12 @@ public class MessageRow {
 		return source;
 	}
 
-	public String getTarget() {
-		return target;
+	public String getMessage() {
+		return message;
 	}
 
-	public String getContent() {
-		return content;
+	public long getTime() {
+		return time;
 	}
 
 	public Type getType() {
@@ -77,11 +82,19 @@ public class MessageRow {
 
 	public enum Type {
 
-		NORMAL("normal"), HIGHLIGHT("highlight"), EVENT("event");
+		SELF("self"),
+		PRIVMSG("privmsg"),
+		HIGHLIGHT("highlight"),
+		NOTICE("notice"),
+		CTCP("notice"),
+		EVENT("event"),
+		JOIN("join"),
+		PART("part"),
+		ERROR("error");
 
 		private final String style;
 
-		private Type(final String style) {
+		private Type(String style) {
 			this.style = style;
 		}
 

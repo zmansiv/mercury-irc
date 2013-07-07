@@ -1,11 +1,14 @@
 package com.mercuryirc.client.ui;
 
 import com.mercuryirc.client.Mercury;
-import com.mercuryirc.client.protocol.model.Channel;
-import com.mercuryirc.client.protocol.model.Server;
-import com.mercuryirc.client.protocol.model.Target;
-import com.mercuryirc.client.protocol.model.User;
 import com.mercuryirc.client.ui.misc.FontAwesome;
+import com.mercuryirc.client.ui.model.MessageRow;
+import com.mercuryirc.model.Channel;
+import com.mercuryirc.model.Entity;
+import com.mercuryirc.model.Message;
+import com.mercuryirc.model.Server;
+import com.mercuryirc.model.User;
+import com.mercuryirc.network.Connection;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
@@ -60,22 +63,72 @@ public class TabPane extends VBox {
 		getChildren().addAll(buttonPane, tabListBox);
 	}
 
+
+
+	public void addUserStatusMessage(User source, Message message, MessageRow.Type type) {
+		for (Tab tab : getItems()) {
+			if (tab.getEntity().equals(source) || (tab.getEntity() instanceof Channel && ((Channel) tab.getEntity()).getUsers().contains(source))) {
+				tab.getContentPane().getMessagePane().addRow(new MessageRow(message, type));
+			}
+		}
+	}
+
+	public void addTargetedMessage(Connection connection, Message message, MessageRow.Type type) {
+		Entity target = message.getTarget();
+		if (target.equals(connection.getLocalUser())) {
+			target = message.getSource();
+		}
+		System.out.println(message.getSource().getName() + " to " + message.getTarget().getName() + ": " + message.getMessage());
+		System.out.println(target.getName());
+		Tab tab = null;
+		for (Tab _tab : getItems()) {
+			if (_tab.getEntity().equals(target)) {
+				tab = _tab;
+				break;
+			}
+		}
+		if (tab == null) {
+			if (type == MessageRow.Type.PART && message.getSource().equals(connection.getLocalUser())) {
+				return;
+			}
+			tab = create(connection, target);
+		}
+		tab.getContentPane().getMessagePane().addRow(new MessageRow(message, type));
+	}
+
+	public void addUntargetedMessage(Connection connection, Message message, MessageRow.Type type) {
+		Tab tab = getSelected();
+		if (tab == null || !tab.getConnection().equals(connection)) {
+			tab = null;
+			for (Tab _tab : getItems()) {
+				if (_tab.getConnection().equals(connection)) {
+					tab = _tab;
+					break;
+				}
+			}
+			if (tab == null) {
+				tab = create(connection, connection.getServer());
+			}
+		}
+		tab.getContentPane().getMessagePane().addRow(new MessageRow(message, type));
+	}
+
 	public Collection<Tab> getItems() {
 		return tabList.getItems();
 	}
 
-	public Tab add(Target target) {
-		Tab t = new Tab(appPane, target);
+	public Tab create(Connection connection, Entity entity) {
+		Tab t = new Tab(appPane, connection, entity);
 		tabList.getItems().add(t);
 		return t;
 	}
 
-	public Tab get(Target target) {
+	public Tab get(Connection connection, Entity entity) {
 		for (Tab t : tabList.getItems()) {
-			if (t.getTarget().equals(target))
+			if (t.getEntity().equals(entity))
 				return t;
 		}
-		return add(target);
+		return create(connection, entity);
 	}
 
 	public Tab getSelected() {
@@ -123,26 +176,26 @@ public class TabPane extends VBox {
 		protected void updateItem(Tab tab, boolean empty) {
 			super.updateItem(tab, empty);
 			if (tab != null) {
-				Target target = tab.getTarget();
+				Entity entity = tab.getEntity();
 				setMinHeight(50);
 				setMaxHeight(50);
-				if (target instanceof Server) {
+				if (entity instanceof Server) {
 					setMinHeight(60);
 					setMaxHeight(60);
 					Label net = new Label("network");
 					net.getStyleClass().add("network");
 
 					VBox box = new VBox();
-					Label name = new Label(target.getName());
+					Label name = new Label(entity.getName());
 					box.getChildren().addAll(net, name);
 
 					setGraphic(box);
-				} else if (target instanceof Channel) {
+				} else if (entity instanceof Channel) {
 					setGraphic(FontAwesome.createIcon(FontAwesome.COMMENTS));
-					setText(target.getName().substring(1));
-				} else if (target instanceof User) {
+					setText(entity.getName().substring(1));
+				} else if (entity instanceof User) {
 					setGraphic(FontAwesome.createIcon(FontAwesome.USER));
-					setText(target.getName());
+					setText(entity.getName());
 				}
 				setMinHeight(50);
 				setMaxHeight(50);

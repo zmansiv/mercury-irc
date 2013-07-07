@@ -3,13 +3,12 @@
 <HEAD>
 	<SCRIPT type="text/javascript">
 
-		function addRow(source, message, timestamp, style, color) {
+		function addRow(source, message, timestamp, style) {
 			var table = document.getElementById('messageTable');
 			var row = table.insertRow(table.rows.length);
 			row.className = style;
 			var sourceCell = row.insertCell(0);
 			sourceCell.className = "source";
-			sourceCell.style.color = color;
 			alert(sourceCell.style.borderRight);
 			sourceCell.innerHTML = source;
 			var messageCell = row.insertCell(1);
@@ -29,6 +28,30 @@
 
 	</SCRIPT>
 	<STYLE type="text/css">
+
+		/*
+		background-color: rgb(245, 245, 245);
+		light-background-color: rgb(255, 255, 255);
+		border-color: rgb(200, 200, 200);
+		light-line-color: rgb(230, 230, 230);
+		message-source-color: rgb(50, 50, 50);
+		message-color: control-color;
+		message-time-color: border-color;
+		self-message-source-color: rgb(90, 130, 200);
+		self-message-color: rgb(120, 170, 240);
+		highlight-color: rgb(0, 0, 0);
+		highlight-background-color: rgb(255, 235, 235);
+		highlight-stripe-color: rgb(235, 130, 115);
+		notice-color: highlight-color;
+		notice-background-color: rgb(255, 245, 200);
+		notice-stripe-color: rgb(255, 200, 135);
+		join-message-color: rgb(160, 200, 140);
+		event-message-color: notice-stripe-color;
+		part-message-color: rgb(255, 245, 245);
+		link-message-color: rgb(115, 200, 235);
+		link-message-hover-color: rgb(30, 150, 200);
+		text-selection-color: background-color;
+		*/
 
 		html, body {
 			margin: 0;
@@ -56,27 +79,59 @@
 		}
 
 		tr.highlight {
-			background-color: rgb(255, 225, 225);
-			border-left: 3px solid rgb(240, 95, 80);
-			color: rgb(130, 130, 130);
+			background-color: rgb(255, 235, 235);
+			border-left: 3px solid rgb(235, 130, 115);
+			color: rgb(0, 0, 0);
+			font-weight: bold;
 		}
 
 		tr.highlight td.source {
 			padding-left: 3px;
-			color: rgb(50, 50, 50);
 			width: 1px;
+		}
+
+		tr.notice {
+			background-color: rgb(255, 245, 200);
+			border-left: 3px solid rgb(255, 200, 135);
+			color: rgb(0, 0, 0);
+			font-weight: bold;
+		}
+
+		tr.notice td.source {
+			padding-left: 3px;
+			width: 1px;
+		}
+
+		tr.self td.source {
+			color: rgb(90, 130, 200);
+		}
+
+		tr.self td.message {
+			color: rgb(120, 170, 240);
+		}
+
+		tr.privmsg {
+			color: rgb(130, 130, 130);
 		}
 
 		tr.event {
 			color: rgb(255, 200, 135);
 		}
 
-		tr.normal {
-			color: rgb(130, 130, 130);
+		tr.join {
+			color: rgb(160, 200, 140);
+		}
+
+		tr.part {
+			color: rgb(255, 245, 245);
+		}
+
+		tr.error {
+			color: rgb(50, 50, 50);
 		}
 
 		td {
-			font-family: Ubuntu-Mono, monospace;
+			font-family: Inconsolata, monospace;
 			font-size: 14px;
 			overflow-x: hidden;
 			text-overflow: ellipsis;

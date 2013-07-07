@@ -25,7 +25,7 @@ public class TopicPane extends HBox {
 
 		VBox left = new VBox();
 
-		String name = tab.getTarget().getName();
+		String name = tab.getEntity().getName();
 		Label lblName = new Label(name);
 		lblName.getStyleClass().add("name");
 		String type = name.startsWith("#") ? "channel" : "private message";

@@ -3,11 +3,10 @@ package com.mercuryirc.client.ui;
 import com.mercuryirc.client.InputCallbackImpl;
 import com.mercuryirc.client.Mercury;
 import com.mercuryirc.client.OutputCallbackImpl;
-import com.mercuryirc.client.protocol.model.Server;
-import com.mercuryirc.client.protocol.model.User;
-import com.mercuryirc.client.protocol.network.Connection;
+import com.mercuryirc.model.Server;
+import com.mercuryirc.model.User;
+import com.mercuryirc.network.Connection;
 import javafx.event.EventHandler;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -33,16 +32,23 @@ public class ApplicationPane extends HBox {
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent keyEvent) {
-				if (keyEvent.getCode() == KeyCode.TAB && keyEvent.isControlDown()) {
-					if (keyEvent.isShiftDown()) {
-						tabPane.selectPrevious();
-					} else {
-						tabPane.selectNext();
+				if (keyEvent.isControlDown()) {
+					switch (keyEvent.getCode()) {
+						case W:
+							tabPane.close(tabPane.getSelected());
+							break;
+						case TAB:
+							if (keyEvent.isShiftDown()) {
+								tabPane.selectPrevious();
+							} else {
+								tabPane.selectNext();
+							}
+							break;
 					}
 				}
 			}
 		});
-		getTabPane().select(getTabPane().get(connection.getServer()));
+		getTabPane().select(getTabPane().get(connection, connection.getServer()));
 	}
 
 	private Connection connectToIRC() {

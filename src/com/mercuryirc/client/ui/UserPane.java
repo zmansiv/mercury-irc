@@ -1,11 +1,8 @@
 package com.mercuryirc.client.ui;
 
-import com.mercuryirc.client.protocol.misc.IrcUtils;
-import com.mercuryirc.client.protocol.model.RankComparator;
-import com.mercuryirc.client.protocol.model.Target;
-import com.mercuryirc.client.protocol.model.User;
 import com.mercuryirc.client.ui.misc.FontAwesome;
-import javafx.collections.FXCollections;
+import com.mercuryirc.misc.IrcUtils;
+import com.mercuryirc.model.User;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -19,7 +16,6 @@ import javafx.util.Callback;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,37 +33,47 @@ public class UserPane extends VBox {
 	}
 
 	private final ApplicationPane appPane;
+	//private final Channel channel;
 
-	private ListView<String> userList = new ListView<>();
+	private ListView<User> userList = new ListView<>();
 	private UserButtonPane buttons = new UserButtonPane();
 
 	private List<Character> ranksDisplayed = new ArrayList<>();
 
+	/*private final Comparator<User> USER_COMPARATOR = new Comparator<User>() {
+		@Override
+		public int compare(User o1, User o2) {
+			int rankC = User.RANK_COMPARATOR.compare(o1.getChannelRank(channel), o2.getChannelRank(channel));
+			return rankC == 0 ? o1.getName().compareTo(o2.getName()) : rankC  * -1;
+		}
+	};*/
+
 	public UserPane(ApplicationPane appPane) {
 		this.appPane = appPane;
+		//this.channel = channel;
 		setMinWidth(175);
 		VBox.setVgrow(userList, Priority.ALWAYS);
 		userList.setId("user-list");
-		userList.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+		userList.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
 			@Override
-			public ListCell<String> call(ListView<String> userListView) {
+			public ListCell<User> call(ListView<User> userListView) {
 				return new UserListCell();
 			}
 		});
 		getChildren().addAll(userList, buttons);
 	}
 
-	public List<String> getUsers() {
+	public List<User> getUsers() {
 		return userList.getItems();
 	}
 
-	public void setUsers(Collection<String> users) {
-		ObservableList<String> items = userList.getItems();
+	public void setUsers(Collection<User> users) {
+		ObservableList<User> items = userList.getItems();
 
 		ranksDisplayed.clear();
 		items.setAll(users);
 
-		FXCollections.sort(items, RankComparator.INSTANCE);
+		//FXCollections.sort(items, USER_COMPARATOR);
 	}
 
 	private class UserButtonPane extends HBox {
@@ -87,16 +93,16 @@ public class UserPane extends VBox {
 	/**
 	 * does not work yet
 	 */
-	private class UserListCell extends ListCell<String> {
+	private class UserListCell extends ListCell<User> {
 
 		@Override
-		protected void updateItem(String user, boolean b) {
+		protected void updateItem(User user, boolean b) {
 			super.updateItem(user, b);
 
 			if (user == null)
 				return;
 
-			char ch = user.charAt(0);
+			char ch = user.getName().charAt(0);
 
 			if (IrcUtils.isRank(ch)) {
 				// only do first time
@@ -104,14 +110,15 @@ public class UserPane extends VBox {
 					setGraphic(new Label(rankNames.get(ch)));
 					ranksDisplayed.add(ch);
 				}
-				setText(user.substring(1));
+				setText(user.getName().substring(1));
 			} else {
 				if (!ranksDisplayed.contains(KEY_NORMAL_USER)) {
 					setGraphic(new Label("users"));
 					ranksDisplayed.add(KEY_NORMAL_USER);
 				}
-				setText(user);
+				setText(user.getName());
 			}
 		}
 	}
+
 }

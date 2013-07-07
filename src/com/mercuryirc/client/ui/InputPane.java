@@ -1,8 +1,8 @@
 package com.mercuryirc.client.ui;
 
 import com.mercuryirc.client.Mercury;
-import com.mercuryirc.client.protocol.model.User;
 import com.mercuryirc.client.ui.misc.FontAwesome;
+import com.mercuryirc.model.User;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -79,11 +79,11 @@ public class InputPane extends HBox {
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
-						appPane.getTabPane().select(appPane.getTabPane().get(appPane.getConnection().resolveTarget(input.substring(7))));
+						appPane.getTabPane().select(appPane.getTabPane().get(appPane.getConnection(), appPane.getConnection().getServer().getUser(input.substring(7))));
 					}
 				});
 			} else {
-				appPane.getConnection().process(appPane.getTabPane().getSelected().getTarget(), input);
+				appPane.getConnection().process(appPane.getTabPane().getSelected().getEntity(), input);
 			}
 			inputField.setText("");
 		}
@@ -121,7 +121,8 @@ public class InputPane extends HBox {
 					}
 					if (start != -1) {
 						String beginning = text.substring(start, inputField.getCaretPosition()).toLowerCase();
-						for (String nick : appPane.getContentPane().getUserPane().getUsers()) {
+						for (User user : appPane.getContentPane().getUserPane().getUsers()) {
+							String nick = user.getName();
 							if (nick.toLowerCase().startsWith(beginning)) {
 								inputField.deleteText(start, inputField.getCaretPosition());
 								inputField.insertText(start, nick + " ");
