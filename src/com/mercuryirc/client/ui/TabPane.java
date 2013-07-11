@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 import java.util.Collection;
+import java.util.List;
 
 public class TabPane extends VBox {
 
@@ -117,9 +118,20 @@ public class TabPane extends VBox {
 	}
 
 	public Tab create(Connection connection, Entity entity) {
-		Tab t = new Tab(appPane, connection, entity);
-		tabList.getItems().add(t);
-		return t;
+		Tab tab = new Tab(appPane, connection, entity);
+		List<Tab> tabs = tabList.getItems();
+		boolean added = false;
+		for (int i = tabs.size() - 1; i >= 0; i--) {
+			if (tabs.get(i).getConnection().equals(connection)) {
+				tabs.add(i + 1, tab);
+				added = true;
+				break;
+			}
+		}
+		if (!added) {
+			tabs.add(tab);
+		}
+		return tab;
 	}
 
 	public Tab get(Connection connection, Entity entity) {

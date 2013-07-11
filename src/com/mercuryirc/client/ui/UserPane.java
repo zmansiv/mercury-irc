@@ -2,32 +2,24 @@ package com.mercuryirc.client.ui;
 
 import com.mercuryirc.model.Channel;
 import com.mercuryirc.model.Entity;
+import com.mercuryirc.model.Mode;
 import com.mercuryirc.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.OverrunStyle;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class UserPane extends VBox {
-
-	private static final char KEY_NORMAL_USER = 0;
-	private static final Map<Character, String> rankNames = new HashMap<>();
-
-	static {
-		rankNames.put('~', "owners");
-		rankNames.put('&', "admins");
-		rankNames.put('@', "ops");
-		rankNames.put('%', "halfops");
-		rankNames.put('+', "voices");
-	}
 
 	private final ApplicationPane appPane;
 	private final Channel channel;
@@ -47,6 +39,8 @@ public class UserPane extends VBox {
 		setMinWidth(175);
 		setMaxWidth(175);
 		userListView = new ListView<>();
+		userListView.setMinWidth(175);
+		userListView.setMaxWidth(175);
 		if (entity instanceof Channel) {
 			channel = (Channel) entity;
 			userListView.getItems().addAll(channel.getUsers());
@@ -89,22 +83,74 @@ public class UserPane extends VBox {
 	public void sort() {
 		if (channel != null) {
 			FXCollections.sort(userListView.getItems(), USER_COMPARATOR);
+			//userListView.
+			//for (userListView.getItems().)
 		}
 	}
 
-	/**
-	 * does not work yet
-	 */
 	private class UserListCell extends ListCell<User> {
 
 		@Override
 		protected void updateItem(User user, boolean b) {
 			super.updateItem(user, b);
-
-			if (user == null)
+			if (user == null) {
 				return;
-
-			textProperty().bind(user.getNameProperty());
+			}
+			setMinWidth(175);
+			setMaxWidth(175);
+			setId("user-cell");
+			HBox hbox = new HBox();
+			boolean rankLabeledCell = false;
+			Mode.Type lastRank = null;
+			for (User _user : UserPane.this.getUsers()) {
+				if (_user.equals(user)) {
+					Mode.Type rank = user.getChannelRank(UserPane.this.channel);
+					if (rank != lastRank) {
+						if (lastRank != null) {
+							setId("user-rank-cell");
+						}
+						if (rank != null) {
+							String rankName = null;
+							switch (rank) {
+								case OWNER:
+									rankName = "Owner";
+									break;
+								case PROTECT:
+									rankName = "Admin";
+									break;
+								case OP:
+									rankName = "Op";
+									break;
+								case HALFOP:
+									rankName = "Halfop";
+									break;
+								case VOICE:
+									rankName = "Voice";
+							}
+							Label ranklabel = new Label(rankName);
+							ranklabel.setId("rank-label");
+							ranklabel.setMinWidth(60);
+							ranklabel.setMaxWidth(60);
+							hbox.getChildren().add(ranklabel);
+							rankLabeledCell = true;
+						}
+					}
+					break;
+				}
+				lastRank = _user.getChannelRank(UserPane.this.channel);
+			}
+			if (!rankLabeledCell) {
+				Region spacer = new Region();
+				spacer.setMinWidth(60);
+				spacer.setMaxWidth(60);
+				hbox.getChildren().add(spacer);
+			}
+			Label nickLabel = new Label();
+			nickLabel.setId("user-label");
+			nickLabel.setTextOverrun(OverrunStyle.ELLIPSIS);
+			nickLabel.textProperty().bind(user.getNameProperty());
+			hbox.getChildren().add(nickLabel);
+			setGraphic(hbox);
 		}
 	}
 

@@ -18,9 +18,7 @@ public class FontAwesome {
 	public static final String COG = "\uf013";
 	public static final String COMMENTS = "\uf086";
 	public static final String USER = "\uf007";
-	public static final String PENCIL = "\uf040";
 	public static final String SIGN_OUT = "\uf08b";
-	public static final String INFO = "\uf05a";
 	public static final String REPLY = "\uf112";
 
 	public static Button createIconButton(String iconName) {

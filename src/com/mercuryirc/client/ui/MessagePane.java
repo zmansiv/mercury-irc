@@ -25,7 +25,7 @@ import java.util.List;
 
 public class MessagePane extends VBox {
 
-	private static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("hh:mmaa");
+	private static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("h:mmaa");
 	{
 		DateFormatSymbols sym = TIME_FORMATTER.getDateFormatSymbols();
 		sym.setAmPmStrings(new String[] { "am", "pm" });
@@ -39,6 +39,7 @@ public class MessagePane extends VBox {
 	private final List<MessageRow> loadQueue;
 
 	public MessagePane(ApplicationPane appPane) {
+		setId("message-pane");
 		VBox.setVgrow(this, Priority.ALWAYS);
 		HBox.setHgrow(this, Priority.ALWAYS);
 		webView = new WebView();
