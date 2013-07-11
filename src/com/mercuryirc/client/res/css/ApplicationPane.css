@@ -13,46 +13,42 @@
 }
 
 #tab-list {
-	-fx-border-width: 0px 0px 1px 1px;
+	-fx-border-width: 0px 1px 1px 1px;
 	-fx-border-radius: 0px 0px 0px 4px;
 	-fx-background-radius: 0px 0px 0px 4px;
 	-fx-padding: 0px;
 	-fx-border-insets: 0px;
 }
 
-#tab-list-alt {
-	-fx-border-color: background-color, border-color;
-	-fx-border-width: 1px 0px 0px 0px, 0px 0px 1px 1px;
-}
-
 #topic-pane {
 	-fx-border-width: 0px 1px 1px 0px;
-	-fx-padding: 15;
+	-fx-padding: 15px 15px 15px 15px;
 }
 
-#topic-pane .type {
+#topic-pane-channel {
+	-fx-border-width: 0px 1px 1px 0px;
+	-fx-padding: 8px 15px 15px 15px;
+}
+
+.type {
 	-fx-text-fill: control-color;
+	-fx-font-size: 14pt;
 }
 
-#topic-pane .name {
+.name {
 	-fx-text-fill: dark-control-color;
-	-fx-text-size: 24pt;
+	-fx-font-size: 24pt;
 }
 
-#topic-pane .topic {
+.topic {
 	-fx-text-fill: control-color;
+	-fx-font-size: 14pt;
 }
 
 #user-list {
 	-fx-background-color: light-background-color;
 	-fx-border-color: border-color;
 	-fx-border-width: 0px 1px 0px 1px;
-}
-
-#user-button-pane {
-	-fx-border-width: 1px 1px 1px 1px;
-	-fx-border-radius: 0px 0px 4px 0px;
-	-fx-background-radius: 0px 0px 4px 0px;
 }
 
 #input-pane {

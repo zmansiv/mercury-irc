@@ -16,7 +16,7 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +25,12 @@ import java.util.List;
 
 public class MessagePane extends VBox {
 
-	private static final DateFormat TIME_FORMATTER = new SimpleDateFormat("hh:mmaa");
+	private static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("hh:mmaa");
+	{
+		DateFormatSymbols sym = TIME_FORMATTER.getDateFormatSymbols();
+		sym.setAmPmStrings(new String[] { "am", "pm" });
+		TIME_FORMATTER.setDateFormatSymbols(sym);
+	}
 
 	private final WebView webView;
 	private boolean pageLoaded;

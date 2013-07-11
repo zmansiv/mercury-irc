@@ -1,7 +1,9 @@
-package com.mercuryirc.client;
+package com.mercuryirc.client.callback;
 
 import com.mercuryirc.client.ui.ApplicationPane;
+import com.mercuryirc.client.ui.Tab;
 import com.mercuryirc.client.ui.model.MessageRow;
+import com.mercuryirc.model.Channel;
 import com.mercuryirc.model.Message;
 import com.mercuryirc.model.Server;
 import com.mercuryirc.model.User;
@@ -58,7 +60,19 @@ public class OutputCallbackImpl implements OutputCallback {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				appPane.getTabPane().create(connection, user);
+				Tab tab = appPane.getTabPane().create(connection, user);
+				appPane.getTabPane().select(tab);
+			}
+		});
+	}
+
+	@Override
+	public void onJoin(final Connection connection, final Channel channel) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				Tab tab = appPane.getTabPane().get(connection, channel);
+				appPane.getTabPane().select(tab);
 			}
 		});
 	}

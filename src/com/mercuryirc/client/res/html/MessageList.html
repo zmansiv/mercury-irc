@@ -32,7 +32,9 @@
 		/*
 		background-color: rgb(245, 245, 245);
 		light-background-color: rgb(255, 255, 255);
+		control-color: rgb(130, 130, 130);
 		border-color: rgb(200, 200, 200);
+		tab-stripe-color: rgb(235, 130, 115);
 		light-line-color: rgb(230, 230, 230);
 		message-source-color: rgb(50, 50, 50);
 		message-color: control-color;
@@ -41,13 +43,13 @@
 		self-message-color: rgb(120, 170, 240);
 		highlight-color: rgb(0, 0, 0);
 		highlight-background-color: rgb(255, 235, 235);
-		highlight-stripe-color: rgb(235, 130, 115);
+		highlight-stripe-color: tab-stripe-color;
 		notice-color: highlight-color;
 		notice-background-color: rgb(255, 245, 200);
 		notice-stripe-color: rgb(255, 200, 135);
 		join-message-color: rgb(160, 200, 140);
 		event-message-color: notice-stripe-color;
-		part-message-color: rgb(255, 245, 245);
+		part-message-color: rgb(235, 130, 115);
 		link-message-color: rgb(115, 200, 235);
 		link-message-hover-color: rgb(30, 150, 200);
 		text-selection-color: background-color;
@@ -82,24 +84,45 @@
 			background-color: rgb(255, 235, 235);
 			border-left: 3px solid rgb(235, 130, 115);
 			color: rgb(0, 0, 0);
-			font-weight: bold;
 		}
 
 		tr.highlight td.source {
 			padding-left: 3px;
 			width: 1px;
+			color: rgb(0, 0, 0);
+			font-weight: bolder;
+		}
+
+		tr.highlight td.message {
+			color: rgb(0, 0, 0);
+			font-weight: bolder;
+		}
+
+		tr.highlight td.timestamp {
+			color: rgb(0, 0, 0);
+			font-weight: bolder;
 		}
 
 		tr.notice {
 			background-color: rgb(255, 245, 200);
 			border-left: 3px solid rgb(255, 200, 135);
-			color: rgb(0, 0, 0);
-			font-weight: bold;
 		}
 
 		tr.notice td.source {
 			padding-left: 3px;
 			width: 1px;
+			color: rgb(0, 0, 0);
+			font-weight: bolder;
+		}
+
+		tr.notice td.message {
+			color: rgb(0, 0, 0);
+			font-weight: bolder;
+		}
+
+		tr.notice td.timestamp {
+			color: rgb(0, 0, 0);
+			font-weight: bolder;
 		}
 
 		tr.self td.source {
@@ -110,28 +133,28 @@
 			color: rgb(120, 170, 240);
 		}
 
-		tr.privmsg {
+		tr.privmsg td.message {
 			color: rgb(130, 130, 130);
 		}
 
-		tr.event {
+		tr.event td.message {
 			color: rgb(255, 200, 135);
 		}
 
-		tr.join {
+		tr.join td.message {
 			color: rgb(160, 200, 140);
 		}
 
-		tr.part {
-			color: rgb(255, 245, 245);
+		tr.part td.message {
+			color: rgb(235, 130, 115);
 		}
 
-		tr.error {
+		tr.error td.message {
 			color: rgb(50, 50, 50);
 		}
 
 		td {
-			font-family: Inconsolata, monospace;
+			font-family: Inconsolata, sans-serif;
 			font-size: 14px;
 			overflow-x: hidden;
 			text-overflow: ellipsis;

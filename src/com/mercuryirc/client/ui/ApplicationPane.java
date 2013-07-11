@@ -1,8 +1,8 @@
 package com.mercuryirc.client.ui;
 
-import com.mercuryirc.client.InputCallbackImpl;
+import com.mercuryirc.client.callback.InputCallbackImpl;
 import com.mercuryirc.client.Mercury;
-import com.mercuryirc.client.OutputCallbackImpl;
+import com.mercuryirc.client.callback.OutputCallbackImpl;
 import com.mercuryirc.model.Server;
 import com.mercuryirc.model.User;
 import com.mercuryirc.network.Connection;

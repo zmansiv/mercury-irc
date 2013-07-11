@@ -33,6 +33,7 @@ public class TabPane extends VBox {
 		this.appPane = appPane;
 		getStylesheets().add(Mercury.class.getResource("./res/css/TabPane.css").toExternalForm());
 		setMinWidth(200);
+		setMaxWidth(200);
 		final TabButtonPane buttonPane = new TabButtonPane();
 		final VBox tabListBox = new VBox();
 		tabListBox.getStyleClass().add("dark-pane");
@@ -45,10 +46,8 @@ public class TabPane extends VBox {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
 				if (number2 == 0) {
-					tabListBox.setId("tab-list-alt");
 					tabList.getStyleClass().add("first");
 				} else {
-					tabListBox.setId("tab-list");
 					tabList.getStyleClass().remove("first");
 				}
 			}
@@ -64,11 +63,13 @@ public class TabPane extends VBox {
 	}
 
 
-
-	public void addUserStatusMessage(User source, Message message, MessageRow.Type type) {
+	public void addUserStatusMessage(User source, Message message, MessageRow.Type type, TabAction action) {
 		for (Tab tab : getItems()) {
 			if (tab.getEntity().equals(source) || (tab.getEntity() instanceof Channel && ((Channel) tab.getEntity()).getUsers().contains(source))) {
 				tab.getContentPane().getMessagePane().addRow(new MessageRow(message, type));
+				if (action != null) {
+					action.process(tab);
+				}
 			}
 		}
 	}
@@ -78,8 +79,6 @@ public class TabPane extends VBox {
 		if (target.equals(connection.getLocalUser())) {
 			target = message.getSource();
 		}
-		System.out.println(message.getSource().getName() + " to " + message.getTarget().getName() + ": " + message.getMessage());
-		System.out.println(target.getName());
 		Tab tab = null;
 		for (Tab _tab : getItems()) {
 			if (_tab.getEntity().equals(target)) {
@@ -177,11 +176,9 @@ public class TabPane extends VBox {
 			super.updateItem(tab, empty);
 			if (tab != null) {
 				Entity entity = tab.getEntity();
-				setMinHeight(50);
-				setMaxHeight(50);
+				setPrefHeight(50);
 				if (entity instanceof Server) {
-					setMinHeight(60);
-					setMaxHeight(60);
+					setPrefHeight(60);
 					Label net = new Label("network");
 					net.getStyleClass().add("network");
 
@@ -197,8 +194,6 @@ public class TabPane extends VBox {
 					setGraphic(FontAwesome.createIcon(FontAwesome.USER));
 					setText(entity.getName());
 				}
-				setMinHeight(50);
-				setMaxHeight(50);
 			}
 		}
 
@@ -214,6 +209,12 @@ public class TabPane extends VBox {
 			setMinHeight(85);
 			getChildren().addAll(FontAwesome.createIconButton(FontAwesome.PLUS, "new", "green"), FontAwesome.createIconButton(FontAwesome.GLOBE), FontAwesome.createIconButton(FontAwesome.COG));
 		}
+
+	}
+
+	public static abstract class TabAction {
+
+		public abstract void process(Tab tab);
 
 	}
 

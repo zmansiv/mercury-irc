@@ -1,6 +1,8 @@
-package com.mercuryirc.client;
+package com.mercuryirc.client.callback;
 
 import com.mercuryirc.client.ui.ApplicationPane;
+import com.mercuryirc.client.ui.Tab;
+import com.mercuryirc.client.ui.TabPane;
 import com.mercuryirc.client.ui.model.MessageRow;
 import com.mercuryirc.model.Channel;
 import com.mercuryirc.model.Entity;
@@ -104,18 +106,13 @@ public class InputCallbackImpl implements InputCallback {
 			@Override
 			public void run() {
 				Message message = new Message(user, null, "has quit (" + reason + ")");
-				appPane.getTabPane().addUserStatusMessage(user, message, MessageRow.Type.PART);
+				appPane.getTabPane().addUserStatusMessage(user, message, MessageRow.Type.PART, null);
 			}
 		});
 	}
 
 	@Override
-	public void onChannelNickList(final Connection connection, final Channel channel, final Set<User> users) {
-		Platform.runLater(new Runnable() {
-			public void run() {
-				appPane.getTabPane().get(connection, channel).getContentPane().getUserPane().setUsers(users);
-			}
-		});
+	public void onChannelNickList(final Connection connection, final Channel channel, final List<User> users) {
 	}
 
 	@Override
@@ -136,7 +133,12 @@ public class InputCallbackImpl implements InputCallback {
 			@Override
 			public void run() {
 				Message message = new Message(null, null, oldNick + " is now known as " + user.getName());
-				appPane.getTabPane().addUserStatusMessage(user, message, MessageRow.Type.EVENT);
+				appPane.getTabPane().addUserStatusMessage(user, message, MessageRow.Type.EVENT, new TabPane.TabAction() {
+					@Override
+					public void process(Tab tab) {
+						tab.getContentPane().getUserPane().sort();
+					}
+				});
 				if (user.equals(connection.getLocalUser())) {
 					appPane.getContentPane().getMessagePane().getInputPane().setNick(user.getName());
 				}
@@ -167,6 +169,7 @@ public class InputCallbackImpl implements InputCallback {
 
 	@Override
 	public void onError(final Connection connection, final String error) {
+		System.out.println("ERRROROROR " + error);
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {

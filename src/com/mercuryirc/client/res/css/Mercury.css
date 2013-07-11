@@ -11,6 +11,7 @@
 	light-control-hover-color: light-background-color;
 	button-color: rgb(250, 250, 250);
 	border-color: rgb(200, 200, 200);
+	tab-stripe-color: rgb(235, 130, 115);
 	green-button-color: rgb(130, 205, 115);
 	green-border-color: rgb(120, 160, 85);
 	red-button-color: rgb(240, 95, 80);
@@ -25,13 +26,13 @@
 	self-message-color: rgb(120, 170, 240);
 	highlight-color: rgb(0, 0, 0);
 	highlight-background-color: rgb(255, 235, 235);
-	highlight-stripe-color: rgb(235, 130, 115);
+	highlight-stripe-color: tab-stripe-color;
 	notice-color: highlight-color;
 	notice-background-color: rgb(255, 245, 200);
 	notice-stripe-color: rgb(255, 200, 135);
 	join-message-color: rgb(160, 200, 140);
 	event-message-color: notice-stripe-color;
-	part-message-color: rgb(255, 245, 245);
+	part-message-color: rgb(235, 130, 115);
 	link-message-color: rgb(115, 200, 235);
 	link-message-hover-color: rgb(30, 150, 200);
 	text-selection-color: background-color;
