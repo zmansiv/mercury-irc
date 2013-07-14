@@ -14,6 +14,8 @@ import javafx.stage.StageStyle;
 
 public class Mercury extends Application {
 
+	public static final String WEBSITE = "https://github.com/zmansiv/mercury-client-java";
+
 	private static Stage stage;
 
 	public static void main(String[] args) {

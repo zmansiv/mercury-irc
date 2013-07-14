@@ -20,12 +20,12 @@
 	-fx-border-insets: 0px;
 }
 
-#topic-pane {
+#left-topic-pane {
 	-fx-border-width: 0px 1px 1px 0px;
 	-fx-padding: 15px 15px 15px 15px;
 }
 
-#topic-pane-channel {
+#left-topic-pane-channel {
 	-fx-border-width: 0px 1px 1px 0px;
 	-fx-padding: 8px 15px 15px 15px;
 }
@@ -43,6 +43,11 @@
 .topic {
 	-fx-text-fill: control-color;
 	-fx-font-size: 14pt;
+}
+
+#right-topic-pane {
+	-fx-padding: 26px 20px 26px 20px;
+	/*-fx-padding: 0px;*/
 }
 
 #user-list {
@@ -77,7 +82,7 @@
 }
 
 #message-pane .scroll-bar:vertical {
-	-fx-padding: 5px 5px 5px 0px;
+	/*-fx-padding: 0px 0px 0px 10px;*/
 }
 
 .scroll-pane {

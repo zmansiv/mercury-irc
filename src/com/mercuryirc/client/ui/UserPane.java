@@ -100,50 +100,52 @@ public class UserPane extends VBox {
 			setMaxWidth(175);
 			setId("user-cell");
 			HBox hbox = new HBox();
-			boolean rankLabeledCell = false;
-			Mode.Type lastRank = null;
-			for (User _user : UserPane.this.getUsers()) {
-				if (_user.equals(user)) {
-					Mode.Type rank = user.getChannelRank(UserPane.this.channel);
-					if (rank != lastRank) {
-						if (lastRank != null) {
-							setId("user-rank-cell");
-						}
-						if (rank != null) {
-							String rankName = null;
-							switch (rank) {
-								case OWNER:
-									rankName = "Owner";
-									break;
-								case PROTECT:
-									rankName = "Admin";
-									break;
-								case OP:
-									rankName = "Op";
-									break;
-								case HALFOP:
-									rankName = "Halfop";
-									break;
-								case VOICE:
-									rankName = "Voice";
+			if (UserPane.this.channel != null) {
+				boolean rankLabeledCell = false;
+				Mode.Type lastRank = null;
+				for (User _user : UserPane.this.getUsers()) {
+					if (_user.equals(user)) {
+						Mode.Type rank = user.getChannelRank(UserPane.this.channel);
+						if (rank != lastRank) {
+							if (lastRank != null) {
+								setId("user-rank-cell");
 							}
-							Label ranklabel = new Label(rankName);
-							ranklabel.setId("rank-label");
-							ranklabel.setMinWidth(60);
-							ranklabel.setMaxWidth(60);
-							hbox.getChildren().add(ranklabel);
-							rankLabeledCell = true;
+							if (rank != null) {
+								String rankName = null;
+								switch (rank) {
+									case OWNER:
+										rankName = "Owner";
+										break;
+									case PROTECT:
+										rankName = "Admin";
+										break;
+									case OP:
+										rankName = "Op";
+										break;
+									case HALFOP:
+										rankName = "Halfop";
+										break;
+									case VOICE:
+										rankName = "Voice";
+								}
+								Label ranklabel = new Label(rankName);
+								ranklabel.setId("rank-label");
+								ranklabel.setMinWidth(60);
+								ranklabel.setMaxWidth(60);
+								hbox.getChildren().add(ranklabel);
+								rankLabeledCell = true;
+							}
 						}
+						break;
 					}
-					break;
+					lastRank = _user.getChannelRank(UserPane.this.channel);
 				}
-				lastRank = _user.getChannelRank(UserPane.this.channel);
-			}
-			if (!rankLabeledCell) {
-				Region spacer = new Region();
-				spacer.setMinWidth(60);
-				spacer.setMaxWidth(60);
-				hbox.getChildren().add(spacer);
+				if (!rankLabeledCell) {
+					Region spacer = new Region();
+					spacer.setMinWidth(60);
+					spacer.setMaxWidth(60);
+					hbox.getChildren().add(spacer);
+				}
 			}
 			Label nickLabel = new Label();
 			nickLabel.setId("user-label");

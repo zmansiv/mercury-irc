@@ -21,23 +21,11 @@ public class FontAwesome {
 	public static final String SIGN_OUT = "\uf08b";
 	public static final String REPLY = "\uf112";
 
-	public static Button createIconButton(String iconName) {
-		return createIconButton(iconName, "", true, null);
-	}
-
-	public static Button createIconButton(String iconName, String styleClass) {
-		return createIconButton(iconName, "", true, styleClass);
-	}
-
-	public static Button createIconButton(String iconName, boolean pad) {
-		return createIconButton(iconName, "", pad, null);
-	}
-
-	public static Button createIconButton(String iconName, String text, String styleClass) {
-		return createIconButton(iconName, text, true, styleClass);
-	}
-
 	public static Button createIconButton(String iconName, String text, boolean pad, String styleClass) {
+		return createIconButton(iconName, text, pad, styleClass, null);
+	}
+
+	public static Button createIconButton(String iconName, String text, boolean pad, String styleClass, String style) {
 		ButtonBuilder builder = ButtonBuilder.create()
 				.text(text)
 				.graphic(createIcon(iconName, styleClass != null))
@@ -52,18 +40,10 @@ public class FontAwesome {
 		if (styleClass != null) {
 			builder.styleClass(styleClass);
 			if (pad) {
-				builder.minHeight(32).maxHeight(32).style("-fx-padding: 0px 5px 0px 5px;");
+				builder.minHeight(32).maxHeight(32).style(style == null ? "-fx-padding: 0px 5px 0px 5px;" : style);
 			}
 		}
 		return builder.build();
-	}
-
-	public static Label createIconLabel(String iconName, String text) {
-		return LabelBuilder.create()
-				.text(text)
-				.graphic(createIcon(iconName))
-				.contentDisplay(ContentDisplay.LEFT)
-				.build();
 	}
 
 	public static Label createIcon(String iconName) {

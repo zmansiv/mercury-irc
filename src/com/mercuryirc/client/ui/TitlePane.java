@@ -41,7 +41,7 @@ public class TitlePane extends StackPane {
 		buttonBox.setAlignment(Pos.CENTER_RIGHT);
 		Region spacer = new Region();
 		HBox.setHgrow(spacer, Priority.ALWAYS);
-		Button minimizeButton = FontAwesome.createIconButton(FontAwesome.MINUS, false);
+		Button minimizeButton = FontAwesome.createIconButton(FontAwesome.MINUS, "", false, null);
 		minimizeButton.setId("minimize-button");
 		minimizeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -49,7 +49,7 @@ public class TitlePane extends StackPane {
 				stage.setIconified(true);
 			}
 		});
-		resizeButton = FontAwesome.createIconButton(FontAwesome.RESIZE_FULL, false);
+		resizeButton = FontAwesome.createIconButton(FontAwesome.RESIZE_FULL, "", false, null);
 		resizeButton.setId("resize-button");
 		resizeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -57,7 +57,7 @@ public class TitlePane extends StackPane {
 				toggleMaximization(stage);
 			}
 		});
-		Button closeButton = FontAwesome.createIconButton(FontAwesome.REMOVE, false);
+		Button closeButton = FontAwesome.createIconButton(FontAwesome.REMOVE, "", false, null);
 		closeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {

@@ -47,18 +47,24 @@ public class InputPane extends HBox {
         inputField.setMaxHeight(33);
         HBox.setHgrow(inputField, Priority.ALWAYS);
         nickLabel.setText(appPane.getConnection().getLocalUser().getName());
-        inputField.setOnAction(new InputHandler());
+		InputHandler inputHandler = new InputHandler();
+        inputField.setOnAction(inputHandler);
         inputField.setOnKeyPressed(new KeyHandler());
         Region spacer = new Region();
         spacer.setMinWidth(10);
         spacer.setMaxWidth(10);
-        Button sendButton = FontAwesome.createIconButton(FontAwesome.REPLY, "send", "blue");
+        Button sendButton = FontAwesome.createIconButton(FontAwesome.REPLY, "send", true, "blue");
+		sendButton.setOnAction(inputHandler);
         getChildren().addAll(nickLabel, inputField, spacer, sendButton);
     }
 
     public void setNick(String nick) {
         nickLabel.setText(nick);
     }
+
+	public TextField getInputField() {
+		return inputField;
+	}
 
     private class InputHandler implements EventHandler<ActionEvent> {
 
@@ -92,8 +98,8 @@ public class InputPane extends HBox {
                     keyEvent.consume();
                     break;
                 case DOWN:
-                    if (messageHistoryIndex < 10 && messageHistoryIndex > -1) {
-                        inputField.setText(messageHistory.get(messageHistoryIndex < 9 && messageHistoryIndex > -1 ? ++messageHistoryIndex : messageHistoryIndex));
+					if (messageHistoryIndex < 10 && messageHistoryIndex > -1) {
+                        inputField.setText(messageHistoryIndex == messageHistory.size() - 1 ? "" : messageHistory.get(messageHistoryIndex < 9 && messageHistoryIndex > -1 ? ++messageHistoryIndex : messageHistoryIndex));
                     }
                     keyEvent.consume();
                     break;
