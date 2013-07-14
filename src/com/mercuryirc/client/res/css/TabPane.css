@@ -26,6 +26,10 @@
 	-fx-text-fill: dark-control-color;
 }
 
+.list-cell:selected .icon {
+	-fx-text-fill: dark-control-color;
+}
+
 .list-cell:hover {
 	-fx-background-color: light-background-color;
 }

@@ -20,13 +20,15 @@
 	-fx-border-insets: 0px;
 }
 
-#left-topic-pane {
+#topic-pane {
 	-fx-border-width: 0px 1px 1px 0px;
+}
+
+#left-topic-box {
 	-fx-padding: 15px 15px 15px 15px;
 }
 
-#left-topic-pane-channel {
-	-fx-border-width: 0px 1px 1px 0px;
+#left-topic-box-channel {
 	-fx-padding: 8px 15px 15px 15px;
 }
 
@@ -45,7 +47,7 @@
 	-fx-font-size: 14pt;
 }
 
-#right-topic-pane {
+#right-topic-box {
 	-fx-padding: 26px 20px 26px 20px;
 	/*-fx-padding: 0px;*/
 }

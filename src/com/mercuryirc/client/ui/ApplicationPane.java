@@ -17,10 +17,8 @@ public class ApplicationPane extends HBox {
 	private final TabPane tabPane;
 	private final VBox contentPaneContainer;
 	private ContentPane contentPane;
-	private final Connection connection;
 
 	public ApplicationPane() {
-		connection = connectToIRC();
 		getStylesheets().add(Mercury.class.getResource("./res/css/ApplicationPane.css").toExternalForm());
 		VBox.setVgrow(this, Priority.ALWAYS);
 		HBox.setHgrow(this, Priority.ALWAYS);
@@ -48,6 +46,7 @@ public class ApplicationPane extends HBox {
 				}
 			}
 		});
+		Connection connection = connectToIRC();
 		getTabPane().select(getTabPane().get(connection, connection.getServer()));
 	}
 
@@ -62,10 +61,6 @@ public class ApplicationPane extends HBox {
 		return connection;
 	}
 
-	public Connection getConnection() {
-		return connection;
-	}
-
 	public TabPane getTabPane() {
 		return tabPane;
 	}
@@ -76,7 +71,11 @@ public class ApplicationPane extends HBox {
 
 	public void setContentPane(ContentPane contentPane) {
 		this.contentPane = contentPane;
-		contentPaneContainer.getChildren().setAll(contentPane);
+		if (contentPane == null) {
+			contentPaneContainer.getChildren().clear();
+		} else {
+			contentPaneContainer.getChildren().setAll(contentPane);
+		}
 	}
 
 }

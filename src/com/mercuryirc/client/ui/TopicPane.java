@@ -3,6 +3,7 @@ package com.mercuryirc.client.ui;
 import com.mercuryirc.client.ui.misc.FontAwesome;
 import com.mercuryirc.model.Channel;
 import com.mercuryirc.model.Entity;
+import com.mercuryirc.model.User;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -22,6 +23,7 @@ public class TopicPane extends HBox {
 		this.appPane = appPane;
 		this.tab = tab;
 		final Entity entity = tab.getEntity();
+		setId("topic-pane");
 		getStyleClass().add("light-pane");
 		setMinHeight(85);
 		setMaxHeight(85);
@@ -29,7 +31,7 @@ public class TopicPane extends HBox {
 
 		VBox left = new VBox();
 		HBox.setHgrow(left, Priority.ALWAYS);
-		left.setId(entity instanceof Channel ? "left-topic-pane-channel" : "left-topic-pane");
+		left.setId(entity instanceof Channel ? "left-topic-box-channel" : "left-topic-box");
 		String type = entity.getClass().getSimpleName().toLowerCase();
 		Label typeLabel = new Label(type);
 		typeLabel.getStyleClass().add("type");
@@ -42,15 +44,17 @@ public class TopicPane extends HBox {
 		left.getChildren().addAll(typeLabel, nameLabel, topicLabel);
 
 		VBox right = new VBox();
-		right.setId("right-topic-pane");
+		right.setId("right-topic-box");
 		Button partButton = FontAwesome.createIconButton(FontAwesome.SIGN_OUT, "", true, "red", "-fx-padding: 3px 4px 7px 6px;");
 		partButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
 				if (entity instanceof Channel) {
-					TopicPane.this.appPane.getConnection().part((Channel) entity);
-				} else {
+					TopicPane.this.appPane.getContentPane().getConnection().part((Channel) entity);
+				} else if (entity instanceof User) {
 					TopicPane.this.appPane.getTabPane().close(TopicPane.this.tab);
+				} else {
+					TopicPane.this.appPane.getContentPane().getConnection().quit("");
 				}
 			}
 		});

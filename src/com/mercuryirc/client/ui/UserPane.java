@@ -62,7 +62,7 @@ public class UserPane extends VBox {
 		} else {
 			channel = null;
 			if (entity instanceof User) {
-				userListView.getItems().addAll(appPane.getConnection().getLocalUser(), (User) entity);
+				userListView.getItems().addAll(appPane.getContentPane().getConnection().getLocalUser(), (User) entity);
 			}
 		}
 		VBox.setVgrow(userListView, Priority.ALWAYS);

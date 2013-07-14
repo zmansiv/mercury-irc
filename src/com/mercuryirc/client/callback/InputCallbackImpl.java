@@ -1,5 +1,6 @@
 package com.mercuryirc.client.callback;
 
+import com.mercuryirc.client.Mercury;
 import com.mercuryirc.client.ui.ApplicationPane;
 import com.mercuryirc.client.ui.Tab;
 import com.mercuryirc.client.ui.TabPane;
@@ -13,6 +14,7 @@ import com.mercuryirc.network.Connection;
 import com.mercuryirc.network.callback.InputCallback;
 import javafx.application.Platform;
 
+import java.awt.Toolkit;
 import java.util.List;
 import java.util.Set;
 
@@ -35,6 +37,9 @@ public class InputCallbackImpl implements InputCallback {
 			public void run() {
 				boolean highlight = message.getMessage().toLowerCase().contains(connection.getLocalUser().getName().toLowerCase());
 				appPane.getTabPane().addTargetedMessage(connection, message, highlight ? MessageRow.Type.HIGHLIGHT : MessageRow.Type.PRIVMSG);
+				if (highlight && !Mercury.getStage().isFocused()) {
+					Toolkit.getDefaultToolkit().beep();
+				}
 			}
 		});
 	}
@@ -45,6 +50,9 @@ public class InputCallbackImpl implements InputCallback {
 			@Override
 			public void run() {
 				appPane.getTabPane().addUntargetedMessage(connection, message, MessageRow.Type.NOTICE);
+				if (!Mercury.getStage().isFocused()) {
+					Toolkit.getDefaultToolkit().beep();
+				}
 			}
 		});
 	}
@@ -101,12 +109,15 @@ public class InputCallbackImpl implements InputCallback {
 	}
 
 	@Override
-	public void onUserQuit(Connection connection, final User user, final String reason) {
+	public void onUserQuit(final Connection connection, final User user, final String reason) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				Message message = new Message(user, null, "has quit (" + reason + ")");
 				appPane.getTabPane().addUserStatusMessage(user, message, MessageRow.Type.PART, null);
+				if (user.equals(connection.getLocalUser())) {
+					appPane.getTabPane().close(appPane.getTabPane().get(connection, connection.getServer()));
+				}
 			}
 		});
 	}
@@ -169,12 +180,12 @@ public class InputCallbackImpl implements InputCallback {
 
 	@Override
 	public void onError(final Connection connection, final String error) {
-		System.out.println("ERRROROROR " + error);
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				Message message = new Message(null, null, error);
 				appPane.getTabPane().addUntargetedMessage(connection, message, MessageRow.Type.ERROR);
+				Toolkit.getDefaultToolkit().beep();
 			}
 		});
 	}

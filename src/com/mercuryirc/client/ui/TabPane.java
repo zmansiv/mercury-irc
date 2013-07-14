@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 public class TabPane extends VBox {
@@ -177,14 +178,30 @@ public class TabPane extends VBox {
 
 	public void close(Tab tab) {
 		if (getSelected().equals(tab)) {
-			selectPrevious();
+			selectNext();
 		}
 		tabList.getItems().remove(tab);
+		if (tab.getEntity() instanceof Server) {
+			Iterator<Tab> it = tabList.getItems().iterator();
+			while (it.hasNext()) {
+				Tab _tab = it.next();
+				if (_tab.getConnection().equals(tab.getConnection())) {
+					if (getSelected().equals(tab)) {
+						selectNext();
+					}
+					it.remove();
+				}
+			}
+		}
 	}
 
 	private class TabClickedListener implements ChangeListener<Tab> {
 
 		public void changed(ObservableValue<? extends Tab> ov, Tab oldTab, Tab newTab) {
+			if (newTab == null) {
+				appPane.setContentPane(null);
+				return;
+			}
 			appPane.setContentPane(newTab.getContentPane());
 			final TextField inputField = appPane.getContentPane().getMessagePane().getInputPane().getInputField();
 			Platform.runLater(new Runnable() {

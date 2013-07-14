@@ -3,6 +3,7 @@ package com.mercuryirc.client.ui;
 import com.mercuryirc.client.Mercury;
 import com.mercuryirc.client.ui.misc.FontAwesome;
 import com.mercuryirc.model.User;
+import com.mercuryirc.network.Connection;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,15 +22,17 @@ import java.util.LinkedList;
 public class InputPane extends HBox {
 
     private final ApplicationPane appPane;
+	private final Connection connection;
 
     private final Label nickLabel;
     private final TextField inputField;
     private LinkedList<String> messageHistory = new LinkedList<>();
     private int messageHistoryIndex = -1;
 
-    public InputPane(final ApplicationPane appPane) {
+    public InputPane(ApplicationPane appPane, Connection connection) {
         super(0);
         this.appPane = appPane;
+		this.connection = connection;
         getStylesheets().add(Mercury.class.getResource("./res/css/InputPane.css").toExternalForm());
         getStyleClass().add("dark-pane");
         setId("input-pane");
@@ -46,7 +49,7 @@ public class InputPane extends HBox {
         inputField.setMinHeight(33);
         inputField.setMaxHeight(33);
         HBox.setHgrow(inputField, Priority.ALWAYS);
-        nickLabel.setText(appPane.getConnection().getLocalUser().getName());
+        nickLabel.setText(connection.getLocalUser().getName());
 		InputHandler inputHandler = new InputHandler();
         inputField.setOnAction(inputHandler);
         inputField.setOnKeyPressed(new KeyHandler());
@@ -80,7 +83,7 @@ public class InputPane extends HBox {
                 messageHistoryIndex++;
             }
             messageHistory.add(input);
-            appPane.getConnection().process(appPane.getTabPane().getSelected().getEntity(), input);
+            connection.process(appPane.getTabPane().getSelected().getEntity(), input);
             inputField.setText("");
         }
 

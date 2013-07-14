@@ -14,7 +14,7 @@ public class Tab {
 		this.connection = connection;
 		this.entity = entity;
 
-		this.contentPane = new ContentPane(appPane, this);
+		this.contentPane = new ContentPane(connection, appPane, this);
 	}
 
 	public Connection getConnection() {

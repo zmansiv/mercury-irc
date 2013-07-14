@@ -2,6 +2,7 @@ package com.mercuryirc.client.ui;
 
 import com.mercuryirc.client.Mercury;
 import com.mercuryirc.client.ui.model.MessageRow;
+import com.mercuryirc.network.Connection;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
@@ -38,7 +39,7 @@ public class MessagePane extends VBox {
 
 	private final List<MessageRow> loadQueue;
 
-	public MessagePane(ApplicationPane appPane) {
+	public MessagePane(ApplicationPane appPane, Connection connection) {
 		setId("message-pane");
 		VBox.setVgrow(this, Priority.ALWAYS);
 		HBox.setHgrow(this, Priority.ALWAYS);
@@ -53,7 +54,7 @@ public class MessagePane extends VBox {
 		engine.getLoadWorker().stateProperty().addListener(new LoadListener());
 		engine.load(Mercury.class.getResource("./res/html/MessageList.html").toExternalForm());
 
-		getChildren().addAll(webView, inputPane = new InputPane(appPane));
+		getChildren().addAll(webView, inputPane = new InputPane(appPane, connection));
 	}
 
 	public InputPane getInputPane() {
