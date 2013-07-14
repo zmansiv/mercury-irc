@@ -4,6 +4,7 @@ import com.mercuryirc.client.Mercury;
 import com.mercuryirc.client.ui.ApplicationPane;
 import com.mercuryirc.client.ui.Tab;
 import com.mercuryirc.client.ui.TabPane;
+import com.mercuryirc.client.ui.misc.Tray;
 import com.mercuryirc.client.ui.model.MessageRow;
 import com.mercuryirc.model.Channel;
 import com.mercuryirc.model.Entity;
@@ -38,6 +39,8 @@ public class InputCallbackImpl implements InputCallback {
 				boolean highlight = message.getMessage().toLowerCase().contains(connection.getLocalUser().getName().toLowerCase());
 				appPane.getTabPane().addTargetedMessage(connection, message, highlight ? MessageRow.Type.HIGHLIGHT : MessageRow.Type.PRIVMSG);
 				if (highlight && !Mercury.getStage().isFocused()) {
+					String title = "Highlighted by " + message.getSource().getName();
+					Tray.notify(title, message.getMessage(), true);
 					Toolkit.getDefaultToolkit().beep();
 				}
 			}
@@ -51,6 +54,7 @@ public class InputCallbackImpl implements InputCallback {
 			public void run() {
 				appPane.getTabPane().addUntargetedMessage(connection, message, MessageRow.Type.NOTICE);
 				if (!Mercury.getStage().isFocused()) {
+					Tray.notify("Notice", message.getMessage(), true);
 					Toolkit.getDefaultToolkit().beep();
 				}
 			}

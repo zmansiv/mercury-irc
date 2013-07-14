@@ -3,9 +3,11 @@ package com.mercuryirc.client;
 import com.mercuryirc.client.misc.Settings;
 import com.mercuryirc.client.ui.ApplicationPane;
 import com.mercuryirc.client.ui.TitlePane;
+import com.mercuryirc.client.ui.misc.Tray;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
@@ -24,6 +26,7 @@ public class Mercury extends Application {
 		Font.loadFont(Mercury.class.getResource("./res/fonts/inconsolata.ttf").toExternalForm(), 12);
 		Font.loadFont(Mercury.class.getResource("./res/fonts/inconsolata_bold.ttf").toExternalForm(), 12);
 		Settings.init();
+		Tray.init();
 		Application.launch(args);
 	}
 
@@ -32,6 +35,7 @@ public class Mercury extends Application {
 		this.stage = stage;
 		stage.setTitle("Mercury");
 		stage.initStyle(StageStyle.TRANSPARENT);
+		stage.getIcons().add(new Image(Mercury.class.getResource("./res/images/icon32.png").toExternalForm()));
 		VBox content = new VBox();
 		content.getChildren().add(new TitlePane(stage));
 		content.getChildren().add(new ApplicationPane());
