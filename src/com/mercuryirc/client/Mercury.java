@@ -2,6 +2,7 @@ package com.mercuryirc.client;
 
 import com.mercuryirc.client.misc.Settings;
 import com.mercuryirc.client.ui.ApplicationPane;
+import com.mercuryirc.client.ui.ConnectDialog;
 import com.mercuryirc.client.ui.TitlePane;
 import com.mercuryirc.client.ui.misc.Tray;
 import javafx.application.Application;
@@ -66,6 +67,9 @@ public class Mercury extends Application {
 			}
 		}
 		stage.show();
+
+		if(Settings.get("default-connection") == null)
+			new ConnectDialog(stage);
 	}
 
 	private void setDefaultBounds() {

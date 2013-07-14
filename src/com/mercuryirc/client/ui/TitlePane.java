@@ -104,7 +104,9 @@ public class TitlePane extends StackPane {
 		stage.addEventHandler(WindowEvent.WINDOW_HIDDEN, new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent windowEvent) {
-				System.exit(0);
+				Mercury.getStage().getScene().getRoot().setEffect(null);
+				if(stage == Mercury.getStage())
+					System.exit(0);
 			}
 		});
 	}
