@@ -22,7 +22,7 @@ public class ConnectStage extends Stage {
 
 		getIcons().add(new Image(Mercury.class.getResource("./res/images/icon32.png").toExternalForm()));
 		VBox content = new VBox();
-		//content.getChildren().add(new ConnectPane());
+		content.getChildren().add(new ConnectPane());
 		Scene scene = new Scene(content);
 		scene.setFill(null);
 		scene.getStylesheets().add(Mercury.class.getResource("./res/css/Mercury.css").toExternalForm());
