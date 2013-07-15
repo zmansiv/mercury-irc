@@ -39,6 +39,8 @@ public class Mercury extends Application {
 
 	private static Stage stage;
 	private static ApplicationPane appPane;
+	private static InputCallbackImpl inputCallback;
+	private static OutputCallbackImpl outputCallback;
 	private static final List<Connection> connections = new LinkedList<>();
 
 	public static void main(String[] args) {
@@ -60,6 +62,8 @@ public class Mercury extends Application {
 		VBox content = new VBox();
 		content.getChildren().add(new TitlePane(stage));
 		content.getChildren().add(appPane = new ApplicationPane());
+		inputCallback = new InputCallbackImpl(appPane);
+		outputCallback = new OutputCallbackImpl(appPane);
 		Scene scene = new Scene(content);
 		scene.setFill(null);
 		scene.getStylesheets().add(Mercury.class.getResource("./res/css/Mercury.css").toExternalForm());
@@ -116,7 +120,7 @@ public class Mercury extends Application {
 			user.addProperty("realname", conn.getLocalUser().getRealName());
 			String nspw = conn.getLocalUser().getNickservPassword();
 			if (nspw != null) {
-				connection.addProperty("password", nspw);
+				user.addProperty("password", nspw);
 			}
 			JsonArray channels = new JsonArray();
 			for (Tab tab : appPane.getTabPane().getItems()) {
@@ -175,12 +179,17 @@ public class Mercury extends Application {
 			User user = new User(server, nick, username, realname);
 			user.setNickservPassword(nspw);
 			user.setAutojoinChannels(autoChannels);
-			Connection connection = new Connection(server, user, new InputCallbackImpl(appPane), new OutputCallbackImpl(appPane));
-			connection.setAcceptAllSSLCerts(true);
-			connection.connect();
-			appPane.getTabPane().create(connection, connection.getServer());
-			appPane.getTabPane().select(appPane.getTabPane().get(connection, connection.getServer()));
+			connect(server, user);
 		}
+	}
+
+	public static void connect(Server server, User user) {
+		Connection connection = new Connection(server, user, inputCallback, outputCallback);
+		connection.setAcceptAllSSLCerts(true);
+		connection.connect();
+		appPane.getTabPane().create(connection, connection.getServer());
+		appPane.getTabPane().select(appPane.getTabPane().get(connection, connection.getServer()));
+		connections.add(connection);
 	}
 
 	public static Stage getStage() {

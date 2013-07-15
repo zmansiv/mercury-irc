@@ -3,7 +3,6 @@ package com.mercuryirc.client.ui;
 import com.mercuryirc.client.ui.misc.FontAwesome;
 import com.mercuryirc.model.Channel;
 import com.mercuryirc.model.Entity;
-import com.mercuryirc.model.User;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -49,13 +48,7 @@ public class TopicPane extends HBox {
 		partButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
-				if (entity instanceof Channel) {
-					TopicPane.this.appPane.getContentPane().getConnection().part((Channel) entity);
-				} else if (entity instanceof User) {
-					TopicPane.this.appPane.getTabPane().close(TopicPane.this.tab);
-				} else {
-					TopicPane.this.appPane.getContentPane().getConnection().quit("");
-				}
+				TopicPane.this.appPane.getTabPane().close(TopicPane.this.tab);
 			}
 		});
 		right.getChildren().add(partButton);

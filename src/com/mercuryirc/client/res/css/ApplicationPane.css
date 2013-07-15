@@ -1,15 +1,16 @@
-.light-pane {
-	-fx-background-color: light-background-color;
-	-fx-border-color: border-color;
-}
-
-.dark-pane {
-	-fx-background-color: background-color;
-	-fx-border-color: border-color;
-}
-
 #blank-content {
 	-fx-border-width: 0px 1px 1px 0px;
+}
+
+.list-view {
+	-fx-padding: 0px;
+	-fx-background-color: transparent;
+	-fx-border-width: 0px;
+}
+
+.list-cell {
+	-fx-background-color: transparent;
+	-fx-border-width: 0px;
 }
 
 #tab-button-pane {

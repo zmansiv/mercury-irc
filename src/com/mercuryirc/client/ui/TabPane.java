@@ -177,19 +177,36 @@ public class TabPane extends VBox {
 	}
 
 	public void close(Tab tab) {
+		close(tab, true);
+	}
+
+	public void close(Tab tab, boolean action) {
 		if (getSelected().equals(tab)) {
 			selectNext();
 		}
-		tabList.getItems().remove(tab);
+		{
+			Iterator<Tab> it = tabList.getItems().iterator();
+			while (it.hasNext()) {
+				Tab _tab = it.next();
+				if (_tab.equals(tab)) {
+					it.remove();
+					if (action) {
+						if (tab.getEntity() instanceof Channel) {
+							appPane.getContentPane().getConnection().part((Channel) tab.getEntity());
+						} else if (tab.getEntity() instanceof Server) {
+							appPane.getContentPane().getConnection().quit("");
+						}
+					}
+					break;
+				}
+			}
+		}
 		if (tab.getEntity() instanceof Server) {
 			Iterator<Tab> it = tabList.getItems().iterator();
 			while (it.hasNext()) {
 				Tab _tab = it.next();
 				if (_tab.getConnection().equals(tab.getConnection())) {
-					if (getSelected().equals(tab)) {
-						selectNext();
-					}
-					it.remove();
+					close(_tab);
 				}
 			}
 		}
@@ -254,6 +271,12 @@ public class TabPane extends VBox {
 			setId("tab-button-pane");
 			setMinHeight(85);
 			Button newButton = FontAwesome.createIconButton(FontAwesome.PLUS, "new", true, "green");
+			newButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent actionEvent) {
+					new ConnectStage(Mercury.getStage());
+				}
+			});
 			Button websiteButton = FontAwesome.createIconButton(FontAwesome.GLOBE, "", true, null);
 			websiteButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override

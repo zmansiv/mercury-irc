@@ -118,7 +118,7 @@ public class InputCallbackImpl implements InputCallback {
 				Message message = new Message(user, channel, "has left the channel");
 				appPane.getTabPane().addTargetedMessage(connection, message, MessageRow.Type.PART);
 				if (user.equals(connection.getLocalUser())) {
-					appPane.getTabPane().close(appPane.getTabPane().get(connection, channel));
+					appPane.getTabPane().close(appPane.getTabPane().get(connection, channel), false);
 				}
 			}
 		});
@@ -132,7 +132,7 @@ public class InputCallbackImpl implements InputCallback {
 				Message message = new Message(user, null, "has quit (" + reason + ")");
 				appPane.getTabPane().addUserStatusMessage(user, message, MessageRow.Type.PART, null);
 				if (user.equals(connection.getLocalUser())) {
-					appPane.getTabPane().close(appPane.getTabPane().get(connection, connection.getServer()));
+					appPane.getTabPane().close(appPane.getTabPane().get(connection, connection.getServer()), false);
 				}
 			}
 		});

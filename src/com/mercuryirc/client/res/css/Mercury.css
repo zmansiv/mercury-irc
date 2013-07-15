@@ -38,6 +38,16 @@
 	text-selection-color: background-color;
 }
 
+.light-pane {
+	-fx-background-color: light-background-color;
+	-fx-border-color: border-color;
+}
+
+.dark-pane {
+	-fx-background-color: background-color;
+	-fx-border-color: border-color;
+}
+
 .icon {
 	-fx-text-fill: control-color;
 }
@@ -122,29 +132,4 @@
 
 .blue:hover .icon {
 	-fx-text-fill: light-control-hover-color;
-}
-
-.split-pane {
-	-fx-background-color: border-color;
-	-fx-background-radius: 0px 0px 6px 6px;
-}
-
-.split-pane .split-pane-divider {
-	-fx-padding: 0px;
-	-fx-border-color: border-color;
-}
-
-.split-pane .split-pane-divider .horizontal-grabber {
-	-fx-background-color: transparent;
-}
-
-.list-view {
-	-fx-padding: 0px;
-	-fx-background-color: transparent;
-	-fx-border-width: 0px;
-}
-
-.list-cell {
-	-fx-background-color: transparent;
-	-fx-border-width: 0px;
 }
