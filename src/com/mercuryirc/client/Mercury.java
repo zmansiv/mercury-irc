@@ -1,10 +1,25 @@
 package com.mercuryirc.client;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.reflect.TypeToken;
+import com.mercuryirc.client.callback.InputCallbackImpl;
+import com.mercuryirc.client.callback.OutputCallbackImpl;
 import com.mercuryirc.client.misc.Settings;
 import com.mercuryirc.client.ui.ApplicationPane;
-import com.mercuryirc.client.ui.ConnectDialog;
+import com.mercuryirc.client.ui.ConnectStage;
+import com.mercuryirc.client.ui.Tab;
 import com.mercuryirc.client.ui.TitlePane;
 import com.mercuryirc.client.ui.misc.Tray;
+import com.mercuryirc.model.Channel;
+import com.mercuryirc.model.Entity;
+import com.mercuryirc.model.Server;
+import com.mercuryirc.model.User;
+import com.mercuryirc.network.Connection;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -15,11 +30,16 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Mercury extends Application {
 
 	public static final String WEBSITE = "https://github.com/zmansiv/mercury-client-java";
 
 	private static Stage stage;
+	private static ApplicationPane appPane;
+	private static final List<Connection> connections = new LinkedList<>();
 
 	public static void main(String[] args) {
 		Font.loadFont(Mercury.class.getResource("./res/fonts/font_awesome.ttf").toExternalForm(), 12);
@@ -39,7 +59,7 @@ public class Mercury extends Application {
 		stage.getIcons().add(new Image(Mercury.class.getResource("./res/images/icon32.png").toExternalForm()));
 		VBox content = new VBox();
 		content.getChildren().add(new TitlePane(stage));
-		content.getChildren().add(new ApplicationPane());
+		content.getChildren().add(appPane = new ApplicationPane());
 		Scene scene = new Scene(content);
 		scene.setFill(null);
 		scene.getStylesheets().add(Mercury.class.getResource("./res/css/Mercury.css").toExternalForm());
@@ -68,8 +88,7 @@ public class Mercury extends Application {
 		}
 		stage.show();
 
-		if(Settings.get("default-connection") == null)
-			new ConnectDialog(stage);
+		loadConnections();
 	}
 
 	private void setDefaultBounds() {
@@ -78,6 +97,90 @@ public class Mercury extends Application {
 		stage.setY(maximized.getMinY());
 		stage.setWidth(maximized.getWidth());
 		stage.setHeight(maximized.getHeight());
+	}
+
+	public static void saveConnections() {
+		Gson gson = new Gson();
+		JsonObject json = new JsonObject();
+		JsonArray connectionsArray = new JsonArray();
+		for (Connection conn : connections) {
+			JsonObject connection = new JsonObject();
+			connection.addProperty("name", conn.getServer().getName());
+			connection.addProperty("host", conn.getServer().getHost());
+			connection.addProperty("port", conn.getServer().getPort());
+			connection.addProperty("password", conn.getServer().getPassword());
+			connection.addProperty("ssl", conn.getServer().isSsl());
+			JsonObject user = new JsonObject();
+			user.addProperty("nick", conn.getLocalUser().getName());
+			user.addProperty("username", conn.getLocalUser().getUserName());
+			user.addProperty("realname", conn.getLocalUser().getRealName());
+			String nspw = conn.getLocalUser().getNickservPassword();
+			if (nspw != null) {
+				connection.addProperty("password", nspw);
+			}
+			JsonArray channels = new JsonArray();
+			for (Tab tab : appPane.getTabPane().getItems()) {
+				if (tab.getConnection().equals(conn)) {
+					Entity entity = tab.getEntity();
+					if (entity instanceof Channel) {
+						channels.add(new JsonPrimitive(entity.getName()));
+					}
+				}
+			}
+			user.add("channels", channels);
+			connection.add("user", user);
+			connectionsArray.add(connection);
+		}
+		json.add("connections", connectionsArray);
+		Settings.set("connections", gson.toJson(json));
+	}
+
+	private void loadConnections() {
+		if (Settings.get("connections") == null) {
+			new ConnectStage(stage);
+			return;
+		}
+		String connectionsString = Settings.get("connections");
+		JsonParser parser = new JsonParser();
+		Gson gson = new Gson();
+		JsonObject connectionsJson = parser.parse(connectionsString).getAsJsonObject();
+		JsonElement obj = connectionsJson.get("connections");
+		JsonArray connectionsArray = obj.getAsJsonArray();
+		if (connectionsArray.size() == 0) {
+			new ConnectStage(stage);
+			return;
+		}
+		for (JsonElement connectionElement : connectionsArray) {
+			JsonObject connectionObject = connectionElement.getAsJsonObject();
+			String name = connectionObject.get("name").getAsString();
+			String hostname = connectionObject.get("host").getAsString();
+			int port = connectionObject.get("port").getAsInt();
+			String password = null;
+			if (connectionObject.has("password")) {
+				password = connectionObject.get("password").getAsString();
+			}
+			boolean ssl = connectionObject.get("ssl").getAsBoolean();
+			Server server = new Server(name, hostname, port, password, ssl);
+			JsonObject userObject = connectionObject.get("user").getAsJsonObject();
+			String nick = userObject.get("nick").getAsString();
+			String username = userObject.get("username").getAsString();
+			String realname = userObject.get("realname").getAsString();
+			String nspw = null;
+			if (userObject.has("password")) {
+				nspw = userObject.get("password").getAsString();
+			}
+			JsonArray channels = userObject.getAsJsonArray("channels");
+			String[] autoChannels = gson.fromJson(channels.toString(), new TypeToken<String[]>() {
+			}.getType());
+			User user = new User(server, nick, username, realname);
+			user.setNickservPassword(nspw);
+			user.setAutojoinChannels(autoChannels);
+			Connection connection = new Connection(server, user, new InputCallbackImpl(appPane), new OutputCallbackImpl(appPane));
+			connection.setAcceptAllSSLCerts(true);
+			connection.connect();
+			appPane.getTabPane().create(connection, connection.getServer());
+			appPane.getTabPane().select(appPane.getTabPane().get(connection, connection.getServer()));
+		}
 	}
 
 	public static Stage getStage() {

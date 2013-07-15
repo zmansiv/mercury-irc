@@ -1,11 +1,6 @@
 package com.mercuryirc.client.ui;
 
-import com.mercuryirc.client.callback.InputCallbackImpl;
 import com.mercuryirc.client.Mercury;
-import com.mercuryirc.client.callback.OutputCallbackImpl;
-import com.mercuryirc.model.Server;
-import com.mercuryirc.model.User;
-import com.mercuryirc.network.Connection;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -25,7 +20,12 @@ public class ApplicationPane extends HBox {
 		contentPaneContainer = new VBox();
 		VBox.setVgrow(contentPaneContainer, Priority.ALWAYS);
 		HBox.setHgrow(contentPaneContainer, Priority.ALWAYS);
-		contentPaneContainer.getChildren().setAll(new VBox());
+		VBox vbox = new VBox();
+		VBox.setVgrow(vbox, Priority.ALWAYS);
+		HBox.setHgrow(vbox, Priority.ALWAYS);
+		vbox.getStyleClass().add("dark-pane");
+		vbox.setId("blank-content");
+		contentPaneContainer.getChildren().setAll(vbox);
 		getChildren().addAll(tabPane = new TabPane(this), contentPaneContainer);
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
@@ -46,19 +46,6 @@ public class ApplicationPane extends HBox {
 				}
 			}
 		});
-		Connection connection = connectToIRC();
-		getTabPane().select(getTabPane().get(connection, connection.getServer()));
-	}
-
-	private Connection connectToIRC() {
-		Server server = new Server("Rizon", "irc.rizon.net", 6667, false);
-		User user = new User(server, "Test|Mercury");
-		user.setUserName("mercury");
-		user.setRealName("Mercury IRC Client");
-		Connection connection = new Connection(server, user, new InputCallbackImpl(this), new OutputCallbackImpl(this));
-		connection.setAcceptAllSSLCerts(true);
-		connection.connect();
-		return connection;
 	}
 
 	public TabPane getTabPane() {

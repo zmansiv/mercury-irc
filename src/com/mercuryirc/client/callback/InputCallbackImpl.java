@@ -28,7 +28,19 @@ public class InputCallbackImpl implements InputCallback {
 	}
 
 	public void onConnect(final Connection connection) {
-		connection.join("#mercury");
+		User local = connection.getLocalUser();
+		if (local.getNickservPassword() != null) {
+			connection.privmsg(new Message(local, connection.getServer().getUser("NickServ"), "identify " + local.getNickservPassword()), true);
+		}
+		if (local.getAutojoinChannels() != null) {
+			try {
+				Thread.sleep(750);
+			} catch (InterruptedException e) {
+			}
+			for (String channel : local.getAutojoinChannels()) {
+				connection.join(channel);
+			}
+		}
 	}
 
 	@Override

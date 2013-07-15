@@ -35,6 +35,7 @@ public class Settings {
 			public void run() {
 				Stage stage = Mercury.getStage();
 				set("bounds", String.format("%s %s %s %s", stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight()));
+				Mercury.saveConnections();
 				save();
 			}
 		}));

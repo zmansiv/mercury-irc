@@ -8,6 +8,10 @@
 	-fx-border-color: border-color;
 }
 
+#blank-content {
+	-fx-border-width: 0px 1px 1px 0px;
+}
+
 #tab-button-pane {
 	-fx-border-width: 0px 1px 1px 1px;
 }
