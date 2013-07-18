@@ -4,7 +4,7 @@ import com.mercuryirc.client.Mercury;
 import com.mercuryirc.client.ui.ApplicationPane;
 import com.mercuryirc.client.ui.Tab;
 import com.mercuryirc.client.ui.TabPane;
-import com.mercuryirc.client.ui.misc.Tray;
+import com.mercuryirc.client.misc.Tray;
 import com.mercuryirc.client.ui.model.MessageRow;
 import com.mercuryirc.model.Channel;
 import com.mercuryirc.model.Entity;
@@ -66,7 +66,7 @@ public class InputCallbackImpl implements InputCallback {
 			public void run() {
 				appPane.getTabPane().addUntargetedMessage(connection, message, MessageRow.Type.NOTICE);
 				if (!Mercury.getStage().isFocused()) {
-					Tray.notify("Notice", message.getMessage(), true);
+					Tray.notify("Notice from " + message.getSource(), message.getMessage(), true);
 					Toolkit.getDefaultToolkit().beep();
 				}
 			}
@@ -115,7 +115,7 @@ public class InputCallbackImpl implements InputCallback {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				Message message = new Message(user, channel, "has left the channel");
+				Message message = new Message(user, channel, "has left the channel (" + reason + ")");
 				appPane.getTabPane().addTargetedMessage(connection, message, MessageRow.Type.PART);
 				if (user.equals(connection.getLocalUser())) {
 					appPane.getTabPane().close(appPane.getTabPane().get(connection, channel), false);
@@ -178,7 +178,7 @@ public class InputCallbackImpl implements InputCallback {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				Message message = new Message(user, channel, "has been kicked from the channel");
+				Message message = new Message(user, channel, "has been kicked from the channel (" + reason + ")");
 				appPane.getTabPane().addTargetedMessage(connection, message, MessageRow.Type.PART);
 			}
 		});

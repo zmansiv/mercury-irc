@@ -21,7 +21,7 @@ public class ContentPane extends VBox {
 		HBox box = new HBox();
 		VBox.setVgrow(box, Priority.ALWAYS);
 		HBox.setHgrow(box, Priority.ALWAYS);
-		box.getChildren().addAll(messagePane = new MessagePane(appPane, connection), userPane = new UserPane(appPane, tab.getEntity()));
+		box.getChildren().addAll(messagePane = new MessagePane(appPane, tab, connection), userPane = new UserPane(appPane, tab.getEntity()));
 		getChildren().addAll(topicPane = new TopicPane(appPane, tab), box);
 	}
 

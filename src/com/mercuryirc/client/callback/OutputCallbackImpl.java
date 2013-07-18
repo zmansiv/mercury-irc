@@ -61,8 +61,7 @@ public class OutputCallbackImpl implements OutputCallback {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				Tab tab = appPane.getTabPane().create(connection, user);
-				appPane.getTabPane().select(tab);
+				appPane.getTabPane().create(connection, user, true);
 			}
 		});
 	}

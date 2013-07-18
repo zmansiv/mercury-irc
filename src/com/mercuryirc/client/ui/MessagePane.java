@@ -26,10 +26,14 @@ import java.util.List;
 
 public class MessagePane extends VBox {
 
+	private final ApplicationPane appPane;
+	private final Tab tab;
+
 	private static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("h:mmaa");
+
 	{
 		DateFormatSymbols sym = TIME_FORMATTER.getDateFormatSymbols();
-		sym.setAmPmStrings(new String[] { "am", "pm" });
+		sym.setAmPmStrings(new String[]{"am", "pm"});
 		TIME_FORMATTER.setDateFormatSymbols(sym);
 	}
 
@@ -39,7 +43,9 @@ public class MessagePane extends VBox {
 
 	private final List<MessageRow> loadQueue;
 
-	public MessagePane(ApplicationPane appPane, Connection connection) {
+	public MessagePane(ApplicationPane appPane, Tab tab, Connection connection) {
+		this.appPane = appPane;
+		this.tab = tab;
 		setId("message-pane");
 		VBox.setVgrow(this, Priority.ALWAYS);
 		HBox.setHgrow(this, Priority.ALWAYS);
@@ -73,9 +79,14 @@ public class MessagePane extends VBox {
 	public void addRow(MessageRow message) {
 		if (pageLoaded) {
 			webView.getEngine().executeScript(String.format("addRow('%s', '%s', '%s', '%s')", message.getSource(), message.getMessage(), TIME_FORMATTER.format(new Date()), message.getType().style()));
+			Tab selected = appPane.getTabPane().getSelected();
+			if (selected != null && !selected.equals(tab)) {
+				tab.setUnread(true);
+			}
 		} else {
 			loadQueue.add(message);
 		}
+
 	}
 
 	private void onLoad() {

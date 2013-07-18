@@ -14,7 +14,7 @@ import com.mercuryirc.client.ui.ApplicationPane;
 import com.mercuryirc.client.ui.ConnectStage;
 import com.mercuryirc.client.ui.Tab;
 import com.mercuryirc.client.ui.TitlePane;
-import com.mercuryirc.client.ui.misc.Tray;
+import com.mercuryirc.client.misc.Tray;
 import com.mercuryirc.model.Channel;
 import com.mercuryirc.model.Entity;
 import com.mercuryirc.model.Server;
@@ -187,8 +187,7 @@ public class Mercury extends Application {
 		Connection connection = new Connection(server, user, inputCallback, outputCallback);
 		connection.setAcceptAllSSLCerts(true);
 		connection.connect();
-		appPane.getTabPane().create(connection, connection.getServer());
-		appPane.getTabPane().select(appPane.getTabPane().get(connection, connection.getServer()));
+		appPane.getTabPane().create(connection, connection.getServer(), true);
 		connections.add(connection);
 	}
 

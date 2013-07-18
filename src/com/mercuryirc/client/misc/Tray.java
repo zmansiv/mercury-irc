@@ -1,14 +1,15 @@
-package com.mercuryirc.client.ui.misc;
+package com.mercuryirc.client.misc;
 
 import com.mercuryirc.client.Mercury;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
+import java.awt.Image;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
 import java.net.URL;
 
 public class Tray {
-	private static final String ICON_CAPTION = "mercury";
+	private static final String ICON_CAPTION = "Mercury";
 	private static TrayIcon icon;
 
 	public static boolean init() {

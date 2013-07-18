@@ -128,6 +128,10 @@ public class TabPane extends VBox {
 	}
 
 	public Tab create(Connection connection, Entity entity) {
+		return create(connection, entity, false);
+	}
+
+	public Tab create(Connection connection, Entity entity, boolean select) {
 		Tab tab = new Tab(appPane, connection, entity);
 		List<Tab> tabs = tabList.getItems();
 		boolean added = false;
@@ -140,6 +144,18 @@ public class TabPane extends VBox {
 		}
 		if (!added) {
 			tabs.add(tab);
+		}
+		//javafx webview bug workaround -_-
+		Tab selected = getSelected();
+		select(tab);
+		if (!select) {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+			}
+			if (selected != null) {
+				select(selected);
+			}
 		}
 		return tab;
 	}
@@ -182,7 +198,11 @@ public class TabPane extends VBox {
 
 	public void close(Tab tab, boolean action) {
 		if (getSelected().equals(tab)) {
-			selectNext();
+			if (selectionModel.getSelectedIndex() == tabList.getItems().size()) {
+				selectPrevious();
+			} else {
+				selectNext();
+			}
 		}
 		{
 			Iterator<Tab> it = tabList.getItems().iterator();
@@ -219,6 +239,7 @@ public class TabPane extends VBox {
 				appPane.setContentPane(null);
 				return;
 			}
+			newTab.setUnread(false);
 			appPane.setContentPane(newTab.getContentPane());
 			final TextField inputField = appPane.getContentPane().getMessagePane().getInputPane().getInputField();
 			Platform.runLater(new Runnable() {
@@ -235,20 +256,29 @@ public class TabPane extends VBox {
 	private class TabCell extends ListCell<Tab> {
 
 		@Override
-		protected void updateItem(Tab tab, boolean empty) {
+		protected void updateItem(final Tab tab, boolean empty) {
 			super.updateItem(tab, empty);
 			if (tab != null) {
+				tab.getUnreadProperty().addListener(new ChangeListener<Boolean>() {
+					@Override
+					public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
+						if (newValue) {
+							getStyleClass().add("unread");
+						} else {
+							getStyleClass().remove("unread");
+						}
+					}
+				});
 				Entity entity = tab.getEntity();
 				setPrefHeight(50);
 				if (entity instanceof Server) {
 					setPrefHeight(60);
 					Label net = new Label("network");
 					net.getStyleClass().add("network");
-
 					VBox box = new VBox();
 					Label name = new Label(entity.getName());
+					name.getStyleClass().add("network-name");
 					box.getChildren().addAll(net, name);
-
 					setGraphic(box);
 				} else if (entity instanceof Channel) {
 					setGraphic(FontAwesome.createIcon(FontAwesome.COMMENTS));
