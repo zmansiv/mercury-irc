@@ -42,7 +42,7 @@ public class TabPane extends VBox {
 
 	public TabPane(ApplicationPane appPane) {
 		this.appPane = appPane;
-		getStylesheets().add(Mercury.class.getResource("./res/css/TabPane.css").toExternalForm());
+		getStylesheets().add(Mercury.class.getResource("/res/css/TabPane.css").toExternalForm());
 		setMinWidth(200);
 		setMaxWidth(200);
 		final TabButtonPane buttonPane = new TabButtonPane();

@@ -1,0 +1,63 @@
+.list-cell {
+	-fx-background-color: transparent;
+	-fx-border-color: border-color;
+	-fx-border-width: 0px 0px 0px 0px;
+	-fx-padding: 0px 20px 0px 20px;
+	-fx-font-size: 24pt;
+	-fx-text-fill: control-color;
+}
+
+.list-cell .network {
+	-fx-padding: 5px 0px 0px 0px;
+	-fx-border-width: 1px 0px 0px 0px;
+	-fx-font-size: 14pt;
+}
+
+
+/*for some reason it doesn't work if you combine the 2 blocks below...*/
+.list-cell .unread .network {
+	-fx-text-fill: dark-control-color;
+}
+
+.list-cell .unread .network-name {
+	-fx-text-fill: dark-control-color;
+}
+
+.list-cell:selected .network,
+.list-cell:selected .network-name {
+	-fx-text-fill: dark-control-color;
+}
+
+.list-cell:empty {
+	-fx-background-color: transparent;
+	-fx-border-width: 0px 0px 0px 0px;
+}
+
+.list-cell:selected {
+	-fx-background-color: light-background-color;
+	-fx-border-color: border-color, selected-tab-stripe-color;
+	-fx-border-width: 1px 0px 1px 0px, 0px 0px 0px 3px;
+	-fx-padding: 0px 20px 0px 17px;
+	-fx-text-fill: dark-control-color;
+}
+
+.list-cell .unread .icon {
+	-fx-text-fill: dark-control-color;
+}
+
+.list-cell:selected .icon {
+	-fx-text-fill: dark-control-color;
+}
+
+.list-cell:hover {
+	-fx-background-color: light-background-color;
+}
+
+.list-cell:empty:hover {
+	-fx-background-color: transparent;
+}
+
+.first .list-cell:selected {
+	-fx-border-color: border-color, selected-tab-stripe-color;
+	-fx-border-width: 0px 0px 1px 0px, 0px 0px 0px 3px;
+}

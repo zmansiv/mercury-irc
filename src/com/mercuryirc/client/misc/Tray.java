@@ -17,7 +17,7 @@ public class Tray {
 			return false;
 
 		SystemTray sysTray = SystemTray.getSystemTray();
-		URL url = Mercury.class.getResource("./res/images/icon16.png");
+		URL url = Mercury.class.getResource("/res/images/icon16.png");
 		Image im = Toolkit.getDefaultToolkit().getImage(url);
 		icon = new TrayIcon(im, ICON_CAPTION);
 		icon.setImageAutoSize(true);

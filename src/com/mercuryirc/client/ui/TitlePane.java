@@ -30,7 +30,7 @@ public class TitlePane extends StackPane {
 	private double unmaximizedHeight = 650D;
 
 	public TitlePane(final Stage stage) {
-		getStylesheets().add(Mercury.class.getResource("./res/css/TitlePane.css").toExternalForm());
+		getStylesheets().add(Mercury.class.getResource("/res/css/TitlePane.css").toExternalForm());
 		setId("title-bar");
 		setMinHeight(50);
 		setMaxHeight(50);

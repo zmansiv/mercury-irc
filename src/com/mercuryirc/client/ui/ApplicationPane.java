@@ -14,7 +14,7 @@ public class ApplicationPane extends HBox {
 	private ContentPane contentPane;
 
 	public ApplicationPane() {
-		getStylesheets().add(Mercury.class.getResource("./res/css/ApplicationPane.css").toExternalForm());
+		getStylesheets().add(Mercury.class.getResource("/res/css/ApplicationPane.css").toExternalForm());
 		VBox.setVgrow(this, Priority.ALWAYS);
 		HBox.setHgrow(this, Priority.ALWAYS);
 		contentPaneContainer = new VBox();

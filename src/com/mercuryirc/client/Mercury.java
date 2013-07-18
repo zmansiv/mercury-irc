@@ -44,10 +44,10 @@ public class Mercury extends Application {
 	private static final List<Connection> connections = new LinkedList<>();
 
 	public static void main(String[] args) {
-		Font.loadFont(Mercury.class.getResource("./res/fonts/font_awesome.ttf").toExternalForm(), 12);
-		Font.loadFont(Mercury.class.getResource("./res/fonts/open_sans.ttf").toExternalForm(), 12);
-		Font.loadFont(Mercury.class.getResource("./res/fonts/inconsolata.ttf").toExternalForm(), 12);
-		Font.loadFont(Mercury.class.getResource("./res/fonts/inconsolata_bold.ttf").toExternalForm(), 12);
+		Font.loadFont(Mercury.class.getResource("/res/fonts/font_awesome.ttf").toExternalForm(), 12);
+		Font.loadFont(Mercury.class.getResource("/res/fonts/open_sans.ttf").toExternalForm(), 12);
+		Font.loadFont(Mercury.class.getResource("/res/fonts/inconsolata.ttf").toExternalForm(), 12);
+		Font.loadFont(Mercury.class.getResource("/res/fonts/inconsolata_bold.ttf").toExternalForm(), 12);
 		Settings.init();
 		Tray.init();
 		Application.launch(args);
@@ -58,7 +58,7 @@ public class Mercury extends Application {
 		this.stage = stage;
 		stage.setTitle("Mercury");
 		stage.initStyle(StageStyle.TRANSPARENT);
-		stage.getIcons().add(new Image(Mercury.class.getResource("./res/images/icon32.png").toExternalForm()));
+		stage.getIcons().add(new Image(Mercury.class.getResource("/res/images/icon32.png").toExternalForm()));
 		VBox content = new VBox();
 		content.getChildren().add(new TitlePane(stage));
 		content.getChildren().add(appPane = new ApplicationPane());
@@ -66,7 +66,7 @@ public class Mercury extends Application {
 		outputCallback = new OutputCallbackImpl(appPane);
 		Scene scene = new Scene(content);
 		scene.setFill(null);
-		scene.getStylesheets().add(Mercury.class.getResource("./res/css/Mercury.css").toExternalForm());
+		scene.getStylesheets().add(Mercury.class.getResource("/res/css/Mercury.css").toExternalForm());
 		stage.setScene(scene);
 		String bounds = Settings.get("bounds");
 		if (bounds == null) {

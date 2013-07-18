@@ -33,7 +33,7 @@ public class InputPane extends HBox {
         super(0);
         this.appPane = appPane;
 		this.connection = connection;
-        getStylesheets().add(Mercury.class.getResource("./res/css/InputPane.css").toExternalForm());
+        getStylesheets().add(Mercury.class.getResource("/res/css/InputPane.css").toExternalForm());
         getStyleClass().add("dark-pane");
         setId("input-pane");
         setAlignment(Pos.CENTER);

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+	<SCRIPT type="text/javascript">
+
+		function addRow(source, message, timestamp, style) {
+			var table = document.getElementById('messageTable');
+			var row = table.insertRow(table.rows.length);
+			row.className = style;
+			var sourceCell = row.insertCell(0);
+			sourceCell.className = "source";
+			alert(sourceCell.style.borderRight);
+			sourceCell.innerHTML = source;
+			var messageCell = row.insertCell(1);
+			messageCell.className = "message";
+			messageCell.innerHTML = message;
+			var timestampCell = row.insertCell(2);
+			timestampCell.className = "timestamp";
+			timestampCell.innerHTML = timestamp;
+			if (window.innerHeight > 10) {
+				window.scrollTo(0, document.body.scrollHeight);
+			}
+		}
+
+		function onLinkClick(url) {
+			panel.openUrl(url);
+		}
+
+	</SCRIPT>
+	<STYLE type="text/css">
+
+		/*
+		background-color: rgb(245, 245, 245);
+		light-background-color: rgb(255, 255, 255);
+		control-color: rgb(130, 130, 130);
+		border-color: rgb(200, 200, 200);
+		selected-tab-stripe-color: rgb(235, 130, 115);
+		light-line-color: rgb(230, 230, 230);
+		message-source-color: rgb(50, 50, 50);
+		message-color: control-color;
+		message-time-color: border-color;
+		self-message-source-color: rgb(90, 130, 200);
+		self-message-color: rgb(120, 170, 240);
+		highlight-color: rgb(0, 0, 0);
+		highlight-background-color: rgb(255, 235, 235);
+		highlight-stripe-color: seleted-tab-stripe-color;
+		notice-color: highlight-color;
+		notice-background-color: rgb(255, 245, 200);
+		notice-stripe-color: rgb(255, 200, 135);
+		join-message-color: rgb(160, 200, 140);
+		event-message-color: notice-stripe-color;
+		part-message-color: rgb(235, 130, 115);
+		link-message-color: rgb(115, 200, 235);
+		link-message-hover-color: rgb(30, 150, 200);
+		text-selection-color: background-color;
+		*/
+
+		html, body {
+			margin: 0;
+			padding: 0px 5px 0px 5px;
+			background-color: rgb(255, 255, 255);
+		}
+
+		::selection {
+			background: rgb(245, 245, 245);
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			border-spacing: 0px;
+			overflow-y: auto;
+			overflow-x: hidden;
+			text-overflow: ellipsis;
+		}
+
+		tr {
+			border-bottom: 1px solid rgb(230, 230, 230);
+			padding: 0px 5px 0px 5px;
+			height: 25px;
+		}
+
+		tr.highlight {
+			background-color: rgb(255, 235, 235);
+			border-left: 3px solid rgb(235, 130, 115);
+			color: rgb(0, 0, 0);
+		}
+
+		tr.highlight td.source {
+			padding-left: 3px;
+			width: 1px;
+			color: rgb(0, 0, 0);
+			font-weight: bolder;
+		}
+
+		tr.highlight td.message {
+			color: rgb(0, 0, 0);
+			font-weight: bolder;
+		}
+
+		tr.highlight td.timestamp {
+			color: rgb(0, 0, 0);
+			font-weight: bolder;
+		}
+
+		tr.notice {
+			background-color: rgb(255, 245, 200);
+			border-left: 3px solid rgb(255, 200, 135);
+		}
+
+		tr.notice td.source {
+			padding-left: 3px;
+			width: 1px;
+			color: rgb(0, 0, 0);
+			font-weight: bolder;
+		}
+
+		tr.notice td.message {
+			color: rgb(0, 0, 0);
+			font-weight: bolder;
+		}
+
+		tr.notice td.timestamp {
+			color: rgb(0, 0, 0);
+			font-weight: bolder;
+		}
+
+		tr.self td.source {
+			color: rgb(90, 130, 200);
+		}
+
+		tr.self td.message {
+			color: rgb(120, 170, 240);
+		}
+
+		tr.privmsg td.message {
+			color: rgb(130, 130, 130);
+		}
+
+		tr.event td.message {
+			color: rgb(255, 200, 135);
+		}
+
+		tr.join td.message {
+			color: rgb(160, 200, 140);
+		}
+
+		tr.part td.message {
+			color: rgb(235, 130, 115);
+		}
+
+		tr.error td.message {
+			color: rgb(50, 50, 50);
+		}
+
+		td {
+			font-family: Inconsolata, sans-serif;
+			font-size: 14px;
+			overflow-x: hidden;
+			text-overflow: ellipsis;
+		}
+
+		td.message {
+			padding-left: 7px;
+			padding-right: 7px;
+		}
+
+		td.source {
+			padding-left: 5px;
+			color: rgb(50, 50, 50);
+			width: 1px;
+			text-align: right;
+		}
+
+		td.timestamp {
+			font-size: 13px;
+			padding-right: 5px;
+			color: rgb(200, 200, 200);
+			width: 1px;
+			text-align: right;
+		}
+
+		a {
+			color: rgb(115, 200, 235);
+		}
+
+		a:hover {
+			color: rgb(30, 150, 200);
+		}
+
+	</STYLE>
+</HEAD>
+<BODY>
+<TABLE id="messageTable"/>
+</BODY>
+</HTML>

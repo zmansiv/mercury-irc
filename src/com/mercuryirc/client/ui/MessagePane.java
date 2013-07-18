@@ -58,7 +58,7 @@ public class MessagePane extends VBox {
 
 		WebEngine engine = webView.getEngine();
 		engine.getLoadWorker().stateProperty().addListener(new LoadListener());
-		engine.load(Mercury.class.getResource("./res/html/MessageList.html").toExternalForm());
+		engine.load(Mercury.class.getResource("/res/html/MessageList.html").toExternalForm());
 
 		getChildren().addAll(webView, inputPane = new InputPane(appPane, connection));
 	}
