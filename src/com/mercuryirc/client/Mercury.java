@@ -7,14 +7,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
-import com.mercuryirc.client.callback.InputCallbackImpl;
-import com.mercuryirc.client.callback.OutputCallbackImpl;
+import com.mercuryirc.client.callback.CallbackImpl;
 import com.mercuryirc.client.misc.Settings;
+import com.mercuryirc.client.misc.Tray;
 import com.mercuryirc.client.ui.ApplicationPane;
 import com.mercuryirc.client.ui.ConnectStage;
 import com.mercuryirc.client.ui.Tab;
 import com.mercuryirc.client.ui.TitlePane;
-import com.mercuryirc.client.misc.Tray;
 import com.mercuryirc.model.Channel;
 import com.mercuryirc.model.Entity;
 import com.mercuryirc.model.Server;
@@ -39,8 +38,7 @@ public class Mercury extends Application {
 
 	private static Stage stage;
 	private static ApplicationPane appPane;
-	private static InputCallbackImpl inputCallback;
-	private static OutputCallbackImpl outputCallback;
+	private static CallbackImpl callback;
 	private static final List<Connection> connections = new LinkedList<>();
 
 	public static void main(String[] args) {
@@ -62,8 +60,7 @@ public class Mercury extends Application {
 		VBox content = new VBox();
 		content.getChildren().add(new TitlePane(stage));
 		content.getChildren().add(appPane = new ApplicationPane());
-		inputCallback = new InputCallbackImpl(appPane);
-		outputCallback = new OutputCallbackImpl(appPane);
+		callback = new CallbackImpl(appPane);
 		Scene scene = new Scene(content);
 		scene.setFill(null);
 		scene.getStylesheets().add(Mercury.class.getResource("/res/css/Mercury.css").toExternalForm());
@@ -184,7 +181,7 @@ public class Mercury extends Application {
 	}
 
 	public static void connect(Server server, User user) {
-		Connection connection = new Connection(server, user, inputCallback, outputCallback);
+		Connection connection = new Connection(server, user, callback);
 		connection.setAcceptAllSSLCerts(true);
 		connection.connect();
 		appPane.getTabPane().create(connection, connection.getServer(), true);

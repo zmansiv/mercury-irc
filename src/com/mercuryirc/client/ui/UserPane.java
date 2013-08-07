@@ -83,8 +83,6 @@ public class UserPane extends VBox {
 	public void sort() {
 		if (channel != null) {
 			FXCollections.sort(userListView.getItems(), USER_COMPARATOR);
-			//userListView.
-			//for (userListView.getItems().)
 		}
 	}
 

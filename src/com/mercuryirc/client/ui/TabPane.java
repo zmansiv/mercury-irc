@@ -162,8 +162,9 @@ public class TabPane extends VBox {
 
 	public Tab get(Connection connection, Entity entity) {
 		for (Tab t : tabList.getItems()) {
-			if (t.getEntity().equals(entity))
+			if (t.getConnection().equals(connection) && t.getEntity().equals(entity)) {
 				return t;
+			}
 		}
 		return create(connection, entity);
 	}
