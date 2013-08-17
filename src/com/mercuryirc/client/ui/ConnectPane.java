@@ -19,6 +19,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class ConnectPane extends VBox {
+    public static final int DEFAULT_PORT = 6667;
 
 	private final ConnectStage stage;
 
@@ -45,7 +46,7 @@ public class ConnectPane extends VBox {
 				createHeader("network", true),
 				createField("Name", "Freenode", netName),
 				createField("Host", "irc.freenode.net", netHost),
-				createField("Port", "6667", netPort),
+				createField("Port", String.valueOf(DEFAULT_PORT), netPort),
 				createField("Password", "", netPass),
 				createField("SSL", "", netSsl),
 
@@ -61,7 +62,9 @@ public class ConnectPane extends VBox {
 		connectButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
-				Server server = new Server(netName.getText(), netHost.getText(), Integer.parseInt(netPort.getText()), netPass.getText().equals("") ? null : netPass.getText(), netSsl.isSelected());
+				Server server = new Server(netName.getText(), netHost.getText(), netPort.getText().equals("")
+                        ? DEFAULT_PORT : Integer.parseInt(netPort.getText()), netPass.getText().equals("") ?
+                        null : netPass.getText(), netSsl.isSelected());
 				User user = new User(server, userNick.getText(), userUser.getText(), userReal.getText());
 				if (!userPass.getText().equals("")) {
 					user.setNickservPassword(userPass.getText());
