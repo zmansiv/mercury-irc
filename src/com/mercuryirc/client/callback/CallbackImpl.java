@@ -320,4 +320,19 @@ public class CallbackImpl implements Callback {
 		});
 	}
 
+    @Override
+    public void onJoinError(final Connection connection, final Channel channel, final String reason) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Tab tab = appPane.getTabPane().get(connection, channel);
+                appPane.getTabPane().close(tab);
+                Toolkit.getDefaultToolkit().beep();
+
+                Message reasonMessage = new Message(null, null, channel.getName() + ": " + reason);
+                appPane.getTabPane().addUntargetedMessage(connection, reasonMessage, MessageRow.Type.ERROR);
+            }
+        });
+    }
+
 }
