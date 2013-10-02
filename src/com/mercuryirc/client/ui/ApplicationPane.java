@@ -24,7 +24,6 @@ public class ApplicationPane extends HBox {
 		VBox.setVgrow(vbox, Priority.ALWAYS);
 		HBox.setHgrow(vbox, Priority.ALWAYS);
 		vbox.getStyleClass().add("dark-pane");
-		vbox.setId("blank-content");
 		contentPaneContainer.getChildren().setAll(vbox);
 		getChildren().addAll(tabPane = new TabPane(this), contentPaneContainer);
 		setOnKeyPressed(new EventHandler<KeyEvent>() {

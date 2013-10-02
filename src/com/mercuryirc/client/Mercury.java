@@ -13,7 +13,6 @@ import com.mercuryirc.client.misc.Tray;
 import com.mercuryirc.client.ui.ApplicationPane;
 import com.mercuryirc.client.ui.ConnectStage;
 import com.mercuryirc.client.ui.Tab;
-import com.mercuryirc.client.ui.TitlePane;
 import com.mercuryirc.model.Channel;
 import com.mercuryirc.model.Entity;
 import com.mercuryirc.model.Server;
@@ -27,7 +26,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -55,10 +53,8 @@ public class Mercury extends Application {
 	public void start(Stage stage) {
 		this.stage = stage;
 		stage.setTitle("Mercury");
-		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.getIcons().add(new Image(Mercury.class.getResource("/res/images/icon32.png").toExternalForm()));
 		VBox content = new VBox();
-		content.getChildren().add(new TitlePane(stage));
 		content.getChildren().add(appPane = new ApplicationPane());
 		callback = new CallbackImpl(appPane);
 		Scene scene = new Scene(content);
