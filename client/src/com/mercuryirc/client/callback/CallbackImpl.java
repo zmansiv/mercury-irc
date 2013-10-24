@@ -162,7 +162,7 @@ public class CallbackImpl implements Callback {
 					}
 				});
 				if (user.equals(connection.getLocalUser())) {
-					appPane.getContentPane().getMessagePane().getInputPane().setNick(user.getName());
+					appPane.getContentPane().getInputPane().setNick(user.getName());
 				}
 			}
 		});

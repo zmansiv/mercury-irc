@@ -37,13 +37,15 @@ public class MessagePane extends VBox {
 		TIME_FORMATTER.setDateFormatSymbols(sym);
 	}
 
+	private final Connection connection;
+
 	private final WebView webView;
 	private boolean pageLoaded;
-	private final InputPane inputPane;
 
 	private final List<MessageRow> loadQueue;
 
 	public MessagePane(ApplicationPane appPane, Tab tab, Connection connection) {
+		this.connection = connection;
 		this.appPane = appPane;
 		this.tab = tab;
 		setId("message-pane");
@@ -60,11 +62,7 @@ public class MessagePane extends VBox {
 		engine.getLoadWorker().stateProperty().addListener(new LoadListener());
 		engine.load(Mercury.class.getResource("/res/html/MessageList.html").toExternalForm());
 
-		getChildren().addAll(webView, inputPane = new InputPane(appPane, connection));
-	}
-
-	public InputPane getInputPane() {
-		return inputPane;
+		getChildren().add(webView);
 	}
 
 	@SuppressWarnings("unused")

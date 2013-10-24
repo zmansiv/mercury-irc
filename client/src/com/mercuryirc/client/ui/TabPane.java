@@ -242,7 +242,7 @@ public class TabPane extends VBox {
 			}
 			newTab.setUnread(false);
 			appPane.setContentPane(newTab.getContentPane());
-			final TextField inputField = appPane.getContentPane().getMessagePane().getInputPane().getInputField();
+			final TextField inputField = appPane.getContentPane().getInputPane().getInputField();
 			Platform.runLater(new Runnable() {
 				public void run() {
 					inputField.requestFocus();

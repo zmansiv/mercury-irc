@@ -27,12 +27,13 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+import java.awt.Toolkit;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Mercury extends Application {
 
-	public static final String WEBSITE = "https://github.com/zmansiv/mercury-client-java";
+	public static final String WEBSITE = "https://github.com/zmansiv/mercury-irc";
 
 	private static Stage stage;
 	private static ApplicationPane appPane;
@@ -40,6 +41,8 @@ public class Mercury extends Application {
 	private static final List<Connection> connections = new LinkedList<>();
 
 	public static void main(String[] args) {
+		System.setProperty("javafx.macosx.embedded", "true");
+		Toolkit.getDefaultToolkit();
 		Font.loadFont(Mercury.class.getResource("/res/fonts/font_awesome.ttf").toExternalForm(), 12);
 		Font.loadFont(Mercury.class.getResource("/res/fonts/open_sans.ttf").toExternalForm(), 12);
 		Font.loadFont(Mercury.class.getResource("/res/fonts/inconsolata.ttf").toExternalForm(), 12);
@@ -51,7 +54,7 @@ public class Mercury extends Application {
 
 	@Override
 	public void start(Stage stage) {
-		this.stage = stage;
+		Mercury.stage = stage;
 		stage.setTitle("Mercury");
 		stage.getIcons().add(new Image(Mercury.class.getResource("/res/images/icon32.png").toExternalForm()));
 		VBox content = new VBox();

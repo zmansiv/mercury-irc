@@ -12,17 +12,22 @@ public class ContentPane extends VBox {
 
 	private final TopicPane topicPane;
 	private final MessagePane messagePane;
+	private final InputPane inputPane;
 	private final UserPane userPane;
 
 	public ContentPane(Connection connection, ApplicationPane appPane, Tab tab) {
 		this.connection = connection;
 		VBox.setVgrow(this, Priority.ALWAYS);
 		HBox.setHgrow(this, Priority.ALWAYS);
-		HBox box = new HBox();
-		VBox.setVgrow(box, Priority.ALWAYS);
-		HBox.setHgrow(box, Priority.ALWAYS);
-		box.getChildren().addAll(messagePane = new MessagePane(appPane, tab, connection), userPane = new UserPane(appPane, tab.getEntity()));
-		getChildren().addAll(topicPane = new TopicPane(appPane, tab), box);
+		VBox innerBox = new VBox();
+		VBox.setVgrow(innerBox, Priority.ALWAYS);
+		HBox.setHgrow(innerBox, Priority.ALWAYS);
+		innerBox.getChildren().addAll(messagePane = new MessagePane(appPane, tab, connection), inputPane = new InputPane(appPane, connection));
+		HBox outerBox = new HBox();
+		VBox.setVgrow(outerBox, Priority.ALWAYS);
+		HBox.setHgrow(outerBox, Priority.ALWAYS);
+		outerBox.getChildren().addAll(innerBox, userPane = new UserPane(appPane, tab.getEntity()));
+		getChildren().addAll(topicPane = new TopicPane(appPane, tab), outerBox);
 	}
 
 	public Connection getConnection() {
@@ -35,6 +40,10 @@ public class ContentPane extends VBox {
 
 	public MessagePane getMessagePane() {
 		return messagePane;
+	}
+
+	public InputPane getInputPane() {
+		return inputPane;
 	}
 
 	public UserPane getUserPane() {
